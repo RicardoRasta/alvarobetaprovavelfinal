@@ -14,16 +14,254 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activities: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      booking_requests: {
+        Row: {
+          contact: string
+          created_at: string
+          customer_name: string
+          departure_date: string | null
+          id: string
+          people: number
+          status: string
+          trip_id: string | null
+          trip_name: string
+        }
+        Insert: {
+          contact?: string
+          created_at?: string
+          customer_name: string
+          departure_date?: string | null
+          id?: string
+          people?: number
+          status?: string
+          trip_id?: string | null
+          trip_name: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          customer_name?: string
+          departure_date?: string | null
+          id?: string
+          people?: number
+          status?: string
+          trip_id?: string | null
+          trip_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_requests_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departures: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          spots: number
+          trip_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          spots?: number
+          trip_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          spots?: number
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departures_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          banner_badge: string
+          banner_image_url: string | null
+          banner_subtitle: string
+          banner_title: string
+          id: number
+          stats: Json
+          updated_at: string
+          whatsapp_greeting: string
+          whatsapp_number: string
+        }
+        Insert: {
+          banner_badge?: string
+          banner_image_url?: string | null
+          banner_subtitle?: string
+          banner_title?: string
+          id?: number
+          stats?: Json
+          updated_at?: string
+          whatsapp_greeting?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          banner_badge?: string
+          banner_image_url?: string | null
+          banner_subtitle?: string
+          banner_title?: string
+          id?: number
+          stats?: Json
+          updated_at?: string
+          whatsapp_greeting?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
+      trips: {
+        Row: {
+          activity_id: string | null
+          created_at: string
+          days: number
+          description: string
+          destination: string
+          featured: boolean
+          highlights: string[]
+          id: string
+          image_url: string | null
+          includes: string[]
+          level: string
+          name: string
+          old_price: number | null
+          price: number
+          published: boolean
+          rating: number
+          slug: string
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id?: string | null
+          created_at?: string
+          days?: number
+          description?: string
+          destination: string
+          featured?: boolean
+          highlights?: string[]
+          id?: string
+          image_url?: string | null
+          includes?: string[]
+          level?: string
+          name: string
+          old_price?: number | null
+          price?: number
+          published?: boolean
+          rating?: number
+          slug: string
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string | null
+          created_at?: string
+          days?: number
+          description?: string
+          destination?: string
+          featured?: boolean
+          highlights?: string[]
+          id?: string
+          image_url?: string | null
+          includes?: string[]
+          level?: string
+          name?: string
+          old_price?: number | null
+          price?: number
+          published?: boolean
+          rating?: number
+          slug?: string
+          state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trips_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_exists: { Args: never; Returns: boolean }
+      claim_first_admin: { Args: never; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +388,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
