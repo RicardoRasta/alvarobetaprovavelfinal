@@ -13,6 +13,8 @@ import {
   User,
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { WhatsAppFab } from "./whatsapp-fab";
+
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
@@ -156,7 +158,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           </p>
         </footer>
 
+        <WhatsAppFab />
       </div>
+
     </div>
   );
 }
