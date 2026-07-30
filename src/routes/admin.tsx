@@ -1,10 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  AlertTriangle,
-  DollarSign,
-  Package,
-  Users,
-} from "lucide-react";
+import { CalendarCheck, DollarSign, MapPinned, Users } from "lucide-react";
 import {
   Area,
   AreaChart,
@@ -16,19 +11,21 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatPrice, products } from "@/data/store";
+import { formatDate, formatPrice, trips } from "@/data/trips";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Painel administrativo — Casa de Aventura" },
+      { title: "Painel administrativo — A Casa de Aventura" },
       {
         name: "description",
-        content: "Dashboard de vendas, estoque, clientes e pedidos da loja Casa de Aventura.",
+        content: "Dashboard de reservas, roteiros, vagas e clientes da agência A Casa de Aventura.",
       },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Painel administrativo — Casa de Aventura" },
-      { property: "og:description", content: "Gestão completa da loja em um só lugar." },
+      { property: "og:title", content: "Painel administrativo — A Casa de Aventura" },
+      { property: "og:description", content: "Gestão completa da agência em um só lugar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Admin,
@@ -45,31 +42,32 @@ const salesData = [
 ];
 
 const dailyData = [
-  { dia: "Seg", vendas: 18 },
-  { dia: "Ter", vendas: 24 },
-  { dia: "Qua", vendas: 31 },
-  { dia: "Qui", vendas: 22 },
-  { dia: "Sex", vendas: 45 },
-  { dia: "Sáb", vendas: 52 },
-  { dia: "Dom", vendas: 29 },
+  { dia: "Seg", reservas: 4 },
+  { dia: "Ter", reservas: 7 },
+  { dia: "Qua", reservas: 9 },
+  { dia: "Qui", reservas: 5 },
+  { dia: "Sex", reservas: 12 },
+  { dia: "Sáb", reservas: 15 },
+  { dia: "Dom", reservas: 8 },
 ];
 
-const recentOrders = [
-  { id: "#10456", cliente: "Marina Lopes", total: 1299.9, status: "Pago" },
-  { id: "#10455", cliente: "Rafael Duarte", total: 749.9, status: "Separando" },
-  { id: "#10454", cliente: "Camila Reis", total: 2148.0, status: "Enviado" },
-  { id: "#10453", cliente: "João Meireles", total: 469.9, status: "Entregue" },
-  { id: "#10452", cliente: "Ana Prado", total: 1189.0, status: "Cancelado" },
+const recentBookings = [
+  { id: "#RV-1456", cliente: "Marina Lopes", roteiro: "Vale do Pati", total: 5580, status: "Confirmada" },
+  { id: "#RV-1455", cliente: "Rafael Duarte", roteiro: "Canoagem em Bonito", total: 1890, status: "Aguardando pagamento" },
+  { id: "#RV-1454", cliente: "Camila Reis", roteiro: "Lençóis Maranhenses", total: 6780, status: "Confirmada" },
+  { id: "#RV-1453", cliente: "João Meireles", roteiro: "Rafting em Brotas", total: 1380, status: "Em análise" },
+  { id: "#RV-1452", cliente: "Ana Prado", roteiro: "Escalada Pedra Azul", total: 1450, status: "Cancelada" },
 ];
 
 function Admin() {
-  const semEstoque = products.filter((p) => p.stock === 0).length;
+  const allDepartures = trips.flatMap((t) => t.departures.map((d) => ({ trip: t, ...d })));
+  const vagasAbertas = allDepartures.reduce((sum, d) => sum + d.spots, 0);
 
   const cards = [
-    { icon: DollarSign, label: "Vendas do mês", value: formatPrice(68900) },
+    { icon: DollarSign, label: "Receita do mês", value: formatPrice(68900) },
     { icon: Users, label: "Clientes cadastrados", value: "1.842" },
-    { icon: Package, label: "Produtos cadastrados", value: String(products.length) },
-    { icon: AlertTriangle, label: "Produtos sem estoque", value: String(semEstoque) },
+    { icon: MapPinned, label: "Roteiros ativos", value: String(trips.length) },
+    { icon: CalendarCheck, label: "Vagas abertas", value: String(vagasAbertas) },
   ];
 
   return (
@@ -77,7 +75,7 @@ function Admin() {
       <header>
         <h1 className="text-3xl font-bold uppercase md:text-4xl">Painel administrativo</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Visão geral de vendas, estoque e pedidos da loja.
+          Visão geral de reservas, roteiros e saídas da agência.
         </p>
       </header>
 
@@ -130,7 +128,7 @@ function Admin() {
         </div>
 
         <div className="card-surface p-5">
-          <h2 className="text-lg font-bold uppercase">Vendas por dia</h2>
+          <h2 className="text-lg font-bold uppercase">Reservas por dia</h2>
           <div className="mt-4 h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dailyData}>
@@ -145,7 +143,7 @@ function Admin() {
                     color: "var(--color-card-foreground)",
                   }}
                 />
-                <Bar dataKey="vendas" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="reservas" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -154,23 +152,25 @@ function Admin() {
 
       <section className="card-surface mt-6 overflow-hidden">
         <h2 className="border-b border-border px-5 py-4 text-lg font-bold uppercase">
-          Pedidos recentes
+          Reservas recentes
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
               <tr>
-                <th className="px-5 py-2">Pedido</th>
+                <th className="px-5 py-2">Reserva</th>
                 <th className="px-5 py-2">Cliente</th>
+                <th className="px-5 py-2">Roteiro</th>
                 <th className="px-5 py-2">Total</th>
                 <th className="px-5 py-2">Status</th>
               </tr>
             </thead>
             <tbody>
-              {recentOrders.map((o) => (
+              {recentBookings.map((o) => (
                 <tr key={o.id} className="border-t border-border">
                   <td className="px-5 py-3 font-medium">{o.id}</td>
                   <td className="px-5 py-3">{o.cliente}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{o.roteiro}</td>
                   <td className="px-5 py-3">{formatPrice(o.total)}</td>
                   <td className="px-5 py-3">
                     <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
@@ -186,37 +186,43 @@ function Admin() {
 
       <section className="card-surface mt-6 overflow-hidden">
         <h2 className="border-b border-border px-5 py-4 text-lg font-bold uppercase">
-          Estoque de produtos
+          Saídas programadas
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
               <tr>
-                <th className="px-5 py-2">Produto</th>
-                <th className="px-5 py-2">Marca</th>
+                <th className="px-5 py-2">Roteiro</th>
+                <th className="px-5 py-2">Destino</th>
+                <th className="px-5 py-2">Data</th>
                 <th className="px-5 py-2">Preço</th>
-                <th className="px-5 py-2">Estoque</th>
+                <th className="px-5 py-2">Vagas</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((p) => (
-                <tr key={p.id} className="border-t border-border">
-                  <td className="px-5 py-3 font-medium">{p.name}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{p.brand}</td>
-                  <td className="px-5 py-3">{formatPrice(p.price)}</td>
-                  <td className="px-5 py-3">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                        p.stock === 0
-                          ? "bg-destructive text-destructive-foreground"
-                          : "bg-secondary text-secondary-foreground"
-                      }`}
-                    >
-                      {p.stock === 0 ? "Esgotado" : `${p.stock} un.`}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {allDepartures
+                .sort((a, b) => a.date.localeCompare(b.date))
+                .map((d) => (
+                  <tr key={`${d.trip.id}-${d.date}`} className="border-t border-border">
+                    <td className="px-5 py-3 font-medium">{d.trip.name}</td>
+                    <td className="px-5 py-3 text-muted-foreground">
+                      {d.trip.destination} · {d.trip.state}
+                    </td>
+                    <td className="px-5 py-3">{formatDate(d.date)}</td>
+                    <td className="px-5 py-3">{formatPrice(d.trip.price)}</td>
+                    <td className="px-5 py-3">
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                          d.spots <= 4
+                            ? "bg-destructive text-destructive-foreground"
+                            : "bg-secondary text-secondary-foreground"
+                        }`}
+                      >
+                        {d.spots} vagas
+                      </span>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

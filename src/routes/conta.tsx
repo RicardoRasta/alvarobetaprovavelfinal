@@ -1,28 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { KeyRound, MapPin, Package, User } from "lucide-react";
-import { formatPrice } from "@/data/store";
+import { CalendarDays, KeyRound, MapPin, User } from "lucide-react";
+import { formatPrice } from "@/data/trips";
 
 export const Route = createFileRoute("/conta")({
   head: () => ({
     meta: [
-      { title: "Minha conta — Casa de Aventura" },
+      { title: "Minha conta — A Casa de Aventura" },
       {
         name: "description",
-        content: "Acesse sua conta para ver pedidos, endereços e favoritos na Casa de Aventura.",
+        content: "Acesse sua conta para ver reservas, dados de viagem e roteiros salvos.",
       },
-      { property: "og:title", content: "Minha conta — Casa de Aventura" },
-      { property: "og:description", content: "Login, cadastro e histórico de pedidos." },
+      { property: "og:title", content: "Minha conta — A Casa de Aventura" },
+      { property: "og:description", content: "Login, cadastro e histórico de reservas." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Conta,
 });
 
 const orders = [
-  { id: "#10432", date: "12/07/2026", total: 1848.9, status: "Entregue" },
-  { id: "#10388", date: "28/06/2026", total: 549.0, status: "Em trânsito" },
-  { id: "#10291", date: "03/06/2026", total: 469.9, status: "Cancelado" },
+  { id: "#RV-1432", date: "12/07/2026", roteiro: "Vale do Pati", total: 5580, status: "Concluída" },
+  { id: "#RV-1388", date: "28/06/2026", roteiro: "Rafting em Brotas", total: 1380, status: "Confirmada" },
+  { id: "#RV-1291", date: "03/06/2026", roteiro: "Escalada Pedra Azul", total: 1450, status: "Cancelada" },
 ];
+
 
 type Tab = "login" | "cadastro" | "recuperar";
 
