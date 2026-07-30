@@ -85,12 +85,16 @@ export const formatDate = (iso: string) =>
     year: "numeric",
   });
 
+/** Número oficial do proprietário (fallback caso as configurações não carreguem). */
+export const DEFAULT_WHATSAPP = "554799030838";
+
 /** Monta o link do WhatsApp com a mensagem já preenchida. */
 export function whatsappLink(
   settings: Pick<SiteSettings, "whatsapp_number" | "whatsapp_greeting"> | null | undefined,
   params: { tripName: string; date?: string; people?: number; customerName?: string },
 ) {
-  const number = (settings?.whatsapp_number || "").replace(/\D/g, "");
+  const number =
+    (settings?.whatsapp_number || DEFAULT_WHATSAPP).replace(/\D/g, "") || DEFAULT_WHATSAPP;
   const greeting = settings?.whatsapp_greeting || "Olá! Tenho interesse na viagem";
   const parts = [`${greeting}: *${params.tripName}*.`];
   if (params.date) parts.push(`Data de saída: ${formatDate(params.date)}.`);
