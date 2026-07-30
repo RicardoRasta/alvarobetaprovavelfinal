@@ -1,7 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { CalendarDays, KeyRound, MapPin, User } from "lucide-react";
-import { formatPrice } from "@/data/trips";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { CalendarDays, LayoutDashboard, LogOut, User } from "lucide-react";
+import { formatDate } from "@/data/trips";
+import { bookingsQuery } from "@/lib/api";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/conta")({
   head: () => ({
@@ -9,10 +11,10 @@ export const Route = createFileRoute("/conta")({
       { title: "Minha conta — A Casa de Aventura" },
       {
         name: "description",
-        content: "Acesse sua conta para ver reservas, dados de viagem e roteiros salvos.",
+        content: "Acesse sua conta para ver seus pedidos de reserva e roteiros salvos.",
       },
       { property: "og:title", content: "Minha conta — A Casa de Aventura" },
-      { property: "og:description", content: "Login, cadastro e histórico de reservas." },
+      { property: "og:description", content: "Login e histórico de reservas da sua conta." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -20,146 +22,92 @@ export const Route = createFileRoute("/conta")({
   component: Conta,
 });
 
-const orders = [
-  { id: "#RV-1432", date: "12/07/2026", roteiro: "Vale do Pati", total: 5580, status: "Concluída" },
-  { id: "#RV-1388", date: "28/06/2026", roteiro: "Rafting em Brotas", total: 1380, status: "Confirmada" },
-  { id: "#RV-1291", date: "03/06/2026", roteiro: "Escalada Pedra Azul", total: 1450, status: "Cancelada" },
-];
-
-
-type Tab = "login" | "cadastro" | "recuperar";
-
 function Conta() {
-  const [tab, setTab] = useState<Tab>("login");
+  const { session, isAdmin, loading, signOut } = useAuth();
+  const { data: bookings = [] } = useQuery({ ...bookingsQuery, enabled: Boolean(isAdmin) });
 
-  return (
-    <div className="mx-auto max-w-6xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
-      <h1 className="text-3xl font-bold uppercase md:text-4xl">Área do cliente</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Entre na sua conta para acompanhar pedidos, endereços e favoritos.
-      </p>
+  if (loading) {
+    return <div className="p-12 text-center text-muted-foreground">Carregando...</div>;
+  }
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[380px_1fr]">
-        <section className="card-surface p-6">
-          <div className="mb-5 flex gap-1 rounded-md bg-muted p-1">
-            {(["login", "cadastro", "recuperar"] as Tab[]).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTab(t)}
-                className={`flex-1 rounded px-2 py-1.5 text-sm font-medium capitalize transition-colors ${
-                  tab === t ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
-                }`}
-              >
-                {t === "recuperar" ? "Senha" : t}
-              </button>
-            ))}
-          </div>
-
-          <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-            {tab === "cadastro" && <Field label="Nome completo" type="text" />}
-            <Field label="E-mail" type="email" />
-            {tab !== "recuperar" && <Field label="Senha" type="password" />}
-            {tab === "cadastro" && <Field label="Confirmar senha" type="password" />}
-            <button
-              type="submit"
-              className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              {tab === "login" ? "Entrar" : tab === "cadastro" ? "Criar conta" : "Enviar link"}
-            </button>
-          </form>
-          <p className="mt-3 text-xs text-muted-foreground">
-            Interface pronta — a autenticação real é ativada na próxima etapa.
-          </p>
-        </section>
-
-        <div className="space-y-6">
-          <section className="card-surface p-6">
-            <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
-              <User className="h-5 w-5 text-accent" /> Perfil
-            </h2>
-            <dl className="mt-4 grid gap-3 sm:grid-cols-2">
-              {[
-                ["Nome", "Convidado"],
-                ["E-mail", "—"],
-                ["Telefone", "—"],
-                ["Cliente desde", "—"],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <dt className="text-xs uppercase text-muted-foreground">{k}</dt>
-                  <dd className="font-medium">{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-
-          <section className="card-surface overflow-hidden">
-            <h2 className="flex items-center gap-2 border-b border-border px-6 py-4 text-lg font-bold uppercase">
-              <CalendarDays className="h-5 w-5 text-accent" /> Histórico de reservas
-            </h2>
-            <table className="w-full text-sm">
-              <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
-                <tr>
-                  <th className="px-6 py-2">Reserva</th>
-                  <th className="px-6 py-2">Roteiro</th>
-                  <th className="px-6 py-2">Data</th>
-                  <th className="px-6 py-2">Total</th>
-                  <th className="px-6 py-2">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((o) => (
-                  <tr key={o.id} className="border-t border-border">
-                    <td className="px-6 py-3 font-medium">{o.id}</td>
-                    <td className="px-6 py-3 text-muted-foreground">{o.roteiro}</td>
-                    <td className="px-6 py-3 text-muted-foreground">{o.date}</td>
-                    <td className="px-6 py-3">{formatPrice(o.total)}</td>
-
-                    <td className="px-6 py-3">
-                      <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
-                        {o.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            <section className="card-surface p-6">
-              <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
-                <MapPin className="h-5 w-5 text-accent" /> Endereços
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Nenhum endereço cadastrado ainda.
-              </p>
-            </section>
-            <section className="card-surface p-6">
-              <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
-                <KeyRound className="h-5 w-5 text-accent" /> Alterar senha
-              </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Disponível após o login na conta.
-              </p>
-            </section>
-          </div>
-        </div>
+  if (!session) {
+    return (
+      <div className="mx-auto max-w-md animate-fade-up px-4 py-16 text-center">
+        <User className="mx-auto h-10 w-10 text-accent" />
+        <h1 className="mt-4 text-2xl font-bold uppercase">Área do cliente</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Entre na sua conta para acompanhar suas reservas de aventura.
+        </p>
+        <Link
+          to="/auth"
+          search={{ next: "/conta" }}
+          className="mt-6 inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
+        >
+          Entrar ou criar conta
+        </Link>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-function Field({ label, type }: { label: string; type: string }) {
   return (
-    <label className="block">
-      <span className="mb-1 block text-xs font-medium uppercase text-muted-foreground">
-        {label}
-      </span>
-      <input
-        type={type}
-        className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-      />
-    </label>
+    <div className="mx-auto max-w-4xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
+      <h1 className="text-3xl font-bold uppercase md:text-4xl">Minha conta</h1>
+
+      <section className="card-surface mt-6 p-6">
+        <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
+          <User className="h-5 w-5 text-accent" /> Perfil
+        </h2>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div>
+            <dt className="text-xs uppercase text-muted-foreground">E-mail</dt>
+            <dd className="font-medium">{session.user.email}</dd>
+          </div>
+          <div>
+            <dt className="text-xs uppercase text-muted-foreground">Tipo de acesso</dt>
+            <dd className="font-medium">{isAdmin ? "Administrador" : "Cliente"}</dd>
+          </div>
+        </dl>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+            >
+              <LayoutDashboard className="h-4 w-4" /> Painel administrativo
+            </Link>
+          )}
+          <button
+            type="button"
+            onClick={() => signOut()}
+            className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm hover:border-accent hover:text-accent"
+          >
+            <LogOut className="h-4 w-4" /> Sair
+          </button>
+        </div>
+      </section>
+
+      {isAdmin && (
+        <section className="card-surface mt-6 overflow-hidden">
+          <h2 className="flex items-center gap-2 border-b border-border px-6 py-4 text-lg font-bold uppercase">
+            <CalendarDays className="h-5 w-5 text-accent" /> Últimos pedidos recebidos
+          </h2>
+          {bookings.length === 0 ? (
+            <p className="p-6 text-sm text-muted-foreground">Nenhum pedido registrado ainda.</p>
+          ) : (
+            <ul className="divide-y divide-border">
+              {bookings.slice(0, 5).map((b) => (
+                <li key={b.id} className="flex flex-wrap justify-between gap-2 px-6 py-3 text-sm">
+                  <span className="font-medium">{b.customer_name}</span>
+                  <span className="text-muted-foreground">{b.trip_name}</span>
+                  <span className="text-muted-foreground">
+                    {b.departure_date ? formatDate(b.departure_date) : "sem data"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+    </div>
   );
 }

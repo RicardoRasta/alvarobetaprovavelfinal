@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { activities, trips } from "@/data/trips";
+import { activitiesQuery, tripsQuery } from "@/lib/api";
 
 type CatalogSearch = { atividade?: string; q?: string };
 
@@ -35,16 +36,19 @@ function Viagens() {
   const { atividade } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [query, setQuery] = useState("");
+  const { data: trips = [], isLoading } = useQuery(tripsQuery);
+  const { data: activities = [] } = useQuery(activitiesQuery);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return trips.filter(
       (t) =>
-        (!atividade || t.activityId === atividade) &&
+        t.published &&
+        (!atividade || t.activity_id === atividade) &&
         (!q ||
           `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
     );
-  }, [atividade, query]);
+  }, [atividade, query, trips]);
 
   const setAtividade = (id?: string) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, atividade: id }) });
@@ -54,7 +58,7 @@ function Viagens() {
       <header className="mb-6">
         <h1 className="text-3xl font-bold uppercase md:text-4xl">Viagens</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {filtered.length} roteiro(s) com saídas confirmadas
+          {isLoading ? "Carregando roteiros..." : `${filtered.length} roteiro(s) disponíveis`}
         </p>
       </header>
 
@@ -83,7 +87,7 @@ function Viagens() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {!isLoading && filtered.length === 0 ? (
         <p className="card-surface p-10 text-center text-muted-foreground">
           Nenhuma viagem encontrada para esta busca.
         </p>

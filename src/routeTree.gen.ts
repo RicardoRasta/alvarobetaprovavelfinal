@@ -11,8 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
+import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
@@ -26,6 +31,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContaRoute = ContaRouteImport.update({
   id: '/conta',
   path: '/conta',
@@ -35,6 +45,26 @@ const FavoritosRoute = FavoritosRouteImport.update({
   id: '/favoritos',
   path: '/favoritos',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReservasRoute = AdminReservasRouteImport.update({
+  id: '/reservas',
+  path: '/reservas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminViagensRoute = AdminViagensRouteImport.update({
+  id: '/viagens',
+  path: '/viagens',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
   id: '/viagens/',
@@ -49,48 +79,88 @@ const ViagensTripIdRoute = ViagensTripIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens/'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/conta'
+    | '/favoritos'
+    | '/admin/configuracoes'
+    | '/admin/reservas'
+    | '/admin/viagens'
+    | '/viagens/$tripId'
+    | '/admin/'
+    | '/viagens/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens'
+  to:
+    | '/'
+    | '/auth'
+    | '/conta'
+    | '/favoritos'
+    | '/admin/configuracoes'
+    | '/admin/reservas'
+    | '/admin/viagens'
+    | '/viagens/$tripId'
+    | '/admin'
+    | '/viagens'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/auth'
     | '/conta'
     | '/favoritos'
+    | '/admin/configuracoes'
+    | '/admin/reservas'
+    | '/admin/viagens'
     | '/viagens/$tripId'
+    | '/admin/'
     | '/viagens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
   ViagensTripIdRoute: typeof ViagensTripIdRoute
@@ -113,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/conta': {
       id: '/conta'
       path: '/conta'
@@ -126,6 +203,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/favoritos'
       preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reservas': {
+      id: '/admin/reservas'
+      path: '/reservas'
+      fullPath: '/admin/reservas'
+      preLoaderRoute: typeof AdminReservasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/viagens': {
+      id: '/admin/viagens'
+      path: '/viagens'
+      fullPath: '/admin/viagens'
+      preLoaderRoute: typeof AdminViagensRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/viagens/': {
       id: '/viagens/'
@@ -144,9 +249,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminReservasRoute: typeof AdminReservasRoute
+  AdminViagensRoute: typeof AdminViagensRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminReservasRoute: AdminReservasRoute,
+  AdminViagensRoute: AdminViagensRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
   ViagensTripIdRoute: ViagensTripIdRoute,

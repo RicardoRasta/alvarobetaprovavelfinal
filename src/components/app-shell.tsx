@@ -127,12 +127,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
             <Link
-              to="/conta"
+              to="/auth"
+              search={{ next: "/conta" }}
               className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
             >
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Entrar</span>
             </Link>
+
             <Link
               to="/viagens"
               className="inline-flex h-9 items-center gap-2 rounded-md bg-accent px-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"

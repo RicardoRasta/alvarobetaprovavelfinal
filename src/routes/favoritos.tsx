@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { TripCard } from "@/components/trip-card";
-import { trips } from "@/data/trips";
+import { tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/favoritos")({
   head: () => ({
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/favoritos")({
 });
 
 function Favoritos() {
-  const saved = trips.slice(0, 3);
+  const { data: trips = [] } = useQuery(tripsQuery);
+  const saved = trips.filter((t) => t.published).slice(0, 3);
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
