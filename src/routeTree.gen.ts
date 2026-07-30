@@ -14,7 +14,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
+import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
@@ -43,9 +45,19 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminReservasRoute = AdminReservasRouteImport.update({
   id: '/reservas',
   path: '/reservas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminViagensRoute = AdminViagensRouteImport.update({
+  id: '/viagens',
+  path: '/viagens',
   getParentRoute: () => AdminRoute,
 } as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
@@ -64,7 +76,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -73,7 +87,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
@@ -84,7 +100,9 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/viagens': typeof AdminViagensRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -96,7 +114,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/conta'
     | '/favoritos'
+    | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/viagens'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -105,7 +125,9 @@ export interface FileRouteTypes {
     | '/'
     | '/conta'
     | '/favoritos'
+    | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/viagens'
     | '/viagens/$tripId'
     | '/admin'
     | '/viagens'
@@ -115,7 +137,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/conta'
     | '/favoritos'
+    | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/viagens'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -167,11 +191,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/reservas': {
       id: '/admin/reservas'
       path: '/reservas'
       fullPath: '/admin/reservas'
       preLoaderRoute: typeof AdminReservasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/viagens': {
+      id: '/admin/viagens'
+      path: '/viagens'
+      fullPath: '/admin/viagens'
+      preLoaderRoute: typeof AdminViagensRouteImport
       parentRoute: typeof AdminRoute
     }
     '/viagens/': {
@@ -192,12 +230,16 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminReservasRoute: typeof AdminReservasRoute
+  AdminViagensRoute: typeof AdminViagensRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminReservasRoute: AdminReservasRoute,
+  AdminViagensRoute: AdminViagensRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
