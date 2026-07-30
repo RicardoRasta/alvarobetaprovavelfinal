@@ -6,7 +6,7 @@ import { categories, products } from "@/data/store";
 
 type CatalogSearch = { categoria?: string; q?: string };
 
-export const Route = createFileRoute("/catalogo")({
+export const Route = createFileRoute("/catalogo/")({
   validateSearch: (search: Record<string, unknown>): CatalogSearch => ({
     categoria: typeof search.categoria === "string" ? search.categoria : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
@@ -45,7 +45,7 @@ function Catalogo() {
   }, [categoria, query]);
 
   const setCategoria = (id?: string) =>
-    navigate({ search: (prev) => ({ ...prev, categoria: id }) });
+    navigate({ search: (prev: CatalogSearch) => ({ ...prev, categoria: id }) });
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
