@@ -95,12 +95,13 @@ function Conta() {
 
           <section className="card-surface overflow-hidden">
             <h2 className="flex items-center gap-2 border-b border-border px-6 py-4 text-lg font-bold uppercase">
-              <Package className="h-5 w-5 text-accent" /> Histórico de pedidos
+              <CalendarDays className="h-5 w-5 text-accent" /> Histórico de reservas
             </h2>
             <table className="w-full text-sm">
               <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="px-6 py-2">Pedido</th>
+                  <th className="px-6 py-2">Reserva</th>
+                  <th className="px-6 py-2">Roteiro</th>
                   <th className="px-6 py-2">Data</th>
                   <th className="px-6 py-2">Total</th>
                   <th className="px-6 py-2">Status</th>
@@ -110,8 +111,10 @@ function Conta() {
                 {orders.map((o) => (
                   <tr key={o.id} className="border-t border-border">
                     <td className="px-6 py-3 font-medium">{o.id}</td>
+                    <td className="px-6 py-3 text-muted-foreground">{o.roteiro}</td>
                     <td className="px-6 py-3 text-muted-foreground">{o.date}</td>
                     <td className="px-6 py-3">{formatPrice(o.total)}</td>
+
                     <td className="px-6 py-3">
                       <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
                         {o.status}
