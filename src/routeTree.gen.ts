@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as CatalogoIndexRouteImport } from './routes/catalogo.index'
@@ -18,6 +19,11 @@ import { Route as CatalogoProductIdRouteImport } from './routes/catalogo.$produc
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContaRoute = ContaRouteImport.update({
@@ -43,6 +49,7 @@ const CatalogoProductIdRoute = CatalogoProductIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
@@ -66,12 +75,24 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/conta' | '/favoritos' | '/catalogo/$productId' | '/catalogo/'
+    | '/'
+    | '/admin'
+    | '/conta'
+    | '/favoritos'
+    | '/catalogo/$productId'
+    | '/catalogo/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/conta' | '/favoritos' | '/catalogo/$productId' | '/catalogo'
+  to:
+    | '/'
+    | '/admin'
+    | '/conta'
+    | '/favoritos'
+    | '/catalogo/$productId'
+    | '/catalogo'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/conta'
     | '/favoritos'
     | '/catalogo/$productId'
@@ -80,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
   CatalogoProductIdRoute: typeof CatalogoProductIdRoute
@@ -93,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/conta': {
@@ -128,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
   CatalogoProductIdRoute: CatalogoProductIdRoute,
@@ -136,3 +166,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
