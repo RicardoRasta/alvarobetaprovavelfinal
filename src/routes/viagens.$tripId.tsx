@@ -11,7 +11,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
-import { activities, formatDate, formatPrice, trips } from "@/data/trips";
+import { activities, formatDate, formatPrice, trips, type Trip } from "@/data/trips";
 
 export const Route = createFileRoute("/viagens/$tripId")({
   loader: ({ params }) => {
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/viagens/$tripId")({
 });
 
 function TripDetail() {
-  const { trip } = Route.useLoaderData();
+  const { trip } = Route.useLoaderData() as { trip: Trip };
   const activity = activities.find((a) => a.id === trip.activityId);
   const [departure, setDeparture] = useState(trip.departures[0]?.date ?? "");
   const [people, setPeople] = useState(1);
