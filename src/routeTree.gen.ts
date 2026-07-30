@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
@@ -36,6 +38,16 @@ const FavoritosRoute = FavoritosRouteImport.update({
   path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminReservasRoute = AdminReservasRouteImport.update({
+  id: '/reservas',
+  path: '/reservas',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
   id: '/viagens/',
   path: '/viagens/',
@@ -49,48 +61,69 @@ const ViagensTripIdRoute = ViagensTripIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/reservas': typeof AdminReservasRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/reservas': typeof AdminReservasRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/reservas': typeof AdminReservasRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens/'
+    | '/'
+    | '/admin'
+    | '/conta'
+    | '/favoritos'
+    | '/admin/reservas'
+    | '/viagens/$tripId'
+    | '/admin/'
+    | '/viagens/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens'
+  to:
+    | '/'
+    | '/conta'
+    | '/favoritos'
+    | '/admin/reservas'
+    | '/viagens/$tripId'
+    | '/admin'
+    | '/viagens'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/conta'
     | '/favoritos'
+    | '/admin/reservas'
     | '/viagens/$tripId'
+    | '/admin/'
     | '/viagens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
   ViagensTripIdRoute: typeof ViagensTripIdRoute
@@ -127,6 +160,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/reservas': {
+      id: '/admin/reservas'
+      path: '/reservas'
+      fullPath: '/admin/reservas'
+      preLoaderRoute: typeof AdminReservasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/viagens/': {
       id: '/viagens/'
       path: '/viagens'
@@ -144,9 +191,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminReservasRoute: typeof AdminReservasRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminReservasRoute: AdminReservasRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
   ViagensTripIdRoute: ViagensTripIdRoute,
