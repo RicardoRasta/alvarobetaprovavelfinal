@@ -15,6 +15,8 @@ import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as CatalogoIndexRouteImport } from './routes/catalogo.index'
 import { Route as CatalogoProductIdRouteImport } from './routes/catalogo.$productId'
+import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
+import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +48,16 @@ const CatalogoProductIdRoute = CatalogoProductIdRouteImport.update({
   path: '/catalogo/$productId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ViagensIndexRoute = ViagensIndexRouteImport.update({
+  id: '/viagens/',
+  path: '/viagens/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ViagensTripIdRoute = ViagensTripIdRouteImport.update({
+  id: '/viagens/$tripId',
+  path: '/viagens/$tripId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,7 +65,9 @@ export interface FileRoutesByFullPath {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
   '/catalogo/': typeof CatalogoIndexRoute
+  '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +75,9 @@ export interface FileRoutesByTo {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
   '/catalogo': typeof CatalogoIndexRoute
+  '/viagens': typeof ViagensIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,7 +86,9 @@ export interface FileRoutesById {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/catalogo/$productId': typeof CatalogoProductIdRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
   '/catalogo/': typeof CatalogoIndexRoute
+  '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,7 +98,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/catalogo/$productId'
+    | '/viagens/$tripId'
     | '/catalogo/'
+    | '/viagens/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -88,7 +108,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/catalogo/$productId'
+    | '/viagens/$tripId'
     | '/catalogo'
+    | '/viagens'
   id:
     | '__root__'
     | '/'
@@ -96,7 +118,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/catalogo/$productId'
+    | '/viagens/$tripId'
     | '/catalogo/'
+    | '/viagens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,7 +129,9 @@ export interface RootRouteChildren {
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
   CatalogoProductIdRoute: typeof CatalogoProductIdRoute
+  ViagensTripIdRoute: typeof ViagensTripIdRoute
   CatalogoIndexRoute: typeof CatalogoIndexRoute
+  ViagensIndexRoute: typeof ViagensIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogoProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/viagens/': {
+      id: '/viagens/'
+      path: '/viagens'
+      fullPath: '/viagens/'
+      preLoaderRoute: typeof ViagensIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/viagens/$tripId': {
+      id: '/viagens/$tripId'
+      path: '/viagens/$tripId'
+      fullPath: '/viagens/$tripId'
+      preLoaderRoute: typeof ViagensTripIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -161,7 +201,9 @@ const rootRouteChildren: RootRouteChildren = {
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
   CatalogoProductIdRoute: CatalogoProductIdRoute,
+  ViagensTripIdRoute: ViagensTripIdRoute,
   CatalogoIndexRoute: CatalogoIndexRoute,
+  ViagensIndexRoute: ViagensIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
