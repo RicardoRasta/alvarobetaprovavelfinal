@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import {
+  CalendarDays,
   Compass,
   Home,
   Heart,
@@ -9,18 +10,18 @@ import {
   Mountain,
   PanelLeftClose,
   Search,
-  ShoppingBag,
   User,
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
-  { to: "/catalogo", label: "Catálogo", icon: Compass },
-  { to: "/favoritos", label: "Favoritos", icon: Heart },
+  { to: "/viagens", label: "Viagens", icon: Compass },
+  { to: "/favoritos", label: "Viagens salvas", icon: Heart },
   { to: "/conta", label: "Minha conta", icon: User },
   { to: "/admin", label: "Administração", icon: LayoutDashboard },
 ] as const;
+
 
 /** Layout base: menu lateral recolhível + cabeçalho fixo. */
 export function AppShell({ children }: { children: ReactNode }) {
