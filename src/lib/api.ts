@@ -47,17 +47,30 @@ export const tripsQuery = queryOptions({
   queryFn: fetchTrips,
 });
 
+export type BookingRequest = {
+  id: string;
+  trip_id: string | null;
+  trip_name: string;
+  customer_name: string;
+  contact: string | null;
+  departure_date: string | null;
+  people: number;
+  status: string;
+  created_at: string;
+};
+
 export const bookingsQuery = queryOptions({
   queryKey: ["booking_requests"],
-  queryFn: async () => {
+  queryFn: async (): Promise<BookingRequest[]> => {
     const { data, error } = await supabase
       .from("booking_requests")
       .select("*")
       .order("created_at", { ascending: false });
     if (error) throw error;
-    return data ?? [];
+    return (data ?? []) as unknown as BookingRequest[];
   },
 });
+
 
 export const nextDeparture = (trip: Trip) => {
   const today = new Date().toISOString().slice(0, 10);
