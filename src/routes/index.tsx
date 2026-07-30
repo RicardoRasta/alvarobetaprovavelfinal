@@ -53,8 +53,11 @@ function Index() {
         <div className="gradient-hero absolute inset-0" />
         <div className="absolute inset-0 flex items-center px-6 md:px-12">
           <div className="max-w-xl text-primary-foreground">
+            <span className="inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-accent">
+              <Compass className="h-4 w-4" /> Casa de Aventura
+            </span>
             {settings?.banner_badge && (
-              <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
+              <span className="mt-3 inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
                 {settings.banner_badge}
               </span>
             )}
