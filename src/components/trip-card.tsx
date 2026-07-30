@@ -1,14 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, MapPin, Star } from "lucide-react";
-import { formatDate, formatPrice, tripImage, type Trip } from "@/data/trips";
-import { nextDeparture } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
+import { formatDate, formatPrice, tripImage, whatsappLink, type Trip } from "@/data/trips";
+import { nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
   const next = nextDeparture(trip);
+  const { data: settings } = useQuery(settingsQuery);
   const discount =
     trip.old_price != null && trip.old_price > 0
       ? Math.round((1 - trip.price / trip.old_price) * 100)
       : null;
+
 
   return (
     <article className="card-surface hover-lift group flex flex-col overflow-hidden">
@@ -75,8 +78,20 @@ export function TripCard({ trip }: { trip: Trip }) {
           >
             <CalendarDays className="h-4 w-4" /> Agendar
           </Link>
+          <a
+            href={whatsappLink(settings, {
+              tripName: trip.name,
+              date: next?.date,
+            })}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <MessageCircle className="h-4 w-4" /> Agendar no WhatsApp
+          </a>
         </div>
       </div>
     </article>
   );
 }
+
