@@ -119,7 +119,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Search className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground" />
             <input
               type="search"
-              placeholder="Buscar equipamentos..."
+              placeholder="Buscar destinos e aventuras..."
               className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
             />
           </label>
@@ -133,16 +133,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Entrar</span>
             </Link>
-            <button
-              type="button"
-              aria-label="Carrinho"
-              className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border"
+            <Link
+              to="/viagens"
+              className="inline-flex h-9 items-center gap-2 rounded-md bg-accent px-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
             >
-              <ShoppingBag className="h-4 w-4" />
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-accent-foreground">
-                2
-              </span>
-            </button>
+              <CalendarDays className="h-4 w-4" />
+              <span className="hidden sm:inline">Agendar</span>
+            </Link>
           </div>
         </header>
 
@@ -150,10 +147,13 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <footer className="border-t border-border px-4 py-8 text-sm text-muted-foreground md:px-6">
           <p className="font-display text-base font-bold uppercase text-foreground">
-            Casa de Aventura
+            A Casa de Aventura
           </p>
-          <p className="mt-1">Equipamentos para trilha, camping e escalada. © 2026</p>
+          <p className="mt-1">
+            Agência de viagens de aventura: canoagem, escalada e expedições pelo Brasil. © 2026
+          </p>
         </footer>
+
       </div>
     </div>
   );
