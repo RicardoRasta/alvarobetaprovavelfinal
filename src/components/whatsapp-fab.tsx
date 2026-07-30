@@ -6,8 +6,6 @@ import { settingsQuery } from "@/lib/api";
 /** Botão flutuante para falar/agendar direto no WhatsApp da agência. */
 export function WhatsAppFab() {
   const { data: settings } = useQuery(settingsQuery);
-  if (!settings?.whatsapp_number) return null;
-
   return (
     <a
       href={whatsappLink(settings, { tripName: "uma viagem de aventura" })}
