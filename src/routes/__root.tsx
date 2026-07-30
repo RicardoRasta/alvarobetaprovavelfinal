@@ -84,11 +84,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Agência de viagens de aventura: canoagem, escalada, trekking e expedições pelo Brasil. Agende pelo WhatsApp.",
+          "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp.",
       },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "A Casa de Aventura — Viagens de aventura pelo Brasil" },
+      { name: "twitter:title", content: "A Casa de Aventura — Viagens de aventura pelo Brasil" },
+      { property: "og:description", content: "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp." },
+      { name: "twitter:description", content: "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f3522584-a619-4213-b7d3-1a5fba249b9f/id-preview-e5570752--e9026900-e97f-4f52-81c0-366e5c4fda00.lovable.app-1785447943093.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f3522584-a619-4213-b7d3-1a5fba249b9f/id-preview-e5570752--e9026900-e97f-4f52-81c0-366e5c4fda00.lovable.app-1785447943093.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

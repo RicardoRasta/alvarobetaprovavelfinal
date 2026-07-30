@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "A Casa de Aventura — Viagens de aventura pelo Brasil" },
       {
         property: "og:description",
-        content: "Roteiros guiados de canoagem, escalada e trekking com saídas confirmadas.",
+        content: "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
