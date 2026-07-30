@@ -1,28 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { KeyRound, MapPin, Package, User } from "lucide-react";
-import { formatPrice } from "@/data/store";
+import { CalendarDays, KeyRound, MapPin, User } from "lucide-react";
+import { formatPrice } from "@/data/trips";
 
 export const Route = createFileRoute("/conta")({
   head: () => ({
     meta: [
-      { title: "Minha conta — Casa de Aventura" },
+      { title: "Minha conta — A Casa de Aventura" },
       {
         name: "description",
-        content: "Acesse sua conta para ver pedidos, endereços e favoritos na Casa de Aventura.",
+        content: "Acesse sua conta para ver reservas, dados de viagem e roteiros salvos.",
       },
-      { property: "og:title", content: "Minha conta — Casa de Aventura" },
-      { property: "og:description", content: "Login, cadastro e histórico de pedidos." },
+      { property: "og:title", content: "Minha conta — A Casa de Aventura" },
+      { property: "og:description", content: "Login, cadastro e histórico de reservas." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Conta,
 });
 
 const orders = [
-  { id: "#10432", date: "12/07/2026", total: 1848.9, status: "Entregue" },
-  { id: "#10388", date: "28/06/2026", total: 549.0, status: "Em trânsito" },
-  { id: "#10291", date: "03/06/2026", total: 469.9, status: "Cancelado" },
+  { id: "#RV-1432", date: "12/07/2026", roteiro: "Vale do Pati", total: 5580, status: "Concluída" },
+  { id: "#RV-1388", date: "28/06/2026", roteiro: "Rafting em Brotas", total: 1380, status: "Confirmada" },
+  { id: "#RV-1291", date: "03/06/2026", roteiro: "Escalada Pedra Azul", total: 1450, status: "Cancelada" },
 ];
+
 
 type Tab = "login" | "cadastro" | "recuperar";
 
@@ -92,12 +95,13 @@ function Conta() {
 
           <section className="card-surface overflow-hidden">
             <h2 className="flex items-center gap-2 border-b border-border px-6 py-4 text-lg font-bold uppercase">
-              <Package className="h-5 w-5 text-accent" /> Histórico de pedidos
+              <CalendarDays className="h-5 w-5 text-accent" /> Histórico de reservas
             </h2>
             <table className="w-full text-sm">
               <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="px-6 py-2">Pedido</th>
+                  <th className="px-6 py-2">Reserva</th>
+                  <th className="px-6 py-2">Roteiro</th>
                   <th className="px-6 py-2">Data</th>
                   <th className="px-6 py-2">Total</th>
                   <th className="px-6 py-2">Status</th>
@@ -107,8 +111,10 @@ function Conta() {
                 {orders.map((o) => (
                   <tr key={o.id} className="border-t border-border">
                     <td className="px-6 py-3 font-medium">{o.id}</td>
+                    <td className="px-6 py-3 text-muted-foreground">{o.roteiro}</td>
                     <td className="px-6 py-3 text-muted-foreground">{o.date}</td>
                     <td className="px-6 py-3">{formatPrice(o.total)}</td>
+
                     <td className="px-6 py-3">
                       <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
                         {o.status}

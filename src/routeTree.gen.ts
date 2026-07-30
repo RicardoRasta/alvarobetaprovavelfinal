@@ -13,8 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
-import { Route as CatalogoIndexRouteImport } from './routes/catalogo.index'
-import { Route as CatalogoProductIdRouteImport } from './routes/catalogo.$productId'
+import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
+import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,14 +36,14 @@ const FavoritosRoute = FavoritosRouteImport.update({
   path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CatalogoIndexRoute = CatalogoIndexRouteImport.update({
-  id: '/catalogo/',
-  path: '/catalogo/',
+const ViagensIndexRoute = ViagensIndexRouteImport.update({
+  id: '/viagens/',
+  path: '/viagens/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CatalogoProductIdRoute = CatalogoProductIdRouteImport.update({
-  id: '/catalogo/$productId',
-  path: '/catalogo/$productId',
+const ViagensTripIdRoute = ViagensTripIdRouteImport.update({
+  id: '/viagens/$tripId',
+  path: '/viagens/$tripId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -52,16 +52,16 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
-  '/catalogo/$productId': typeof CatalogoProductIdRoute
-  '/catalogo/': typeof CatalogoIndexRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
-  '/catalogo/$productId': typeof CatalogoProductIdRoute
-  '/catalogo': typeof CatalogoIndexRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/viagens': typeof ViagensIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,34 +69,23 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
-  '/catalogo/$productId': typeof CatalogoProductIdRoute
-  '/catalogo/': typeof CatalogoIndexRoute
+  '/viagens/$tripId': typeof ViagensTripIdRoute
+  '/viagens/': typeof ViagensIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/admin'
-    | '/conta'
-    | '/favoritos'
-    | '/catalogo/$productId'
-    | '/catalogo/'
+    '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/admin'
-    | '/conta'
-    | '/favoritos'
-    | '/catalogo/$productId'
-    | '/catalogo'
+  to: '/' | '/admin' | '/conta' | '/favoritos' | '/viagens/$tripId' | '/viagens'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/conta'
     | '/favoritos'
-    | '/catalogo/$productId'
-    | '/catalogo/'
+    | '/viagens/$tripId'
+    | '/viagens/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,8 +93,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
-  CatalogoProductIdRoute: typeof CatalogoProductIdRoute
-  CatalogoIndexRoute: typeof CatalogoIndexRoute
+  ViagensTripIdRoute: typeof ViagensTripIdRoute
+  ViagensIndexRoute: typeof ViagensIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,18 +127,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catalogo/': {
-      id: '/catalogo/'
-      path: '/catalogo'
-      fullPath: '/catalogo/'
-      preLoaderRoute: typeof CatalogoIndexRouteImport
+    '/viagens/': {
+      id: '/viagens/'
+      path: '/viagens'
+      fullPath: '/viagens/'
+      preLoaderRoute: typeof ViagensIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catalogo/$productId': {
-      id: '/catalogo/$productId'
-      path: '/catalogo/$productId'
-      fullPath: '/catalogo/$productId'
-      preLoaderRoute: typeof CatalogoProductIdRouteImport
+    '/viagens/$tripId': {
+      id: '/viagens/$tripId'
+      path: '/viagens/$tripId'
+      fullPath: '/viagens/$tripId'
+      preLoaderRoute: typeof ViagensTripIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -160,8 +149,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
-  CatalogoProductIdRoute: CatalogoProductIdRoute,
-  CatalogoIndexRoute: CatalogoIndexRoute,
+  ViagensTripIdRoute: ViagensTripIdRoute,
+  ViagensIndexRoute: ViagensIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
