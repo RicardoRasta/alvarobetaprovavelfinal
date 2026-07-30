@@ -55,15 +55,17 @@ function AdminLayout() {
         <button
           type="button"
           onClick={async () => {
-            const { data, error } = await supabase.rpc("claim_first_admin");
-            if (error) return toast.error("Não foi possível ativar o acesso.");
-            if (data) {
-              await refreshRole();
-              toast.success("Acesso de administrador ativado!");
-            } else {
-              toast.error("Já existe um administrador. Peça acesso a ele.");
+            const { error } = await supabase
+              .from("user_roles")
+              .insert({ user_id: session.user.id, role: "admin" });
+            if (error) {
+              toast.error("Já existe um administrador ou o acesso não pôde ser ativado.");
+              return;
             }
+            await refreshRole();
+            toast.success("Acesso de administrador ativado!");
           }}
+
           className="mt-6 inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
         >
           Tornar esta conta administradora
