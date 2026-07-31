@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
 import { formatDate, formatPrice, tripImage, whatsappLink, type Trip } from "@/data/trips";
-import { nextDeparture, settingsQuery } from "@/lib/api";
+import { logWhatsAppClick, nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
   const next = nextDeparture(trip);
