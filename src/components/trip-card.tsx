@@ -85,8 +85,17 @@ export function TripCard({ trip }: { trip: Trip }) {
             })}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              logWhatsAppClick({
+                tripId: trip.id,
+                tripName: trip.name,
+                source: "card",
+                departureDate: next?.date,
+              })
+            }
             className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
           >
+
             <MessageCircle className="h-4 w-4" /> Agendar no WhatsApp
           </a>
         </div>
