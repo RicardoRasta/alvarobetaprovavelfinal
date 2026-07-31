@@ -18,6 +18,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
+import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 
@@ -66,6 +67,11 @@ const AdminViagensRoute = AdminViagensRouteImport.update({
   path: '/viagens',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
+  id: '/whatsapp',
+  path: '/whatsapp',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
   id: '/viagens/',
   path: '/viagens/',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
+    | '/admin/whatsapp'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
+    | '/admin/whatsapp'
     | '/viagens/$tripId'
     | '/admin'
     | '/viagens'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
+    | '/admin/whatsapp'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminViagensRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/whatsapp': {
+      id: '/admin/whatsapp'
+      path: '/whatsapp'
+      fullPath: '/admin/whatsapp'
+      preLoaderRoute: typeof AdminWhatsappRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/viagens/': {
       id: '/viagens/'
       path: '/viagens'
@@ -253,6 +272,7 @@ interface AdminRouteChildren {
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminReservasRoute: typeof AdminReservasRoute
   AdminViagensRoute: typeof AdminViagensRoute
+  AdminWhatsappRoute: typeof AdminWhatsappRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -260,6 +280,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminReservasRoute: AdminReservasRoute,
   AdminViagensRoute: AdminViagensRoute,
+  AdminWhatsappRoute: AdminWhatsappRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
