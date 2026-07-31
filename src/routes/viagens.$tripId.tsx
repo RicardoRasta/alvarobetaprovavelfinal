@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatPrice, tripImage, whatsappLink } from "@/data/trips";
-import { activitiesQuery, settingsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/viagens/$tripId")({
   head: () => ({
