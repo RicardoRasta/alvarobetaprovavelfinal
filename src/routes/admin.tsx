@@ -27,7 +27,9 @@ const tabs = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/viagens", label: "Viagens", icon: MapPinned, exact: false },
   { to: "/admin/reservas", label: "Reservas", icon: CalendarCheck, exact: false },
+  { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle, exact: false },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
+
 ] as const;
 
 function AdminLayout() {
