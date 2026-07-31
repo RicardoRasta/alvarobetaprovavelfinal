@@ -245,6 +245,41 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_clicks: {
+        Row: {
+          created_at: string
+          departure_date: string | null
+          id: string
+          source: string
+          trip_id: string | null
+          trip_name: string
+        }
+        Insert: {
+          created_at?: string
+          departure_date?: string | null
+          id?: string
+          source: string
+          trip_id?: string | null
+          trip_name: string
+        }
+        Update: {
+          created_at?: string
+          departure_date?: string | null
+          id?: string
+          source?: string
+          trip_id?: string | null
+          trip_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_clicks_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

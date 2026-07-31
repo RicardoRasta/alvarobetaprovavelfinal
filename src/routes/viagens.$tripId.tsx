@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatPrice, tripImage, whatsappLink } from "@/data/trips";
-import { activitiesQuery, settingsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/viagens/$tripId")({
   head: () => ({
@@ -94,6 +94,12 @@ function TripDetail() {
     if (error) {
       toast.error("Não foi possível registrar o pedido, mas você pode seguir pelo WhatsApp.");
     }
+    await logWhatsAppClick({
+      tripId: trip.id,
+      tripName: trip.name,
+      source: "trip_page",
+      departureDate: departure || null,
+    });
     const url = whatsappLink(settings, {
       tripName: trip.name,
       date: departure || undefined,
@@ -101,6 +107,7 @@ function TripDetail() {
       customerName: name.trim(),
     });
     window.open(url, "_blank", "noopener,noreferrer");
+
   };
 
   return (

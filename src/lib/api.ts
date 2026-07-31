@@ -71,8 +71,49 @@ export const bookingsQuery = queryOptions({
   },
 });
 
+export type WhatsAppClick = {
+  id: string;
+  trip_id: string | null;
+  trip_name: string;
+  source: "card" | "trip_page" | "fab";
+  departure_date: string | null;
+  created_at: string;
+};
+
+export const whatsappClicksQuery = queryOptions({
+  queryKey: ["whatsapp_clicks"],
+  queryFn: async (): Promise<WhatsAppClick[]> => {
+    const { data, error } = await supabase
+      .from("whatsapp_clicks")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    return (data ?? []) as unknown as WhatsAppClick[];
+  },
+});
+
+/** Registra um clique em "Agendar no WhatsApp" para acompanhamento de leads. */
+export async function logWhatsAppClick(input: {
+  tripId?: string | null;
+  tripName: string;
+  source: WhatsAppClick["source"];
+  departureDate?: string | null;
+}) {
+  try {
+    await supabase.from("whatsapp_clicks").insert({
+      trip_id: input.tripId ?? null,
+      trip_name: input.tripName.slice(0, 160),
+      source: input.source,
+      departure_date: input.departureDate || null,
+    });
+  } catch {
+    /* nunca bloquear o envio ao WhatsApp */
+  }
+}
 
 export const nextDeparture = (trip: Trip) => {
   const today = new Date().toISOString().slice(0, 10);
   return (trip.departures ?? []).filter((d) => d.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
 };
+
