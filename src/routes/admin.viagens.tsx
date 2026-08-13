@@ -105,9 +105,8 @@ const slugify = (v: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-const storageUrl = (path: string) => {
-  return `${import.meta.env.VITE_SUPABASE_URL || ""}/storage/v1/object/public/trip-images/${path}`;
-};
+const storageUrl = (path: string) => `/api/public/img/${path}`;
+
 
 const MAX_IMAGES = 5;
 

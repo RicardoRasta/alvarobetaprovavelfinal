@@ -74,17 +74,26 @@ const fallbackImages: Record<string, string> = {
   "amazonia-rio-negro": amazonia,
 };
 
+/** Converte endereços antigos do armazenamento para a rota interna de imagens. */
+export const normalizeImage = (url?: string | null) => {
+  const v = (url ?? "").trim();
+  if (!v) return "";
+  const m = v.match(/\/storage\/v1\/object\/(?:public\/)?trip-images\/(.+)$/);
+  return m ? `/api/public/img/${m[1]}` : v;
+};
+
 export const tripImage = (trip: Pick<Trip, "slug" | "image_url">) =>
-  trip.image_url?.trim() || fallbackImages[trip.slug] || hero;
+  normalizeImage(trip.image_url) || fallbackImages[trip.slug] || hero;
 
 /** Lista de imagens da viagem (capa primeiro), com fallback para a imagem única. */
 export const tripImages = (trip: Pick<Trip, "slug" | "image_url" | "images">): string[] => {
-  const list = (trip.images ?? []).map((u) => (u ?? "").trim()).filter(Boolean);
+  const list = (trip.images ?? []).map((u) => normalizeImage(u)).filter(Boolean);
   return list.length > 0 ? list.slice(0, 5) : [tripImage(trip)];
 };
 
 export const bannerImage = (settings?: Pick<SiteSettings, "banner_image_url"> | null) =>
-  settings?.banner_image_url?.trim() || hero;
+  normalizeImage(settings?.banner_image_url) || hero;
+
 
 export const formatPrice = (value: number) =>
   Number(value).toLocaleString("pt-BR", {
