@@ -159,15 +159,7 @@ function TripDetail() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-4">
-          <div className="card-surface overflow-hidden">
-            <img
-              src={tripImage(trip)}
-              alt={`${trip.name} em ${trip.destination}, ${trip.state}`}
-              width={1024}
-              height={768}
-              className="aspect-[4/3] w-full object-cover"
-            />
-          </div>
+          <TripGallery trip={trip} />
 
           {trip.highlights.length > 0 && (
             <section className="card-surface p-5">
