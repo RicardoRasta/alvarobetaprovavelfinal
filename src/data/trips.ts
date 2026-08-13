@@ -20,7 +20,10 @@ export type Activity = {
 export type Departure = {
   id: string;
   trip_id: string;
+  /** Data de ida */
   date: string;
+  /** Data de volta (opcional) */
+  return_date?: string | null;
   spots: number;
 };
 
