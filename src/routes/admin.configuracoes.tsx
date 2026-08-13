@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { bannerImage } from "@/data/trips";
+import { bannerImage, DEFAULT_FX } from "@/data/trips";
 import { settingsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/configuracoes")({
