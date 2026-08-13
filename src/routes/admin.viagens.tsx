@@ -28,7 +28,7 @@ type Form = {
   old_price: string;
   days: string;
   level: string;
-  image_url: string;
+  images: string[];
   description: string;
   highlights: string;
   includes: string;
@@ -54,7 +54,7 @@ const empty: Form = {
   old_price: "",
   days: "1",
   level: "Iniciante",
-  image_url: "",
+  images: [],
   description: "",
   highlights: "",
   includes: "",
@@ -74,7 +74,12 @@ const toForm = (t: Trip): Form => ({
   old_price: t.old_price == null ? "" : String(t.old_price),
   days: String(t.days),
   level: t.level,
-  image_url: t.image_url ?? "",
+  images:
+    (t.images ?? []).filter(Boolean).length > 0
+      ? (t.images ?? []).filter(Boolean)
+      : t.image_url
+        ? [t.image_url]
+        : [],
   description: t.description,
   highlights: (t.highlights ?? []).join("\n"),
   includes: (t.includes ?? []).join("\n"),
@@ -149,27 +154,50 @@ function AdminTrips() {
     }
   }, [form]);
 
-  const uploadImage = async (file: File) => {
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    setUploading(true);
-    const { error } = await supabase.storage.from("trip-images").upload(path, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-    setUploading(false);
-    if (error) {
-      toast.error(error.message);
+  const uploadImages = async (files: File[]) => {
+    const current = form?.images ?? [];
+    const room = MAX_IMAGES - current.length;
+    if (room <= 0) {
+      toast.error(`Máximo de ${MAX_IMAGES} imagens por viagem.`);
       return;
     }
-    set("image_url", storageUrl(path));
-    toast.success("Imagem enviada!");
-  };
-
-  const removeImage = () => {
-    set("image_url", "");
+    const selected = files.slice(0, room);
+    if (files.length > room) toast.error(`Só cabem mais ${room} imagem(ns).`);
+    setUploading(true);
+    const uploaded: string[] = [];
+    for (const file of selected) {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) {
+        toast.error(error.message);
+        continue;
+      }
+      uploaded.push(storageUrl(path));
+    }
+    setUploading(false);
+    if (uploaded.length) {
+      setForm((f) => (f ? { ...f, images: [...f.images, ...uploaded].slice(0, MAX_IMAGES) } : f));
+      toast.success(uploaded.length > 1 ? "Imagens enviadas!" : "Imagem enviada!");
+    }
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const removeImage = (idx: number) =>
+    setForm((f) => (f ? { ...f, images: f.images.filter((_, i) => i !== idx) } : f));
+
+  const moveImage = (idx: number, dir: -1 | 1) =>
+    setForm((f) => {
+      if (!f) return f;
+      const next = [...f.images];
+      const target = idx + dir;
+      if (target < 0 || target >= next.length) return f;
+      [next[idx], next[target]] = [next[target], next[idx]];
+      return { ...f, images: next };
+    });
 
   const save = async () => {
     if (!form) return;
@@ -190,7 +218,8 @@ function AdminTrips() {
       old_price: form.old_price ? Number(form.old_price) : null,
       days: Number(form.days) || 1,
       level: form.level,
-      image_url: form.image_url.trim() || null,
+      image_url: form.images[0] ?? null,
+      images: form.images,
       description: form.description.trim(),
       highlights: form.highlights.split("\n").map((s) => s.trim()).filter(Boolean),
       includes: form.includes.split("\n").map((s) => s.trim()).filter(Boolean),
