@@ -121,7 +121,8 @@ function AdminTrips() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const refresh = () => qc.invalidateQueries({ queryKey: ["trips"] });
+  /** Recarrega do banco para confirmar o que ficou gravado. */
+  const refresh = () => qc.refetchQueries({ queryKey: ["trips"] });
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) =>
     setForm((f) => (f ? { ...f, [k]: v } : f));
