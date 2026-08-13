@@ -200,6 +200,16 @@ function AdminTrips() {
       return { ...f, images: next };
     });
 
+  /** Move a imagem escolhida para a primeira posição (capa da viagem). */
+  const setCover = (idx: number) =>
+    setForm((f) => {
+      if (!f || idx === 0) return f;
+      const next = [...f.images];
+      const [chosen] = next.splice(idx, 1);
+      if (!chosen) return f;
+      return { ...f, images: [chosen, ...next] };
+    });
+
   const save = async () => {
     if (!form) return;
     if (!form.name.trim() || !form.price) {
