@@ -39,6 +39,7 @@ export type Trip = {
   days: number;
   level: string;
   image_url: string | null;
+  images?: string[] | null;
   description: string;
   highlights: string[];
   includes: string[];
