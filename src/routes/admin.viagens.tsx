@@ -407,50 +407,76 @@ function AdminTrips() {
             </label>
 
             <div className="sm:col-span-2">
-              <span className={labelCls}>Imagem do roteiro</span>
-              <div className="flex flex-col gap-3 rounded-md border border-input bg-card p-3 sm:flex-row sm:items-center">
-                {form.image_url ? (
-                  <div className="relative h-28 w-full overflow-hidden rounded-md sm:w-40">
-                    <img
-                      src={form.image_url}
-                      alt="Pré-visualização do roteiro"
-                      className="h-full w-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute right-2 top-2 rounded-full bg-background/90 p-1 text-muted-foreground hover:text-destructive"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex h-28 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted sm:w-40">
-                    <span className="text-xs text-muted-foreground">Sem imagem</span>
-                  </div>
-                )}
-                <div className="flex-1">
+              <span className={labelCls}>Imagens do roteiro (até {MAX_IMAGES})</span>
+              <div className="space-y-3 rounded-md border border-input bg-card p-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                  {form.images.map((url, idx) => (
+                    <div key={url} className="relative overflow-hidden rounded-md border border-border">
+                      <img src={url} alt={`Imagem ${idx + 1}`} className="aspect-square w-full object-cover" />
+                      {idx === 0 && (
+                        <span className="absolute left-1 top-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
+                          Capa
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        aria-label="Remover imagem"
+                        className="absolute right-1 top-1 rounded-full bg-background/90 p-1 text-muted-foreground hover:text-destructive"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                      <div className="flex justify-between bg-background/90 px-1 py-0.5">
+                        <button
+                          type="button"
+                          onClick={() => moveImage(idx, -1)}
+                          disabled={idx === 0}
+                          aria-label="Mover para a esquerda"
+                          className="px-1 text-xs disabled:opacity-40"
+                        >
+                          ←
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveImage(idx, 1)}
+                          disabled={idx === form.images.length - 1}
+                          aria-label="Mover para a direita"
+                          className="px-1 text-xs disabled:opacity-40"
+                        >
+                          →
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {form.images.length === 0 && (
+                    <div className="col-span-2 flex h-28 items-center justify-center rounded-md border border-dashed border-border bg-muted sm:col-span-5">
+                      <span className="text-xs text-muted-foreground">Sem imagens</span>
+                    </div>
+                  )}
+                </div>
+                <div>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
+                    multiple
                     className="hidden"
                     onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) uploadImage(file);
+                      const files = Array.from(e.target.files ?? []);
+                      if (files.length) uploadImages(files);
                     }}
                   />
                   <button
                     type="button"
-                    disabled={uploading}
+                    disabled={uploading || form.images.length >= MAX_IMAGES}
                     onClick={() => fileInputRef.current?.click()}
                     className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
                   >
                     <Upload className="h-4 w-4" />
-                    {uploading ? "Enviando..." : form.image_url ? "Trocar imagem" : "Enviar imagem"}
+                    {uploading ? "Enviando..." : "Adicionar imagens"}
                   </button>
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Envie uma foto do roteiro direto do seu computador. Formatos: JPG, PNG, WebP.
+                    A primeira imagem é a capa usada nos cards. Formatos: JPG, PNG, WebP.
                   </p>
                 </div>
               </div>
