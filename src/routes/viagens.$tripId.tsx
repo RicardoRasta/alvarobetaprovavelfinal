@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatPrice, tripImages, whatsappLink } from "@/data/trips";
+import { PriceTag } from "@/components/price-tag";
 import type { Trip } from "@/data/trips";
 import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
 
@@ -214,14 +215,14 @@ function TripDetail() {
 
           <p className="mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
 
-          <div className="mt-6 flex items-baseline gap-3">
-            <span className="font-display text-4xl font-bold">{formatPrice(trip.price)}</span>
+          <div className="mt-6 flex flex-wrap items-baseline gap-3">
+            <PriceTag value={trip.price} size="lg" />
             {trip.old_price != null && (
               <span className="text-lg text-muted-foreground line-through">
                 {formatPrice(trip.old_price)}
               </span>
             )}
-            <span className="text-sm text-muted-foreground">por pessoa</span>
+            {trip.price > 0 && <span className="text-sm text-muted-foreground">por pessoa</span>}
           </div>
 
           <form className="card-surface mt-6 space-y-4 p-5" onSubmit={handleSubmit}>
@@ -290,7 +291,7 @@ function TripDetail() {
               <span className="flex items-center gap-1 text-muted-foreground">
                 <Users className="h-4 w-4" /> {people} pessoa(s)
               </span>
-              <span className="font-display text-2xl font-bold">{formatPrice(total)}</span>
+              <PriceTag value={total} size="lg" className="items-end text-right" />
             </div>
 
             <button

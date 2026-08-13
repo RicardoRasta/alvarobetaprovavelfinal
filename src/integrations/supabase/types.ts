@@ -123,6 +123,9 @@ export type Database = {
           banner_image_url: string | null
           banner_subtitle: string
           banner_title: string
+          fx_eur: number
+          fx_updated_at: string | null
+          fx_usd: number
           id: number
           stats: Json
           updated_at: string
@@ -134,6 +137,9 @@ export type Database = {
           banner_image_url?: string | null
           banner_subtitle?: string
           banner_title?: string
+          fx_eur?: number
+          fx_updated_at?: string | null
+          fx_usd?: number
           id?: number
           stats?: Json
           updated_at?: string
@@ -145,6 +151,9 @@ export type Database = {
           banner_image_url?: string | null
           banner_subtitle?: string
           banner_title?: string
+          fx_eur?: number
+          fx_updated_at?: string | null
+          fx_usd?: number
           id?: number
           stats?: Json
           updated_at?: string

@@ -121,7 +121,8 @@ function AdminTrips() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const refresh = () => qc.invalidateQueries({ queryKey: ["trips"] });
+  /** Recarrega do banco para confirmar o que ficou gravado. */
+  const refresh = () => qc.refetchQueries({ queryKey: ["trips"] });
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) =>
     setForm((f) => (f ? { ...f, [k]: v } : f));
@@ -153,6 +154,17 @@ function AdminTrips() {
     if (form && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  }, [form]);
+
+  /** Evita perder o que foi digitado ao fechar/atualizar a aba com o formulário aberto. */
+  useEffect(() => {
+    if (!form) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
   }, [form]);
 
   const uploadImages = async (files: File[]) => {
@@ -198,6 +210,16 @@ function AdminTrips() {
       if (target < 0 || target >= next.length) return f;
       [next[idx], next[target]] = [next[target], next[idx]];
       return { ...f, images: next };
+    });
+
+  /** Move a imagem escolhida para a primeira posição (capa da viagem). */
+  const setCover = (idx: number) =>
+    setForm((f) => {
+      if (!f || idx === 0) return f;
+      const next = [...f.images];
+      const [chosen] = next.splice(idx, 1);
+      if (!chosen) return f;
+      return { ...f, images: [chosen, ...next] };
     });
 
   const save = async () => {
@@ -415,7 +437,7 @@ function AdminTrips() {
                       <img src={url} alt={`Imagem ${idx + 1}`} className="aspect-square w-full object-cover" />
                       {idx === 0 && (
                         <span className="absolute left-1 top-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
-                          Capa
+                          ★ Capa
                         </span>
                       )}
                       <button
@@ -446,6 +468,14 @@ function AdminTrips() {
                           →
                         </button>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setCover(idx)}
+                        disabled={idx === 0}
+                        className="w-full border-t border-border bg-background px-1 py-1.5 text-[11px] font-semibold text-accent disabled:text-muted-foreground disabled:opacity-70"
+                      >
+                        {idx === 0 ? "Esta é a capa" : "Definir como capa"}
+                      </button>
                     </div>
                   ))}
                   {form.images.length === 0 && (
@@ -476,7 +506,8 @@ function AdminTrips() {
                     {uploading ? "Enviando..." : "Adicionar imagens"}
                   </button>
                   <p className="mt-2 text-xs text-muted-foreground">
-                    A primeira imagem é a capa usada nos cards. Formatos: JPG, PNG, WebP.
+                    Use “Definir como capa” para escolher a imagem principal (a que aparece nos
+                    cards e na home). Formatos: JPG, PNG, WebP.
                   </p>
                 </div>
               </div>

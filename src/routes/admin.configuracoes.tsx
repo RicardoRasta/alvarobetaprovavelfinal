@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { bannerImage } from "@/data/trips";
+import { bannerImage, DEFAULT_FX } from "@/data/trips";
 import { settingsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/configuracoes")({
@@ -23,6 +23,8 @@ function AdminSettings() {
     banner_image_url: "",
     whatsapp_number: "",
     whatsapp_greeting: "",
+    fx_usd: "",
+    fx_eur: "",
   });
   const [stats, setStats] = useState<Stat[]>([]);
 
@@ -35,6 +37,8 @@ function AdminSettings() {
       banner_image_url: settings.banner_image_url ?? "",
       whatsapp_number: settings.whatsapp_number ?? "",
       whatsapp_greeting: settings.whatsapp_greeting ?? "",
+      fx_usd: String(settings.fx_usd ?? ""),
+      fx_eur: String(settings.fx_eur ?? ""),
     });
     setStats(settings.stats ?? []);
   }, [settings]);
@@ -45,18 +49,21 @@ function AdminSettings() {
 
   const save = async () => {
     setSaving(true);
+    const { fx_usd, fx_eur, ...rest } = form;
     const { error } = await supabase
       .from("site_settings")
       .update({
-        ...form,
+        ...rest,
         banner_image_url: form.banner_image_url.trim() || null,
+        fx_usd: Number(fx_usd) > 0 ? Number(fx_usd) : DEFAULT_FX.usd,
+        fx_eur: Number(fx_eur) > 0 ? Number(fx_eur) : DEFAULT_FX.eur,
         stats: stats.filter((s) => s.label.trim()),
       })
       .eq("id", 1);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Configurações salvas!");
-    qc.invalidateQueries({ queryKey: ["site_settings"] });
+    await qc.refetchQueries({ queryKey: ["site_settings"] });
   };
 
   return (
@@ -121,6 +128,36 @@ function AdminSettings() {
             A mensagem enviada inclui automaticamente o roteiro, a data de saída, o número de
             pessoas e o nome do cliente.
           </p>
+        </section>
+
+        <section className="card-surface space-y-4 p-5">
+          <h2 className="text-lg font-bold uppercase">Cotações (dólar e euro)</h2>
+          <p className="text-xs text-muted-foreground">
+            O preço principal continua em real. Estes valores são usados para mostrar a conversão
+            aproximada em dólar e euro nos cards e nas páginas das viagens.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block">
+              <span className={labelCls}>1 dólar = R$</span>
+              <input
+                className={field}
+                type="number"
+                step="0.01"
+                value={form.fx_usd}
+                onChange={(e) => setForm({ ...form, fx_usd: e.target.value })}
+              />
+            </label>
+            <label className="block">
+              <span className={labelCls}>1 euro = R$</span>
+              <input
+                className={field}
+                type="number"
+                step="0.01"
+                value={form.fx_eur}
+                onChange={(e) => setForm({ ...form, fx_eur: e.target.value })}
+              />
+            </label>
+          </div>
         </section>
 
         <section className="card-surface space-y-4 p-5">
