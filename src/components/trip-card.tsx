@@ -83,6 +83,12 @@ export function TripCard({ trip }: { trip: Trip }) {
             href={whatsappLink(settings, {
               tripName: trip.name,
               date: next?.date,
+              returnDate: next?.return_date,
+              destination: trip.destination,
+              state: trip.state,
+              days: trip.days,
+              price: trip.price,
+              slug: trip.slug,
             })}
             target="_blank"
             rel="noopener noreferrer"
