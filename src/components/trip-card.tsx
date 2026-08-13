@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
-import { formatDate, formatPrice, tripImage, whatsappLink, type Trip } from "@/data/trips";
+import { formatPrice, formatRange, tripImage, whatsappLink, type Trip } from "@/data/trips";
 import { logWhatsAppClick, nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
@@ -69,7 +69,7 @@ export function TripCard({ trip }: { trip: Trip }) {
           </div>
           <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
             <CalendarDays className="h-3.5 w-3.5" />
-            {next ? `Próxima saída: ${formatDate(next.date)}` : "Datas sob consulta"}
+            {next ? `Próxima saída: ${formatRange(next.date, next.return_date)}` : "Datas sob consulta"}
           </p>
           <Link
             to="/viagens/$tripId"
