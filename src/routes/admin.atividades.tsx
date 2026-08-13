@@ -104,11 +104,14 @@ function AdminActivities() {
     const swap = sorted[swapIdx];
     const { error } = await supabase
       .from("activities")
-      .upsert([
-        { id: current.id, sort_order: swap.sort_order },
-        { id: swap.id, sort_order: current.sort_order },
-      ]);
+      .update({ sort_order: swap.sort_order })
+      .eq("id", current.id);
     if (error) return toast.error(error.message);
+    const { error: err2 } = await supabase
+      .from("activities")
+      .update({ sort_order: current.sort_order })
+      .eq("id", swap.id);
+    if (err2) return toast.error(err2.message);
     refresh();
   };
 
