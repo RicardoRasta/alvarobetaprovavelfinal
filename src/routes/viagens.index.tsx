@@ -41,12 +41,14 @@ function Viagens() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return trips.filter(
-      (t) =>
-        t.published &&
-        (!atividade || t.activity_id === atividade) &&
-        (!q ||
-          `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
+    return sortByNextDeparture(
+      trips.filter(
+        (t) =>
+          t.published &&
+          (!atividade || t.activity_id === atividade) &&
+          (!q ||
+            `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
+      ),
     );
   }, [atividade, query, trips]);
 
