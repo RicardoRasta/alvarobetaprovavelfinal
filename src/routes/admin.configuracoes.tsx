@@ -23,6 +23,8 @@ function AdminSettings() {
     banner_image_url: "",
     whatsapp_number: "",
     whatsapp_greeting: "",
+    fx_usd: "",
+    fx_eur: "",
   });
   const [stats, setStats] = useState<Stat[]>([]);
 
@@ -35,6 +37,8 @@ function AdminSettings() {
       banner_image_url: settings.banner_image_url ?? "",
       whatsapp_number: settings.whatsapp_number ?? "",
       whatsapp_greeting: settings.whatsapp_greeting ?? "",
+      fx_usd: String(settings.fx_usd ?? ""),
+      fx_eur: String(settings.fx_eur ?? ""),
     });
     setStats(settings.stats ?? []);
   }, [settings]);
@@ -45,18 +49,21 @@ function AdminSettings() {
 
   const save = async () => {
     setSaving(true);
+    const { fx_usd, fx_eur, ...rest } = form;
     const { error } = await supabase
       .from("site_settings")
       .update({
-        ...form,
+        ...rest,
         banner_image_url: form.banner_image_url.trim() || null,
+        fx_usd: Number(fx_usd) > 0 ? Number(fx_usd) : DEFAULT_FX.usd,
+        fx_eur: Number(fx_eur) > 0 ? Number(fx_eur) : DEFAULT_FX.eur,
         stats: stats.filter((s) => s.label.trim()),
       })
       .eq("id", 1);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Configurações salvas!");
-    qc.invalidateQueries({ queryKey: ["site_settings"] });
+    await qc.refetchQueries({ queryKey: ["site_settings"] });
   };
 
   return (
