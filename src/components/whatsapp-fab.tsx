@@ -8,7 +8,7 @@ export function WhatsAppFab() {
   const { data: settings } = useQuery(settingsQuery);
   return (
     <a
-      href={whatsappLink(settings, { tripName: "uma viagem de aventura" })}
+      href={whatsappLink(settings, { tripName: "Contato geral", general: true })}
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => logWhatsAppClick({ tripName: "Contato geral", source: "fab" })}

@@ -126,18 +126,55 @@ export const daysUntil = (iso: string) => {
 /** Número oficial do proprietário (fallback caso as configurações não carreguem). */
 export const DEFAULT_WHATSAPP = "554799030838";
 
-/** Monta o link do WhatsApp com a mensagem já preenchida. */
+/** Monta o link do WhatsApp com a mensagem já preenchida e detalhada da viagem. */
 export function whatsappLink(
   settings: Pick<SiteSettings, "whatsapp_number" | "whatsapp_greeting"> | null | undefined,
-  params: { tripName: string; date?: string; people?: number; customerName?: string },
+  params: {
+    tripName: string;
+    date?: string;
+    returnDate?: string | null;
+    people?: number;
+    customerName?: string;
+    destination?: string | null;
+    state?: string | null;
+    days?: number | null;
+    price?: number | null;
+    slug?: string | null;
+    general?: boolean;
+  },
 ) {
   const number =
     (settings?.whatsapp_number || DEFAULT_WHATSAPP).replace(/\D/g, "") || DEFAULT_WHATSAPP;
   const greeting = settings?.whatsapp_greeting || "Olá! Tenho interesse na viagem";
-  const parts = [`${greeting}: *${params.tripName}*.`];
-  if (params.date) parts.push(`Data de saída: ${formatDate(params.date)}.`);
-  if (params.people) parts.push(`Número de pessoas: ${params.people}.`);
-  if (params.customerName) parts.push(`Meu nome é ${params.customerName}.`);
-  parts.push("Pode me passar mais detalhes?");
-  return `https://wa.me/${number}?text=${encodeURIComponent(parts.join(" "))}`;
+
+  if (params.general) {
+    const lines = [
+      `${greeting}.`,
+      "Gostaria de saber mais sobre os roteiros, datas disponíveis e valores.",
+    ];
+    return `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
+  }
+
+  const lines: string[] = [`${greeting}:`, `*${params.tripName}*`];
+
+  const local = [params.destination, params.state].filter(Boolean).join(" - ");
+  if (local) lines.push(`📍 Destino: ${local}`);
+  if (params.date) {
+    lines.push(`📅 Saída: ${formatRange(params.date, params.returnDate ?? undefined)}`);
+  }
+  if (params.days && params.days > 0) lines.push(`⏱️ Duração: ${params.days} dia(s)`);
+  if (params.price != null) {
+    lines.push(
+      params.price > 0 ? `💰 Valor anunciado: ${formatPrice(params.price)} por pessoa` : "💰 Valor: sob consulta",
+    );
+  }
+  if (params.people) lines.push(`👥 Pessoas: ${params.people}`);
+  if (params.customerName) lines.push(`🙋 Meu nome: ${params.customerName}`);
+  if (params.slug && typeof window !== "undefined") {
+    lines.push(`🔗 ${window.location.origin}/viagens/${params.slug}`);
+  }
+  lines.push("", "Pode me confirmar disponibilidade e os próximos passos?");
+
+  return `https://wa.me/${number}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
+

@@ -25,6 +25,7 @@ type Form = {
   state: string;
   activity_id: string;
   price: string;
+  price_on_request: boolean;
   old_price: string;
   days: string;
   level: string;
@@ -51,6 +52,7 @@ const empty: Form = {
   state: "",
   activity_id: "",
   price: "",
+  price_on_request: false,
   old_price: "",
   days: "1",
   level: "Iniciante",
@@ -70,7 +72,8 @@ const toForm = (t: Trip): Form => ({
   destination: t.destination,
   state: t.state,
   activity_id: t.activity_id ?? "",
-  price: String(t.price),
+  price: t.price > 0 ? String(t.price) : "",
+  price_on_request: !t.price || t.price <= 0,
   old_price: t.old_price == null ? "" : String(t.old_price),
   days: String(t.days),
   level: t.level,
@@ -224,8 +227,8 @@ function AdminTrips() {
 
   const save = async () => {
     if (!form) return;
-    if (!form.name.trim() || !form.price) {
-      toast.error("Nome e preço são obrigatórios.");
+    if (!form.name.trim() || (!form.price && !form.price_on_request)) {
+      toast.error("Informe o nome e o preço (ou marque \u201csob consulta\u201d).");
       return;
     }
     setSaving(true);
@@ -237,7 +240,7 @@ function AdminTrips() {
       destination: form.destination.trim(),
       state: form.state.trim(),
       activity_id: form.activity_id || null,
-      price: Number(form.price),
+      price: form.price_on_request ? 0 : Number(form.price),
       old_price: form.old_price ? Number(form.old_price) : null,
       days: Number(form.days) || 1,
       level: form.level,
@@ -411,10 +414,25 @@ function AdminTrips() {
                 ))}
               </select>
             </label>
-            <label>
+            <div>
               <span className={labelCls}>Preço por pessoa (R$)</span>
-              <input className={field} type="number" value={form.price} onChange={(e) => set("price", e.target.value)} />
-            </label>
+              <input
+                className={field}
+                type="number"
+                disabled={form.price_on_request}
+                placeholder={form.price_on_request ? "Sob consulta" : ""}
+                value={form.price_on_request ? "" : form.price}
+                onChange={(e) => set("price", e.target.value)}
+              />
+              <label className="mt-2 flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={form.price_on_request}
+                  onChange={(e) => set("price_on_request", e.target.checked)}
+                />
+                <span>Preço sob consulta</span>
+              </label>
+            </div>
             <label>
               <span className={labelCls}>Preço antigo (opcional)</span>
               <input className={field} type="number" value={form.old_price} onChange={(e) => set("old_price", e.target.value)} />
@@ -663,7 +681,7 @@ function AdminTrips() {
                 )}
               </div>
               <p className="text-sm text-muted-foreground">
-                {t.destination} · {t.state} · {t.days} dias · {formatPrice(t.price)}
+                {t.destination} · {t.state} · {t.days} dias · {t.price > 0 ? formatPrice(t.price) : "Sob consulta"}
               </p>
 
               <div className="mt-3 flex flex-wrap gap-2">

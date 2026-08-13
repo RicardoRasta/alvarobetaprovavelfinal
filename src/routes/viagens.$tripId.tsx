@@ -144,6 +144,11 @@ function TripDetail() {
       date: departure || undefined,
       people,
       customerName: name.trim(),
+      destination: trip.destination,
+      state: trip.state,
+      days: trip.days,
+      price: trip.price,
+      slug: trip.slug,
     });
     window.open(url, "_blank", "noopener,noreferrer");
 
