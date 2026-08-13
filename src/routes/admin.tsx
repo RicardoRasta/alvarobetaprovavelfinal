@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { CalendarCheck, LayoutDashboard, LogOut, MessageCircle, Settings, ShieldAlert, MapPinned, Tags } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
-import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
