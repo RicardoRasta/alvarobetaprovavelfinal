@@ -108,11 +108,6 @@ const storageUrl = (path: string) => {
 
 const MAX_IMAGES = 5;
 
-const legacyStorageUrl = (path: string) => {
-  const base = import.meta.env.VITE_SUPABASE_URL || "";
-  return `${base}/storage/v1/object/public/trip-images/${path}`;
-};
-
 function AdminTrips() {
   const { data: trips = [] } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
