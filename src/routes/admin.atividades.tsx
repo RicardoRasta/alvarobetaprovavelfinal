@@ -32,7 +32,7 @@ function AdminActivities() {
   const [form, setForm] = useState<Form | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const refresh = () => qc.invalidateQueries({ queryKey: ["activities"] });
+  const refresh = () => qc.refetchQueries({ queryKey: ["activities"] });
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) =>
     setForm((f) => (f ? { ...f, [k]: v } : f));
