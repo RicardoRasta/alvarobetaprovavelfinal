@@ -54,6 +54,23 @@ function AdminSettings() {
     "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
+  /** Envia a foto escolhida para o armazenamento e guarda o endereço público. */
+  const uploadBanner = async (file: File) => {
+    setUploading(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `banners/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+    setUploading(false);
+    if (bannerInputRef.current) bannerInputRef.current.value = "";
+    if (error) return toast.error(error.message);
+    setForm((f) => ({ ...f, banner_image_url: storageUrl(path) }));
+    toast.success("Foto enviada! Não esqueça de salvar.");
+  };
+
+
   const save = async () => {
     setSaving(true);
     const { fx_usd, fx_eur, ...rest } = form;
