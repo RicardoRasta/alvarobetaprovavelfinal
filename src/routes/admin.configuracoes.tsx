@@ -131,8 +131,37 @@ function AdminSettings() {
         </section>
 
         <section className="card-surface space-y-4 p-5">
+          <h2 className="text-lg font-bold uppercase">Cotações (dólar e euro)</h2>
+          <p className="text-xs text-muted-foreground">
+            O preço principal continua em real. Estes valores são usados para mostrar a conversão
+            aproximada em dólar e euro nos cards e nas páginas das viagens.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block">
+              <span className={labelCls}>1 dólar = R$</span>
+              <input
+                className={field}
+                type="number"
+                step="0.01"
+                value={form.fx_usd}
+                onChange={(e) => setForm({ ...form, fx_usd: e.target.value })}
+              />
+            </label>
+            <label className="block">
+              <span className={labelCls}>1 euro = R$</span>
+              <input
+                className={field}
+                type="number"
+                step="0.01"
+                value={form.fx_eur}
+                onChange={(e) => setForm({ ...form, fx_eur: e.target.value })}
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className="card-surface space-y-4 p-5">
           <h2 className="text-lg font-bold uppercase">Estatísticas da home</h2>
-          {null}
           {stats.map((s, i) => (
             <div key={i} className="flex gap-2">
               <input
