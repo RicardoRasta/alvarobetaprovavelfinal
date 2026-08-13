@@ -117,3 +117,14 @@ export const nextDeparture = (trip: Trip) => {
   return (trip.departures ?? []).filter((d) => d.date >= today).sort((a, b) => a.date.localeCompare(b.date))[0];
 };
 
+/** Ordena roteiros pela saída mais próxima; sem data marcada vai para o fim. */
+export const sortByNextDeparture = <T extends Trip>(trips: T[]): T[] =>
+  [...trips].sort((a, b) => {
+    const da = nextDeparture(a)?.date;
+    const db = nextDeparture(b)?.date;
+    if (da && db) return da.localeCompare(db);
+    if (da) return -1;
+    if (db) return 1;
+    return a.name.localeCompare(b.name);
+  });
+
