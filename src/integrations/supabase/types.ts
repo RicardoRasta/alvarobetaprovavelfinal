@@ -164,6 +164,7 @@ export type Database = {
           highlights: string[]
           id: string
           image_url: string | null
+          images: string[]
           includes: string[]
           level: string
           name: string
@@ -185,6 +186,7 @@ export type Database = {
           highlights?: string[]
           id?: string
           image_url?: string | null
+          images?: string[]
           includes?: string[]
           level?: string
           name: string
@@ -206,6 +208,7 @@ export type Database = {
           highlights?: string[]
           id?: string
           image_url?: string | null
+          images?: string[]
           includes?: string[]
           level?: string
           name?: string
