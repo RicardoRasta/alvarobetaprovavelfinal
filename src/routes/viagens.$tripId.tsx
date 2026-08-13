@@ -14,8 +14,46 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatPrice, tripImage, whatsappLink } from "@/data/trips";
+import { formatDate, formatPrice, tripImages, whatsappLink } from "@/data/trips";
+import type { Trip } from "@/data/trips";
 import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
+
+function TripGallery({ trip }: { trip: Trip }) {
+  const images = tripImages(trip);
+  const [active, setActive] = useState(0);
+  const current = images[Math.min(active, images.length - 1)];
+
+  return (
+    <div className="space-y-3">
+      <div className="card-surface overflow-hidden">
+        <img
+          src={current}
+          alt={`${trip.name} em ${trip.destination}, ${trip.state}`}
+          width={1024}
+          height={768}
+          className="aspect-[4/3] w-full object-cover"
+        />
+      </div>
+      {images.length > 1 && (
+        <div className="grid grid-cols-5 gap-2">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`Ver imagem ${i + 1} de ${images.length}`}
+              className={`overflow-hidden rounded-md border transition ${
+                i === active ? "border-accent" : "border-border opacity-70 hover:opacity-100"
+              }`}
+            >
+              <img src={src} alt="" className="aspect-square w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/viagens/$tripId")({
   head: () => ({
