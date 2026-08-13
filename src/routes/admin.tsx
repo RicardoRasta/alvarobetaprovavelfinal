@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { CalendarCheck, LayoutDashboard, LogOut, MessageCircle, Settings, ShieldAlert, MapPinned } from "lucide-react";
+import { CalendarCheck, LayoutDashboard, LogOut, MessageCircle, Settings, ShieldAlert, MapPinned, Tags } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -26,10 +26,10 @@ export const Route = createFileRoute("/admin")({
 const tabs = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/viagens", label: "Viagens", icon: MapPinned, exact: false },
+  { to: "/admin/atividades", label: "Atividades", icon: Tags, exact: false },
   { to: "/admin/reservas", label: "Reservas", icon: CalendarCheck, exact: false },
   { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle, exact: false },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
-
 ] as const;
 
 function AdminLayout() {

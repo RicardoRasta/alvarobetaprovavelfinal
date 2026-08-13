@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAtividadesRouteImport } from './routes/admin.atividades'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
@@ -50,6 +51,11 @@ const FavoritosRoute = FavoritosRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAtividadesRoute = AdminAtividadesRouteImport.update({
+  id: '/atividades',
+  path: '/atividades',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/viagens': typeof AdminViagensRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/conta'
     | '/favoritos'
+    | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/conta'
     | '/favoritos'
+    | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/conta'
     | '/favoritos'
+    | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
     | '/admin/viagens'
@@ -223,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/atividades': {
+      id: '/admin/atividades'
+      path: '/atividades'
+      fullPath: '/admin/atividades'
+      preLoaderRoute: typeof AdminAtividadesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -269,6 +288,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAtividadesRoute: typeof AdminAtividadesRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminReservasRoute: typeof AdminReservasRoute
   AdminViagensRoute: typeof AdminViagensRoute
@@ -277,6 +297,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAtividadesRoute: AdminAtividadesRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminReservasRoute: AdminReservasRoute,
   AdminViagensRoute: AdminViagensRoute,
