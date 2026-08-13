@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
 import { formatPrice, formatRange, tripImage, whatsappLink, type Trip } from "@/data/trips";
+import { PriceTag } from "@/components/price-tag";
 import { logWhatsAppClick, nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
@@ -58,14 +59,14 @@ export function TripCard({ trip }: { trip: Trip }) {
         </div>
 
         <div className="mt-auto pt-3">
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold">{formatPrice(trip.price)}</span>
+          <div className="flex flex-wrap items-baseline gap-2">
+            <PriceTag value={trip.price} />
             {trip.old_price != null && (
               <span className="text-sm text-muted-foreground line-through">
                 {formatPrice(trip.old_price)}
               </span>
             )}
-            <span className="text-xs text-muted-foreground">por pessoa</span>
+            {trip.price > 0 && <span className="text-xs text-muted-foreground">por pessoa</span>}
           </div>
           <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
             <CalendarDays className="h-3.5 w-3.5" />
