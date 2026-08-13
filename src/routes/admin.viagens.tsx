@@ -425,7 +425,7 @@ function AdminTrips() {
                       <img src={url} alt={`Imagem ${idx + 1}`} className="aspect-square w-full object-cover" />
                       {idx === 0 && (
                         <span className="absolute left-1 top-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
-                          Capa
+                          ★ Capa
                         </span>
                       )}
                       <button
@@ -456,6 +456,14 @@ function AdminTrips() {
                           →
                         </button>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setCover(idx)}
+                        disabled={idx === 0}
+                        className="w-full border-t border-border bg-background px-1 py-1.5 text-[11px] font-semibold text-accent disabled:text-muted-foreground disabled:opacity-70"
+                      >
+                        {idx === 0 ? "Esta é a capa" : "Definir como capa"}
+                      </button>
                     </div>
                   ))}
                   {form.images.length === 0 && (
@@ -486,7 +494,8 @@ function AdminTrips() {
                     {uploading ? "Enviando..." : "Adicionar imagens"}
                   </button>
                   <p className="mt-2 text-xs text-muted-foreground">
-                    A primeira imagem é a capa usada nos cards. Formatos: JPG, PNG, WebP.
+                    Use “Definir como capa” para escolher a imagem principal (a que aparece nos
+                    cards e na home). Formatos: JPG, PNG, WebP.
                   </p>
                 </div>
               </div>
