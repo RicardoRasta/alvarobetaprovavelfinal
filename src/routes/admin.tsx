@@ -54,27 +54,10 @@ function AdminLayout() {
         <p className="mt-2 text-sm text-muted-foreground">
           Esta conta ({session.user.email}) ainda não tem permissão de administrador.
         </p>
-        <button
-          type="button"
-          onClick={async () => {
-            const { error } = await supabase
-              .from("user_roles")
-              .insert({ user_id: session.user.id, role: "admin" });
-            if (error) {
-              toast.error("Já existe um administrador ou o acesso não pôde ser ativado.");
-              return;
-            }
-            await refreshRole();
-            toast.success("Acesso de administrador ativado!");
-          }}
-
-          className="mt-6 inline-flex items-center justify-center rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
-        >
-          Tornar esta conta administradora
-        </button>
         <p className="mt-3 text-xs text-muted-foreground">
-          Disponível apenas enquanto nenhum administrador foi definido.
+          O acesso de administrador é concedido apenas pela equipe responsável pelo site.
         </p>
+
         <button
           type="button"
           onClick={() => signOut()}
