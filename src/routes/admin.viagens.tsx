@@ -215,8 +215,9 @@ function AdminTrips() {
       }
     }
 
-    const originalIds = editing === "new" ? [] : (trips.find((t) => t.id === editing)?.departures ?? []).map((d) => d.id);
-    const keptIds = form.departures.map((d) => d.id).filter(Boolean) as string[];
+    const originalIds: string[] =
+      editing === "new" ? [] : (trips.find((t) => t.id === editing)?.departures ?? []).map((d) => d.id);
+    const keptIds = form.departures.map((d) => d.id).filter((id): id is string => Boolean(id));
     const toDelete = originalIds.filter((id) => !keptIds.includes(id));
 
     if (toDelete.length > 0) {
