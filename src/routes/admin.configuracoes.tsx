@@ -13,8 +13,8 @@ export const Route = createFileRoute("/admin/configuracoes")({
 
 type Stat = { label: string; value: string };
 
-const storageUrl = (path: string) =>
-  `${import.meta.env.VITE_SUPABASE_URL || ""}/storage/v1/object/public/trip-images/${path}`;
+const storageUrl = (path: string) => `/api/public/img/${path}`;
+
 
 function AdminSettings() {
   const { data: settings } = useQuery(settingsQuery);
