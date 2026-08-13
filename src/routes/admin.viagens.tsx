@@ -28,7 +28,7 @@ type Form = {
   old_price: string;
   days: string;
   level: string;
-  image_url: string;
+  images: string[];
   description: string;
   highlights: string;
   includes: string;
@@ -54,7 +54,7 @@ const empty: Form = {
   old_price: "",
   days: "1",
   level: "Iniciante",
-  image_url: "",
+  images: [],
   description: "",
   highlights: "",
   includes: "",
@@ -74,7 +74,12 @@ const toForm = (t: Trip): Form => ({
   old_price: t.old_price == null ? "" : String(t.old_price),
   days: String(t.days),
   level: t.level,
-  image_url: t.image_url ?? "",
+  images:
+    (t.images ?? []).filter(Boolean).length > 0
+      ? (t.images ?? []).filter(Boolean)
+      : t.image_url
+        ? [t.image_url]
+        : [],
   description: t.description,
   highlights: (t.highlights ?? []).join("\n"),
   includes: (t.includes ?? []).join("\n"),
@@ -98,9 +103,10 @@ const slugify = (v: string) =>
     .replace(/^-|-$/g, "");
 
 const storageUrl = (path: string) => {
-  const base = import.meta.env.VITE_SUPABASE_URL || "";
-  return `${base}/storage/v1/object/public/trip-images/${path}`;
+  return `${import.meta.env.VITE_SUPABASE_URL || ""}/storage/v1/object/public/trip-images/${path}`;
 };
+
+const MAX_IMAGES = 5;
 
 function AdminTrips() {
   const { data: trips = [] } = useQuery(tripsQuery);
@@ -149,27 +155,50 @@ function AdminTrips() {
     }
   }, [form]);
 
-  const uploadImage = async (file: File) => {
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    setUploading(true);
-    const { error } = await supabase.storage.from("trip-images").upload(path, file, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-    setUploading(false);
-    if (error) {
-      toast.error(error.message);
+  const uploadImages = async (files: File[]) => {
+    const current = form?.images ?? [];
+    const room = MAX_IMAGES - current.length;
+    if (room <= 0) {
+      toast.error(`Máximo de ${MAX_IMAGES} imagens por viagem.`);
       return;
     }
-    set("image_url", storageUrl(path));
-    toast.success("Imagem enviada!");
-  };
-
-  const removeImage = () => {
-    set("image_url", "");
+    const selected = files.slice(0, room);
+    if (files.length > room) toast.error(`Só cabem mais ${room} imagem(ns).`);
+    setUploading(true);
+    const uploaded: string[] = [];
+    for (const file of selected) {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) {
+        toast.error(error.message);
+        continue;
+      }
+      uploaded.push(storageUrl(path));
+    }
+    setUploading(false);
+    if (uploaded.length) {
+      setForm((f) => (f ? { ...f, images: [...f.images, ...uploaded].slice(0, MAX_IMAGES) } : f));
+      toast.success(uploaded.length > 1 ? "Imagens enviadas!" : "Imagem enviada!");
+    }
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const removeImage = (idx: number) =>
+    setForm((f) => (f ? { ...f, images: f.images.filter((_, i) => i !== idx) } : f));
+
+  const moveImage = (idx: number, dir: -1 | 1) =>
+    setForm((f) => {
+      if (!f) return f;
+      const next = [...f.images];
+      const target = idx + dir;
+      if (target < 0 || target >= next.length) return f;
+      [next[idx], next[target]] = [next[target], next[idx]];
+      return { ...f, images: next };
+    });
 
   const save = async () => {
     if (!form) return;
@@ -190,7 +219,8 @@ function AdminTrips() {
       old_price: form.old_price ? Number(form.old_price) : null,
       days: Number(form.days) || 1,
       level: form.level,
-      image_url: form.image_url.trim() || null,
+      image_url: form.images[0] ?? null,
+      images: form.images,
       description: form.description.trim(),
       highlights: form.highlights.split("\n").map((s) => s.trim()).filter(Boolean),
       includes: form.includes.split("\n").map((s) => s.trim()).filter(Boolean),
@@ -377,50 +407,76 @@ function AdminTrips() {
             </label>
 
             <div className="sm:col-span-2">
-              <span className={labelCls}>Imagem do roteiro</span>
-              <div className="flex flex-col gap-3 rounded-md border border-input bg-card p-3 sm:flex-row sm:items-center">
-                {form.image_url ? (
-                  <div className="relative h-28 w-full overflow-hidden rounded-md sm:w-40">
-                    <img
-                      src={form.image_url}
-                      alt="Pré-visualização do roteiro"
-                      className="h-full w-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute right-2 top-2 rounded-full bg-background/90 p-1 text-muted-foreground hover:text-destructive"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex h-28 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted sm:w-40">
-                    <span className="text-xs text-muted-foreground">Sem imagem</span>
-                  </div>
-                )}
-                <div className="flex-1">
+              <span className={labelCls}>Imagens do roteiro (até {MAX_IMAGES})</span>
+              <div className="space-y-3 rounded-md border border-input bg-card p-3">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                  {form.images.map((url, idx) => (
+                    <div key={url} className="relative overflow-hidden rounded-md border border-border">
+                      <img src={url} alt={`Imagem ${idx + 1}`} className="aspect-square w-full object-cover" />
+                      {idx === 0 && (
+                        <span className="absolute left-1 top-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
+                          Capa
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        aria-label="Remover imagem"
+                        className="absolute right-1 top-1 rounded-full bg-background/90 p-1 text-muted-foreground hover:text-destructive"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                      <div className="flex justify-between bg-background/90 px-1 py-0.5">
+                        <button
+                          type="button"
+                          onClick={() => moveImage(idx, -1)}
+                          disabled={idx === 0}
+                          aria-label="Mover para a esquerda"
+                          className="px-1 text-xs disabled:opacity-40"
+                        >
+                          ←
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveImage(idx, 1)}
+                          disabled={idx === form.images.length - 1}
+                          aria-label="Mover para a direita"
+                          className="px-1 text-xs disabled:opacity-40"
+                        >
+                          →
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {form.images.length === 0 && (
+                    <div className="col-span-2 flex h-28 items-center justify-center rounded-md border border-dashed border-border bg-muted sm:col-span-5">
+                      <span className="text-xs text-muted-foreground">Sem imagens</span>
+                    </div>
+                  )}
+                </div>
+                <div>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
+                    multiple
                     className="hidden"
                     onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) uploadImage(file);
+                      const files = Array.from(e.target.files ?? []);
+                      if (files.length) uploadImages(files);
                     }}
                   />
                   <button
                     type="button"
-                    disabled={uploading}
+                    disabled={uploading || form.images.length >= MAX_IMAGES}
                     onClick={() => fileInputRef.current?.click()}
                     className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
                   >
                     <Upload className="h-4 w-4" />
-                    {uploading ? "Enviando..." : form.image_url ? "Trocar imagem" : "Enviar imagem"}
+                    {uploading ? "Enviando..." : "Adicionar imagens"}
                   </button>
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Envie uma foto do roteiro direto do seu computador. Formatos: JPG, PNG, WebP.
+                    A primeira imagem é a capa usada nos cards. Formatos: JPG, PNG, WebP.
                   </p>
                 </div>
               </div>

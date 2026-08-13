@@ -1,0 +1,2 @@
+ALTER TABLE public.trips ADD COLUMN IF NOT EXISTS images text[] NOT NULL DEFAULT '{}';
+UPDATE public.trips SET images = ARRAY[image_url] WHERE image_url IS NOT NULL AND btrim(image_url) <> '' AND cardinality(images) = 0;

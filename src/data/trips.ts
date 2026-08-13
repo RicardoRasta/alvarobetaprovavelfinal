@@ -39,6 +39,7 @@ export type Trip = {
   days: number;
   level: string;
   image_url: string | null;
+  images?: string[] | null;
   description: string;
   highlights: string[];
   includes: string[];
@@ -70,6 +71,12 @@ const fallbackImages: Record<string, string> = {
 
 export const tripImage = (trip: Pick<Trip, "slug" | "image_url">) =>
   trip.image_url?.trim() || fallbackImages[trip.slug] || hero;
+
+/** Lista de imagens da viagem (capa primeiro), com fallback para a imagem única. */
+export const tripImages = (trip: Pick<Trip, "slug" | "image_url" | "images">): string[] => {
+  const list = (trip.images ?? []).map((u) => (u ?? "").trim()).filter(Boolean);
+  return list.length > 0 ? list.slice(0, 5) : [tripImage(trip)];
+};
 
 export const bannerImage = (settings?: Pick<SiteSettings, "banner_image_url"> | null) =>
   settings?.banner_image_url?.trim() || hero;
