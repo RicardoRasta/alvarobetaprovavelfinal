@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { bannerImage, DEFAULT_FX } from "@/data/trips";
@@ -12,10 +13,16 @@ export const Route = createFileRoute("/admin/configuracoes")({
 
 type Stat = { label: string; value: string };
 
+const storageUrl = (path: string) =>
+  `${import.meta.env.VITE_SUPABASE_URL || ""}/storage/v1/object/public/trip-images/${path}`;
+
 function AdminSettings() {
   const { data: settings } = useQuery(settingsQuery);
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
+
   const [form, setForm] = useState({
     banner_badge: "",
     banner_title: "",
