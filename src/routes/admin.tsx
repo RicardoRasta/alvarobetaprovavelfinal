@@ -32,7 +32,7 @@ const tabs = [
 ] as const;
 
 function AdminLayout() {
-  const { session, isAdmin, loading, refreshRole, signOut } = useAuth();
+  const { session, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
