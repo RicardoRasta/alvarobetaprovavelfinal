@@ -5,7 +5,6 @@ import {
   Compass,
   Home,
   Heart,
-  LayoutDashboard,
   Menu,
   Mountain,
   PanelLeftClose,
@@ -21,7 +20,6 @@ const nav = [
   { to: "/viagens", label: "Viagens", icon: Compass },
   { to: "/favoritos", label: "Viagens salvas", icon: Heart },
   { to: "/conta", label: "Minha conta", icon: User },
-  { to: "/admin", label: "Administração", icon: LayoutDashboard },
 ] as const;
 
 
