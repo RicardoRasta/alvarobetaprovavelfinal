@@ -132,6 +132,7 @@ function AdminSettings() {
 
         <section className="card-surface space-y-4 p-5">
           <h2 className="text-lg font-bold uppercase">Estatísticas da home</h2>
+          {null}
           {stats.map((s, i) => (
             <div key={i} className="flex gap-2">
               <input
