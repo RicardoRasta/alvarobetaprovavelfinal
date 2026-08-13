@@ -57,6 +57,11 @@ export type SiteSettings = {
   whatsapp_number: string;
   whatsapp_greeting: string;
   stats: { label: string; value: string }[];
+  /** Cotação do dólar em reais (1 USD = fx_usd BRL) */
+  fx_usd?: number | null;
+  /** Cotação do euro em reais (1 EUR = fx_eur BRL) */
+  fx_eur?: number | null;
+  fx_updated_at?: string | null;
 };
 
 /** Imagens locais usadas quando o admin ainda não definiu uma URL própria. */
@@ -85,6 +90,17 @@ export const formatPrice = (value: number) =>
   Number(value).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
+    maximumFractionDigits: 0,
+  });
+
+/** Cotações padrão caso o admin ainda não tenha configurado. */
+export const DEFAULT_FX = { usd: 5.4, eur: 5.9 };
+
+/** Converte um valor em reais para outra moeda e formata. */
+export const formatForeign = (brl: number, rate: number, currency: "USD" | "EUR") =>
+  (Number(brl) / (rate > 0 ? rate : 1)).toLocaleString(currency === "USD" ? "en-US" : "de-DE", {
+    style: "currency",
+    currency,
     maximumFractionDigits: 0,
   });
 
