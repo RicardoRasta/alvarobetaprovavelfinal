@@ -146,6 +146,14 @@ function AdminSettings() {
             Envie uma foto do seu computador (JPG, PNG ou WebP). Sem foto, usamos a imagem padrão.
           </p>
         </div>
+        <img
+          src={bannerImage({ banner_image_url: form.banner_image_url || null })}
+          alt="Pré-visualização do banner"
+          width={640}
+          height={240}
+          className="h-40 w-full rounded-md object-cover"
+        />
+
 
       </section>
 
