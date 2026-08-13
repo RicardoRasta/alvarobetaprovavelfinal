@@ -156,6 +156,17 @@ function AdminTrips() {
     }
   }, [form]);
 
+  /** Evita perder o que foi digitado ao fechar/atualizar a aba com o formulário aberto. */
+  useEffect(() => {
+    if (!form) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [form]);
+
   const uploadImages = async (files: File[]) => {
     const current = form?.images ?? [];
     const room = MAX_IMAGES - current.length;
