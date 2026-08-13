@@ -246,7 +246,7 @@ function AdminTrips() {
     }
 
     const updatedDepartures = form.departures
-      .filter((d) => d.id && d.date)
+      .filter((d): d is FormDeparture & { id: string } => Boolean(d.id && d.date))
       .map((d) => ({
         id: d.id,
         trip_id: tripId,
