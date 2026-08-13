@@ -103,6 +103,12 @@ const slugify = (v: string) =>
     .replace(/^-|-$/g, "");
 
 const storageUrl = (path: string) => {
+  return `${import.meta.env.VITE_SUPABASE_URL || ""}/storage/v1/object/public/trip-images/${path}`;
+};
+
+const MAX_IMAGES = 5;
+
+const legacyStorageUrl = (path: string) => {
   const base = import.meta.env.VITE_SUPABASE_URL || "";
   return `${base}/storage/v1/object/public/trip-images/${path}`;
 };
