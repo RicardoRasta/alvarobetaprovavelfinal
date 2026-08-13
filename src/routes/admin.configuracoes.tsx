@@ -86,22 +86,43 @@ function AdminSettings() {
             onChange={(e) => setForm({ ...form, banner_subtitle: e.target.value })}
           />
         </label>
-        <label className="block">
-          <span className={labelCls}>URL da imagem do banner</span>
+        <div className="block">
+          <span className={labelCls}>Imagem do banner</span>
           <input
-            className={field}
-            placeholder="https://..."
-            value={form.banner_image_url}
-            onChange={(e) => setForm({ ...form, banner_image_url: e.target.value })}
+            ref={bannerInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) uploadBanner(file);
+            }}
           />
-        </label>
-        <img
-          src={bannerImage({ banner_image_url: form.banner_image_url || null })}
-          alt="Pré-visualização do banner"
-          width={640}
-          height={240}
-          className="h-40 w-full rounded-md object-cover"
-        />
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={uploading}
+              onClick={() => bannerInputRef.current?.click()}
+              className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
+            >
+              <Upload className="h-4 w-4" />
+              {uploading ? "Enviando..." : form.banner_image_url ? "Trocar foto" : "Carregar foto"}
+            </button>
+            {form.banner_image_url && (
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, banner_image_url: "" })}
+                className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+              >
+                Remover foto
+              </button>
+            )}
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Envie uma foto do seu computador (JPG, PNG ou WebP). Sem foto, usamos a imagem padrão.
+          </p>
+        </div>
+
       </section>
 
       <div className="space-y-6">
