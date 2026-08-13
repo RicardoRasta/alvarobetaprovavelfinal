@@ -20,7 +20,10 @@ export type Activity = {
 export type Departure = {
   id: string;
   trip_id: string;
+  /** Data de ida */
   date: string;
+  /** Data de volta (opcional) */
+  return_date?: string | null;
   spots: number;
 };
 
@@ -84,6 +87,18 @@ export const formatDate = (iso: string) =>
     month: "short",
     year: "numeric",
   });
+
+/** Mostra "12 ago 2026 → 15 ago 2026" quando há data de volta. */
+export const formatRange = (from: string, to?: string | null) =>
+  to && to !== from ? `${formatDate(from)} → ${formatDate(to)}` : formatDate(from);
+
+/** Quantos dias faltam para a data (0 = hoje). */
+export const daysUntil = (iso: string) => {
+  const today = new Date();
+  const target = new Date(`${iso}T12:00:00`);
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 12);
+  return Math.round((target.getTime() - start.getTime()) / 86400000);
+};
 
 /** Número oficial do proprietário (fallback caso as configurações não carreguem). */
 export const DEFAULT_WHATSAPP = "554799030838";

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { activitiesQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
 
 type CatalogSearch = { atividade?: string; q?: string };
 
@@ -41,12 +41,14 @@ function Viagens() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return trips.filter(
-      (t) =>
-        t.published &&
-        (!atividade || t.activity_id === atividade) &&
-        (!q ||
-          `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
+    return sortByNextDeparture(
+      trips.filter(
+        (t) =>
+          t.published &&
+          (!atividade || t.activity_id === atividade) &&
+          (!q ||
+            `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
+      ),
     );
   }, [atividade, query, trips]);
 

@@ -87,6 +87,7 @@ export type Database = {
           created_at: string
           date: string
           id: string
+          return_date: string | null
           spots: number
           trip_id: string
         }
@@ -94,6 +95,7 @@ export type Database = {
           created_at?: string
           date: string
           id?: string
+          return_date?: string | null
           spots?: number
           trip_id: string
         }
@@ -101,6 +103,7 @@ export type Database = {
           created_at?: string
           date?: string
           id?: string
+          return_date?: string | null
           spots?: number
           trip_id?: string
         }

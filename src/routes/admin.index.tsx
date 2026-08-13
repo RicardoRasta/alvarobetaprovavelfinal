@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarCheck, MapPinned, MessageCircle, Users } from "lucide-react";
-import { formatDate, formatPrice } from "@/data/trips";
+import { daysUntil, formatPrice, formatRange } from "@/data/trips";
 import { bookingsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/")({
@@ -60,13 +60,23 @@ function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {departures.map((d) => (
-                  <tr key={d.id} className="border-t border-border">
+                {departures.map((d, i) => (
+                  <tr
+                    key={d.id}
+                    className={`border-t border-border ${i === 0 ? "bg-secondary/60" : ""}`}
+                  >
                     <td className="px-5 py-3 font-medium">{d.trip.name}</td>
                     <td className="px-5 py-3 text-muted-foreground">
                       {d.trip.destination} · {d.trip.state}
                     </td>
-                    <td className="px-5 py-3">{formatDate(d.date)}</td>
+                    <td className="px-5 py-3">
+                      <span className="font-medium">{formatRange(d.date, d.return_date)}</span>
+                      <span className="ml-2 text-xs text-muted-foreground">
+                        {daysUntil(d.date) === 0
+                          ? "hoje"
+                          : `faltam ${daysUntil(d.date)} dia(s)`}
+                      </span>
+                    </td>
                     <td className="px-5 py-3">{formatPrice(d.trip.price)}</td>
                     <td className="px-5 py-3">
                       <span

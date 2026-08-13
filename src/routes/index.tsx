@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, CalendarDays, Compass, ShieldCheck, Users } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { bannerImage, formatDate } from "@/data/trips";
-import { activitiesQuery, settingsQuery, tripsQuery } from "@/lib/api";
+import { bannerImage, formatRange } from "@/data/trips";
+import { activitiesQuery, settingsQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +32,7 @@ function Index() {
   const { data: settings } = useQuery(settingsQuery);
 
   const visible = trips.filter((t) => t.published);
-  const featured = visible.filter((t) => t.featured).slice(0, 4);
+  const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 4);
   const today = new Date().toISOString().slice(0, 10);
   const nextDepartures = visible
     .flatMap((t) => (t.departures ?? []).map((d) => ({ trip: t, ...d })))
@@ -134,7 +134,7 @@ function Index() {
             <ul className="divide-y divide-border">
               {nextDepartures.map((d) => (
                 <li key={d.id} className="flex flex-wrap items-center gap-3 px-5 py-4">
-                  <span className="w-32 text-sm font-semibold">{formatDate(d.date)}</span>
+                  <span className="w-56 text-sm font-semibold">{formatRange(d.date, d.return_date)}</span>
                   <Link
                     to="/viagens/$tripId"
                     params={{ tripId: d.trip.slug }}
