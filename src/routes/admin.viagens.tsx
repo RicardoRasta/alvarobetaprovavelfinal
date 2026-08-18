@@ -4,7 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatPrice, tripImage, type Departure, type Trip } from "@/data/trips";
+import {
+  formatDate,
+  formatPrice,
+  tripImage,
+  type Departure,
+  type ItineraryDay,
+  type TechSheetItem,
+  type Trip,
+} from "@/data/trips";
 import { activitiesQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/viagens")({
