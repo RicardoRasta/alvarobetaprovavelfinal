@@ -37,6 +37,18 @@ type Form = {
   featured: boolean;
   published: boolean;
   departures: FormDeparture[];
+  tech_sheet: TechSheetItem[];
+  guide_text: string;
+  guide_image_url: string;
+  destination_text: string;
+  prerequisites: string[];
+  characteristics: string;
+  climate: string;
+  food: string;
+  itinerary: ItineraryDay[];
+  not_included: string[];
+  checklist: string[];
+  equipment: string[];
 };
 
 const emptyDeparture: FormDeparture = {
@@ -64,6 +76,18 @@ const empty: Form = {
   featured: false,
   published: true,
   departures: [],
+  tech_sheet: [],
+  guide_text: "",
+  guide_image_url: "",
+  destination_text: "",
+  prerequisites: [],
+  characteristics: "",
+  climate: "",
+  food: "",
+  itinerary: [],
+  not_included: [],
+  checklist: [],
+  equipment: [],
 };
 
 const toForm = (t: Trip): Form => ({
@@ -95,7 +119,20 @@ const toForm = (t: Trip): Form => ({
     return_date: d.return_date ?? "",
     spots: String(d.spots),
   })),
+  tech_sheet: (t.tech_sheet ?? []).map((i) => ({ label: i.label ?? "", value: i.value ?? "" })),
+  guide_text: t.guide_text ?? "",
+  guide_image_url: t.guide_image_url ?? "",
+  destination_text: t.destination_text ?? "",
+  prerequisites: t.prerequisites ?? [],
+  characteristics: t.characteristics ?? "",
+  climate: t.climate ?? "",
+  food: t.food ?? "",
+  itinerary: (t.itinerary ?? []).map((d) => ({ title: d.title ?? "", description: d.description ?? "" })),
+  not_included: t.not_included ?? [],
+  checklist: t.checklist ?? [],
+  equipment: t.equipment ?? [],
 });
+
 
 const slugify = (v: string) =>
   v
