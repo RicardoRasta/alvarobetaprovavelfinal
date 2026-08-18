@@ -4,7 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatPrice, tripImage, type Departure, type Trip } from "@/data/trips";
+import {
+  formatDate,
+  formatPrice,
+  tripImage,
+  type Departure,
+  type ItineraryDay,
+  type TechSheetItem,
+  type Trip,
+} from "@/data/trips";
 import { activitiesQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/viagens")({
@@ -37,6 +45,18 @@ type Form = {
   featured: boolean;
   published: boolean;
   departures: FormDeparture[];
+  tech_sheet: TechSheetItem[];
+  guide_text: string;
+  guide_image_url: string;
+  destination_text: string;
+  prerequisites: string[];
+  characteristics: string;
+  climate: string;
+  food: string;
+  itinerary: ItineraryDay[];
+  not_included: string[];
+  checklist: string[];
+  equipment: string[];
 };
 
 const emptyDeparture: FormDeparture = {
@@ -64,6 +84,18 @@ const empty: Form = {
   featured: false,
   published: true,
   departures: [],
+  tech_sheet: [],
+  guide_text: "",
+  guide_image_url: "",
+  destination_text: "",
+  prerequisites: [],
+  characteristics: "",
+  climate: "",
+  food: "",
+  itinerary: [],
+  not_included: [],
+  checklist: [],
+  equipment: [],
 };
 
 const toForm = (t: Trip): Form => ({
@@ -95,7 +127,20 @@ const toForm = (t: Trip): Form => ({
     return_date: d.return_date ?? "",
     spots: String(d.spots),
   })),
+  tech_sheet: (t.tech_sheet ?? []).map((i) => ({ label: i.label ?? "", value: i.value ?? "" })),
+  guide_text: t.guide_text ?? "",
+  guide_image_url: t.guide_image_url ?? "",
+  destination_text: t.destination_text ?? "",
+  prerequisites: t.prerequisites ?? [],
+  characteristics: t.characteristics ?? "",
+  climate: t.climate ?? "",
+  food: t.food ?? "",
+  itinerary: (t.itinerary ?? []).map((d) => ({ title: d.title ?? "", description: d.description ?? "" })),
+  not_included: t.not_included ?? [],
+  checklist: t.checklist ?? [],
+  equipment: t.equipment ?? [],
 });
+
 
 const slugify = (v: string) =>
   v
@@ -110,6 +155,208 @@ const storageUrl = (path: string) => `/api/public/img/${path}`;
 
 const MAX_IMAGES = 5;
 
+const cleanList = (list: string[]) => list.map((s) => s.trim()).filter(Boolean);
+
+const fieldCls =
+  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+const areaCls =
+  "min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+const label2 = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
+
+/** Bloco recolhível para organizar as seções longas do formulário. */
+function Block({
+  title,
+  hint,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <details className="rounded-lg border border-border bg-secondary/30 p-4">
+      <summary className="cursor-pointer text-xs font-bold uppercase text-muted-foreground">
+        {title}
+      </summary>
+      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      <div className="mt-3 space-y-3">{children}</div>
+    </details>
+  );
+}
+
+/** Editor de lista simples: uma linha por item, com reordenar e remover. */
+function ListEditor({
+  items,
+  onChange,
+  placeholder,
+}: {
+  items: string[];
+  onChange: (next: string[]) => void;
+  placeholder?: string;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {items.map((v, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input
+            className={fieldCls}
+            value={v}
+            placeholder={placeholder}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? e.target.value : x)))}
+          />
+          <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+            ↑
+          </button>
+          <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            className="text-muted-foreground hover:text-destructive"
+            aria-label="Remover item"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, ""])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar item
+      </button>
+    </div>
+  );
+}
+
+/** Editor de pares rótulo/valor (ficha técnica). */
+function PairEditor({
+  items,
+  onChange,
+}: {
+  items: TechSheetItem[];
+  onChange: (next: TechSheetItem[]) => void;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {items.map((it, i) => (
+        <div key={i} className="flex flex-wrap items-center gap-2">
+          <input
+            className={`${fieldCls} sm:w-48 flex-1`}
+            placeholder="Item (ex.: Distância)"
+            value={it.label}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
+          />
+          <input
+            className={`${fieldCls} flex-1`}
+            placeholder="Valor (ex.: 42 km)"
+            value={it.value}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))}
+          />
+          <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+            ↑
+          </button>
+          <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            className="text-muted-foreground hover:text-destructive"
+            aria-label="Remover linha"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { label: "", value: "" }])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar linha
+      </button>
+    </div>
+  );
+}
+
+/** Editor da programação dia a dia. */
+function ItineraryEditor({
+  items,
+  onChange,
+}: {
+  items: ItineraryDay[];
+  onChange: (next: ItineraryDay[]) => void;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-3">
+      {items.map((d, i) => (
+        <div key={i} className="space-y-2 rounded-md border border-input bg-card p-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-muted-foreground">Dia {i + 1}</span>
+            <input
+              className={`${fieldCls} flex-1`}
+              placeholder="Título do dia (ex.: Chegada e aclimatação)"
+              value={d.title}
+              onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)))}
+            />
+            <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+              ↑
+            </button>
+            <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+              ↓
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, j) => j !== i))}
+              className="text-muted-foreground hover:text-destructive"
+              aria-label="Remover dia"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <textarea
+            className={areaCls}
+            placeholder="O que acontece nesse dia"
+            value={d.description}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, description: e.target.value } : x)))}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { title: "", description: "" }])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar dia
+      </button>
+    </div>
+  );
+}
+
 function AdminTrips() {
   const { data: trips = [] } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
@@ -117,11 +364,32 @@ function AdminTrips() {
 
   const formRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const guideInputRef = useRef<HTMLInputElement>(null);
 
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<Form | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingGuide, setUploadingGuide] = useState(false);
+
+  /** Envia a foto do guia para o armazenamento e guarda o endereço interno. */
+  const uploadGuideImage = async (file: File) => {
+    setUploadingGuide(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `guia-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+    setUploadingGuide(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setForm((f) => (f ? { ...f, guide_image_url: storageUrl(path) } : f));
+      toast.success("Foto do guia enviada!");
+    }
+    if (guideInputRef.current) guideInputRef.current.value = "";
+  };
 
   /** Recarrega do banco para confirmar o que ficou gravado. */
   const refresh = () => qc.refetchQueries({ queryKey: ["trips"] });
@@ -251,6 +519,18 @@ function AdminTrips() {
       rating: Number(form.rating) || 5,
       featured: form.featured,
       published: form.published,
+      tech_sheet: form.tech_sheet.filter((i) => i.label.trim() || i.value.trim()),
+      guide_text: form.guide_text.trim(),
+      guide_image_url: form.guide_image_url.trim() || null,
+      destination_text: form.destination_text.trim(),
+      prerequisites: cleanList(form.prerequisites),
+      characteristics: form.characteristics.trim(),
+      climate: form.climate.trim(),
+      food: form.food.trim(),
+      itinerary: form.itinerary.filter((d) => d.title.trim() || d.description.trim()),
+      not_included: cleanList(form.not_included),
+      checklist: cleanList(form.checklist),
+      equipment: cleanList(form.equipment),
     };
 
     let tripId = editing!;
@@ -555,6 +835,118 @@ function AdminTrips() {
               />
             </label>
           </div>
+
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase text-muted-foreground">Conteúdo da página</h4>
+            <p className="text-xs text-muted-foreground">
+              Preencha só o que fizer sentido — seções vazias não aparecem no site.
+            </p>
+
+            <Block title="Ficha técnica" hint="Itens como distância, altitude, duração, grupo...">
+              <PairEditor items={form.tech_sheet} onChange={(v) => set("tech_sheet", v)} />
+            </Block>
+
+            <Block title="Conheça quem irá lhe conduzir">
+              <textarea
+                className={areaCls}
+                placeholder="Apresentação do guia/condutor"
+                value={form.guide_text}
+                onChange={(e) => set("guide_text", e.target.value)}
+              />
+              <div className="flex flex-wrap items-center gap-3">
+                {form.guide_image_url && (
+                  <img
+                    src={form.guide_image_url}
+                    alt="Foto do guia"
+                    className="h-20 w-20 rounded-md object-cover"
+                  />
+                )}
+                <input
+                  ref={guideInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) uploadGuideImage(file);
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={uploadingGuide}
+                  onClick={() => guideInputRef.current?.click()}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent disabled:opacity-60"
+                >
+                  <Upload className="h-4 w-4" />
+                  {uploadingGuide ? "Enviando..." : form.guide_image_url ? "Trocar foto" : "Foto do guia"}
+                </button>
+                {form.guide_image_url && (
+                  <button
+                    type="button"
+                    onClick={() => set("guide_image_url", "")}
+                    className="text-xs text-muted-foreground hover:text-destructive"
+                  >
+                    Remover foto
+                  </button>
+                )}
+              </div>
+            </Block>
+
+            <Block title="Saiba para onde você está indo">
+              <textarea
+                className={areaCls}
+                placeholder="Sobre o destino, região, parque..."
+                value={form.destination_text}
+                onChange={(e) => set("destination_text", e.target.value)}
+              />
+            </Block>
+
+            <Block title="Pré-requisitos">
+              <ListEditor
+                items={form.prerequisites}
+                onChange={(v) => set("prerequisites", v)}
+                placeholder="Ex.: bom condicionamento físico"
+              />
+            </Block>
+
+            <Block title="Características">
+              <textarea
+                className={areaCls}
+                value={form.characteristics}
+                onChange={(e) => set("characteristics", e.target.value)}
+              />
+            </Block>
+
+            <Block title="Clima">
+              <textarea className={areaCls} value={form.climate} onChange={(e) => set("climate", e.target.value)} />
+            </Block>
+
+            <Block title="Alimentação">
+              <textarea className={areaCls} value={form.food} onChange={(e) => set("food", e.target.value)} />
+            </Block>
+
+            <Block title="Programação (dia a dia)">
+              <ItineraryEditor items={form.itinerary} onChange={(v) => set("itinerary", v)} />
+            </Block>
+
+            <Block title="Não inclui">
+              <ListEditor
+                items={form.not_included}
+                onChange={(v) => set("not_included", v)}
+                placeholder="Ex.: passagem aérea"
+              />
+            </Block>
+
+            <Block title="Check list">
+              <ListEditor items={form.checklist} onChange={(v) => set("checklist", v)} placeholder="Ex.: documento com foto" />
+            </Block>
+
+            <Block title="Equipamentos que você deve levar ou alugar">
+              <ListEditor items={form.equipment} onChange={(v) => set("equipment", v)} placeholder="Ex.: mochila de ataque 30L" />
+            </Block>
+          </div>
+
+
 
           <div className="card-surface space-y-3 rounded-lg border border-border bg-secondary/40 p-4">
             <h4 className="text-xs font-bold uppercase text-muted-foreground">Visibilidade</h4>

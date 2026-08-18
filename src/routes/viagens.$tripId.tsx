@@ -5,12 +5,20 @@ import {
   ArrowLeft,
   CalendarDays,
   Check,
+  ClipboardList,
+  Cloud,
+  Compass,
+  ListChecks,
   MapPin,
   MessageCircle,
   Mountain,
+  Backpack,
   ShieldCheck,
   Star,
+  UserRound,
   Users,
+  Utensils,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -314,6 +322,174 @@ function TripDetail() {
           </form>
         </div>
       </div>
+
+      <TripDetails trip={trip} />
     </div>
   );
 }
+
+/** Lista simples com ícone; some quando não há itens. */
+function DetailList({
+  title,
+  items,
+  icon,
+  tone = "accent",
+}: {
+  title: string;
+  items?: string[] | null;
+  icon: React.ReactNode;
+  tone?: "accent" | "muted";
+}) {
+  const list = (items ?? []).filter(Boolean);
+  if (list.length === 0) return null;
+  return (
+    <section className="card-surface p-5">
+      <h2 className="flex items-center gap-2 text-lg font-bold uppercase">{icon} {title}</h2>
+      <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+        {list.map((v, i) => (
+          <li key={i} className="flex items-start gap-2">
+            {tone === "accent" ? (
+              <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+            ) : (
+              <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+            )}
+            {v}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** Bloco de texto corrido; some quando vazio. */
+function DetailText({
+  title,
+  text,
+  icon,
+}: {
+  title: string;
+  text?: string | null;
+  icon: React.ReactNode;
+}) {
+  if (!text?.trim()) return null;
+  return (
+    <section className="card-surface p-5">
+      <h2 className="flex items-center gap-2 text-lg font-bold uppercase">{icon} {title}</h2>
+      <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{text}</p>
+    </section>
+  );
+}
+
+/** Todo o conteúdo detalhado da viagem, no estilo "ficha técnica". */
+function TripDetails({ trip }: { trip: Trip }) {
+  const techSheet = (trip.tech_sheet ?? []).filter((i) => i?.label || i?.value);
+  const itinerary = (trip.itinerary ?? []).filter((d) => d?.title || d?.description);
+
+  return (
+    <div className="mt-10 space-y-6">
+      {techSheet.length > 0 && (
+        <section className="card-surface p-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
+            <ClipboardList className="h-5 w-5 text-accent" /> Ficha técnica
+          </h2>
+          <dl className="mt-3 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+            {techSheet.map((item, i) => (
+              <div key={i} className="flex justify-between gap-3 border-b border-border py-1.5">
+                <dt className="font-medium">{item.label}</dt>
+                <dd className="text-right text-muted-foreground">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {(trip.guide_text?.trim() || trip.guide_image_url) && (
+        <section className="card-surface p-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
+            <UserRound className="h-5 w-5 text-accent" /> Conheça quem irá lhe conduzir
+          </h2>
+          <div className="mt-3 flex flex-col gap-4 sm:flex-row">
+            {trip.guide_image_url && (
+              <img
+                src={trip.guide_image_url}
+                alt="Condutor da viagem"
+                loading="lazy"
+                className="h-32 w-32 shrink-0 rounded-md object-cover"
+              />
+            )}
+            <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
+              {trip.guide_text}
+            </p>
+          </div>
+        </section>
+      )}
+
+      <DetailText
+        title="Saiba para onde você está indo"
+        text={trip.destination_text}
+        icon={<Compass className="h-5 w-5 text-accent" />}
+      />
+
+      <DetailList
+        title="Pré-requisitos"
+        items={trip.prerequisites}
+        icon={<ShieldCheck className="h-5 w-5 text-accent" />}
+      />
+
+      <DetailText
+        title="Características"
+        text={trip.characteristics}
+        icon={<Mountain className="h-5 w-5 text-accent" />}
+      />
+      <DetailText title="Clima" text={trip.climate} icon={<Cloud className="h-5 w-5 text-accent" />} />
+      <DetailText
+        title="Alimentação"
+        text={trip.food}
+        icon={<Utensils className="h-5 w-5 text-accent" />}
+      />
+
+      {itinerary.length > 0 && (
+        <section className="card-surface p-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
+            <CalendarDays className="h-5 w-5 text-accent" /> Programação
+          </h2>
+          <ol className="mt-4 space-y-4">
+            {itinerary.map((d, i) => (
+              <li key={i} className="border-l-2 border-accent pl-4">
+                <h3 className="text-sm font-bold uppercase">
+                  Dia {i + 1}
+                  {d.title ? ` — ${d.title}` : ""}
+                </h3>
+                {d.description && (
+                  <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                    {d.description}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <DetailList
+        title="Não inclui"
+        items={trip.not_included}
+        tone="muted"
+        icon={<X className="h-5 w-5 text-muted-foreground" />}
+      />
+
+      <DetailList
+        title="Check list"
+        items={trip.checklist}
+        icon={<ListChecks className="h-5 w-5 text-accent" />}
+      />
+
+      <DetailList
+        title="Equipamentos que você deve levar ou alugar"
+        items={trip.equipment}
+        icon={<Backpack className="h-5 w-5 text-accent" />}
+      />
+    </div>
+  );
+}
+
