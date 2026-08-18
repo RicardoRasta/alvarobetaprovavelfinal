@@ -364,6 +364,7 @@ function AdminTrips() {
 
   const formRef = useRef<HTMLElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const guideInputRef = useRef<HTMLInputElement>(null);
 
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<Form | null>(null);
