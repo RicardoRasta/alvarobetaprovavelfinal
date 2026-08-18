@@ -27,6 +27,12 @@ export type Departure = {
   spots: number;
 };
 
+/** Par rótulo/valor da ficha técnica (ex.: "Distância" / "42 km"). */
+export type TechSheetItem = { label: string; value: string };
+
+/** Um dia da programação do roteiro. */
+export type ItineraryDay = { title: string; description: string };
+
 export type Trip = {
   id: string;
   slug: string;
@@ -47,7 +53,21 @@ export type Trip = {
   featured: boolean;
   published: boolean;
   departures?: Departure[];
+  /** Conteúdo detalhado da página (tudo opcional) */
+  tech_sheet?: TechSheetItem[] | null;
+  guide_text?: string | null;
+  guide_image_url?: string | null;
+  destination_text?: string | null;
+  prerequisites?: string[] | null;
+  characteristics?: string | null;
+  climate?: string | null;
+  food?: string | null;
+  itinerary?: ItineraryDay[] | null;
+  not_included?: string[] | null;
+  checklist?: string[] | null;
+  equipment?: string[] | null;
 };
+
 
 export type SiteSettings = {
   banner_badge: string;
