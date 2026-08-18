@@ -5,12 +5,20 @@ import {
   ArrowLeft,
   CalendarDays,
   Check,
+  ClipboardList,
+  Cloud,
+  Compass,
+  ListChecks,
   MapPin,
   MessageCircle,
   Mountain,
+  Backpack,
   ShieldCheck,
   Star,
+  UserRound,
   Users,
+  Utensils,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
