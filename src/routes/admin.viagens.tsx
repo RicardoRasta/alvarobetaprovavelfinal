@@ -155,6 +155,208 @@ const storageUrl = (path: string) => `/api/public/img/${path}`;
 
 const MAX_IMAGES = 5;
 
+const cleanList = (list: string[]) => list.map((s) => s.trim()).filter(Boolean);
+
+const fieldCls =
+  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+const areaCls =
+  "min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+const label2 = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
+
+/** Bloco recolhível para organizar as seções longas do formulário. */
+function Block({
+  title,
+  hint,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <details className="rounded-lg border border-border bg-secondary/30 p-4 [&[open »]]:pb-4">
+      <summary className="cursor-pointer text-xs font-bold uppercase text-muted-foreground">
+        {title}
+      </summary>
+      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      <div className="mt-3 space-y-3">{children}</div>
+    </details>
+  );
+}
+
+/** Editor de lista simples: uma linha por item, com reordenar e remover. */
+function ListEditor({
+  items,
+  onChange,
+  placeholder,
+}: {
+  items: string[];
+  onChange: (next: string[]) => void;
+  placeholder?: string;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {items.map((v, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input
+            className={fieldCls}
+            value={v}
+            placeholder={placeholder}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? e.target.value : x)))}
+          />
+          <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+            ↑
+          </button>
+          <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            className="text-muted-foreground hover:text-destructive"
+            aria-label="Remover item"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, ""])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar item
+      </button>
+    </div>
+  );
+}
+
+/** Editor de pares rótulo/valor (ficha técnica). */
+function PairEditor({
+  items,
+  onChange,
+}: {
+  items: TechSheetItem[];
+  onChange: (next: TechSheetItem[]) => void;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {items.map((it, i) => (
+        <div key={i} className="flex flex-wrap items-center gap-2">
+          <input
+            className={`${fieldCls} sm:w-48 flex-1`}
+            placeholder="Item (ex.: Distância)"
+            value={it.label}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
+          />
+          <input
+            className={`${fieldCls} flex-1`}
+            placeholder="Valor (ex.: 42 km)"
+            value={it.value}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))}
+          />
+          <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+            ↑
+          </button>
+          <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+            ↓
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            className="text-muted-foreground hover:text-destructive"
+            aria-label="Remover linha"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { label: "", value: "" }])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar linha
+      </button>
+    </div>
+  );
+}
+
+/** Editor da programação dia a dia. */
+function ItineraryEditor({
+  items,
+  onChange,
+}: {
+  items: ItineraryDay[];
+  onChange: (next: ItineraryDay[]) => void;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const t = i + dir;
+    if (t < 0 || t >= items.length) return;
+    const next = [...items];
+    [next[i], next[t]] = [next[t], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="space-y-3">
+      {items.map((d, i) => (
+        <div key={i} className="space-y-2 rounded-md border border-input bg-card p-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-muted-foreground">Dia {i + 1}</span>
+            <input
+              className={`${fieldCls} flex-1`}
+              placeholder="Título do dia (ex.: Chegada e aclimatação)"
+              value={d.title}
+              onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)))}
+            />
+            <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="px-1 text-xs disabled:opacity-40" aria-label="Subir">
+              ↑
+            </button>
+            <button type="button" onClick={() => move(i, 1)} disabled={i === items.length - 1} className="px-1 text-xs disabled:opacity-40" aria-label="Descer">
+              ↓
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, j) => j !== i))}
+              className="text-muted-foreground hover:text-destructive"
+              aria-label="Remover dia"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <textarea
+            className={areaCls}
+            placeholder="O que acontece nesse dia"
+            value={d.description}
+            onChange={(e) => onChange(items.map((x, j) => (j === i ? { ...x, description: e.target.value } : x)))}
+          />
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { title: "", description: "" }])}
+        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+      >
+        <Plus className="h-3.5 w-3.5" /> Adicionar dia
+      </button>
+    </div>
+  );
+}
+
 function AdminTrips() {
   const { data: trips = [] } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
