@@ -421,10 +421,11 @@ function AdminTrips() {
   };
 
   useEffect(() => {
-    if (form && formRef.current) {
+    if (editing && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [form]);
+  }, [editing]);
+
 
   /** Evita perder o que foi digitado ao fechar/atualizar a aba com o formulário aberto. */
   useEffect(() => {
