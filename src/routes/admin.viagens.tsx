@@ -174,7 +174,7 @@ function Block({
   children: React.ReactNode;
 }) {
   return (
-    <details className="rounded-lg border border-border bg-secondary/30 p-4 [&[open »]]:pb-4">
+    <details className="rounded-lg border border-border bg-secondary/30 p-4">
       <summary className="cursor-pointer text-xs font-bold uppercase text-muted-foreground">
         {title}
       </summary>
