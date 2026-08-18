@@ -296,6 +296,18 @@ function AdminTrips() {
       rating: Number(form.rating) || 5,
       featured: form.featured,
       published: form.published,
+      tech_sheet: form.tech_sheet.filter((i) => i.label.trim() || i.value.trim()),
+      guide_text: form.guide_text.trim(),
+      guide_image_url: form.guide_image_url.trim() || null,
+      destination_text: form.destination_text.trim(),
+      prerequisites: cleanList(form.prerequisites),
+      characteristics: form.characteristics.trim(),
+      climate: form.climate.trim(),
+      food: form.food.trim(),
+      itinerary: form.itinerary.filter((d) => d.title.trim() || d.description.trim()),
+      not_included: cleanList(form.not_included),
+      checklist: cleanList(form.checklist),
+      equipment: cleanList(form.equipment),
     };
 
     let tripId = editing!;
