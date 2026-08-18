@@ -815,6 +815,118 @@ function AdminTrips() {
             </label>
           </div>
 
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase text-muted-foreground">Conteúdo da página</h4>
+            <p className="text-xs text-muted-foreground">
+              Preencha só o que fizer sentido — seções vazias não aparecem no site.
+            </p>
+
+            <Block title="Ficha técnica" hint="Itens como distância, altitude, duração, grupo...">
+              <PairEditor items={form.tech_sheet} onChange={(v) => set("tech_sheet", v)} />
+            </Block>
+
+            <Block title="Conheça quem irá lhe conduzir">
+              <textarea
+                className={areaCls}
+                placeholder="Apresentação do guia/condutor"
+                value={form.guide_text}
+                onChange={(e) => set("guide_text", e.target.value)}
+              />
+              <div className="flex flex-wrap items-center gap-3">
+                {form.guide_image_url && (
+                  <img
+                    src={form.guide_image_url}
+                    alt="Foto do guia"
+                    className="h-20 w-20 rounded-md object-cover"
+                  />
+                )}
+                <input
+                  ref={guideInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) uploadGuideImage(file);
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={uploadingGuide}
+                  onClick={() => guideInputRef.current?.click()}
+                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent disabled:opacity-60"
+                >
+                  <Upload className="h-4 w-4" />
+                  {uploadingGuide ? "Enviando..." : form.guide_image_url ? "Trocar foto" : "Foto do guia"}
+                </button>
+                {form.guide_image_url && (
+                  <button
+                    type="button"
+                    onClick={() => set("guide_image_url", "")}
+                    className="text-xs text-muted-foreground hover:text-destructive"
+                  >
+                    Remover foto
+                  </button>
+                )}
+              </div>
+            </Block>
+
+            <Block title="Saiba para onde você está indo">
+              <textarea
+                className={areaCls}
+                placeholder="Sobre o destino, região, parque..."
+                value={form.destination_text}
+                onChange={(e) => set("destination_text", e.target.value)}
+              />
+            </Block>
+
+            <Block title="Pré-requisitos">
+              <ListEditor
+                items={form.prerequisites}
+                onChange={(v) => set("prerequisites", v)}
+                placeholder="Ex.: bom condicionamento físico"
+              />
+            </Block>
+
+            <Block title="Características">
+              <textarea
+                className={areaCls}
+                value={form.characteristics}
+                onChange={(e) => set("characteristics", e.target.value)}
+              />
+            </Block>
+
+            <Block title="Clima">
+              <textarea className={areaCls} value={form.climate} onChange={(e) => set("climate", e.target.value)} />
+            </Block>
+
+            <Block title="Alimentação">
+              <textarea className={areaCls} value={form.food} onChange={(e) => set("food", e.target.value)} />
+            </Block>
+
+            <Block title="Programação (dia a dia)">
+              <ItineraryEditor items={form.itinerary} onChange={(v) => set("itinerary", v)} />
+            </Block>
+
+            <Block title="Não inclui">
+              <ListEditor
+                items={form.not_included}
+                onChange={(v) => set("not_included", v)}
+                placeholder="Ex.: passagem aérea"
+              />
+            </Block>
+
+            <Block title="Check list">
+              <ListEditor items={form.checklist} onChange={(v) => set("checklist", v)} placeholder="Ex.: documento com foto" />
+            </Block>
+
+            <Block title="Equipamentos que você deve levar ou alugar">
+              <ListEditor items={form.equipment} onChange={(v) => set("equipment", v)} placeholder="Ex.: mochila de ataque 30L" />
+            </Block>
+          </div>
+
+
+
           <div className="card-surface space-y-3 rounded-lg border border-border bg-secondary/40 p-4">
             <h4 className="text-xs font-bold uppercase text-muted-foreground">Visibilidade</h4>
             <label className="flex items-start gap-3 text-sm">
