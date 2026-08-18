@@ -165,68 +165,104 @@ export type Database = {
       trips: {
         Row: {
           activity_id: string | null
+          characteristics: string
+          checklist: string[]
+          climate: string
           created_at: string
           days: number
           description: string
           destination: string
+          destination_text: string
+          equipment: string[]
           featured: boolean
+          food: string
+          guide_image_url: string | null
+          guide_text: string
           highlights: string[]
           id: string
           image_url: string | null
           images: string[]
           includes: string[]
+          itinerary: Json
           level: string
           name: string
+          not_included: string[]
           old_price: number | null
+          prerequisites: string[]
           price: number
           published: boolean
           rating: number
           slug: string
           state: string
+          tech_sheet: Json
           updated_at: string
         }
         Insert: {
           activity_id?: string | null
+          characteristics?: string
+          checklist?: string[]
+          climate?: string
           created_at?: string
           days?: number
           description?: string
           destination: string
+          destination_text?: string
+          equipment?: string[]
           featured?: boolean
+          food?: string
+          guide_image_url?: string | null
+          guide_text?: string
           highlights?: string[]
           id?: string
           image_url?: string | null
           images?: string[]
           includes?: string[]
+          itinerary?: Json
           level?: string
           name: string
+          not_included?: string[]
           old_price?: number | null
+          prerequisites?: string[]
           price?: number
           published?: boolean
           rating?: number
           slug: string
           state: string
+          tech_sheet?: Json
           updated_at?: string
         }
         Update: {
           activity_id?: string | null
+          characteristics?: string
+          checklist?: string[]
+          climate?: string
           created_at?: string
           days?: number
           description?: string
           destination?: string
+          destination_text?: string
+          equipment?: string[]
           featured?: boolean
+          food?: string
+          guide_image_url?: string | null
+          guide_text?: string
           highlights?: string[]
           id?: string
           image_url?: string | null
           images?: string[]
           includes?: string[]
+          itinerary?: Json
           level?: string
           name?: string
+          not_included?: string[]
           old_price?: number | null
+          prerequisites?: string[]
           price?: number
           published?: boolean
           rating?: number
           slug?: string
           state?: string
+          tech_sheet?: Json
           updated_at?: string
         }
         Relationships: [
