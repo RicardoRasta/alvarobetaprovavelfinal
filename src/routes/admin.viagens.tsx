@@ -370,6 +370,26 @@ function AdminTrips() {
   const [form, setForm] = useState<Form | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingGuide, setUploadingGuide] = useState(false);
+
+  /** Envia a foto do guia para o armazenamento e guarda o endereço interno. */
+  const uploadGuideImage = async (file: File) => {
+    setUploadingGuide(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `guia-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+    setUploadingGuide(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setForm((f) => (f ? { ...f, guide_image_url: storageUrl(path) } : f));
+      toast.success("Foto do guia enviada!");
+    }
+    if (guideInputRef.current) guideInputRef.current.value = "";
+  };
 
   /** Recarrega do banco para confirmar o que ficou gravado. */
   const refresh = () => qc.refetchQueries({ queryKey: ["trips"] });
