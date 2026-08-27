@@ -69,8 +69,46 @@ export type Trip = {
   not_included?: string[] | null;
   checklist?: string[] | null;
   equipment?: string[] | null;
+  /** Vídeo do roteiro (YouTube/Vimeo ou arquivo enviado) */
+  video_url?: string | null;
+  /** Tags do roteiro (ids da tabela de tags) */
+  tags?: string[] | null;
 };
 
+export type Tag = { id: string; name: string; sort_order: number };
+
+export type Certificate = {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string | null;
+  sort_order: number;
+};
+
+export type Testimonial = {
+  id: string;
+  name: string;
+  trip_name: string;
+  rating: number;
+  comment: string;
+  photos: string[];
+  approved: boolean;
+  created_at: string;
+};
+
+export type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  cover_url: string | null;
+  images: string[];
+  videos: string[];
+  published: boolean;
+  published_at: string;
+  created_at: string;
+};
 
 export type SiteSettings = {
   banner_badge: string;
@@ -85,7 +123,21 @@ export type SiteSettings = {
   /** Cotação do euro em reais (1 EUR = fx_eur BRL) */
   fx_eur?: number | null;
   fx_updated_at?: string | null;
+  /** Telefone fixo/celular para ligação direta */
+  phone?: string | null;
+  /** Imagens do carrossel da home (até 8) */
+  hero_images?: string[] | null;
+  contact_email?: string | null;
+  address?: string | null;
+  instagram_url?: string | null;
+  facebook_url?: string | null;
+  youtube_url?: string | null;
+  footer_text?: string | null;
+  about_title?: string | null;
+  about_text?: string | null;
+  about_image_url?: string | null;
 };
+
 
 /** Imagens locais usadas quando o admin ainda não definiu uma URL própria. */
 const fallbackImages: Record<string, string> = {
