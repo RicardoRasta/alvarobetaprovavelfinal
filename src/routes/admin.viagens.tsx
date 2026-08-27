@@ -13,7 +13,7 @@ import {
   type TechSheetItem,
   type Trip,
 } from "@/data/trips";
-import { activitiesQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, tagsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/viagens")({
   component: AdminTrips,
@@ -24,6 +24,7 @@ type FormDeparture = {
   date: string;
   return_date: string;
   spots: string;
+  meeting_point: string;
 };
 
 type Form = {
@@ -38,6 +39,8 @@ type Form = {
   days: string;
   level: string;
   images: string[];
+  video_url: string;
+  tags: string[];
   description: string;
   highlights: string;
   includes: string;
@@ -63,6 +66,7 @@ const emptyDeparture: FormDeparture = {
   date: "",
   return_date: "",
   spots: "10",
+  meeting_point: "",
 };
 
 const empty: Form = {
@@ -77,6 +81,8 @@ const empty: Form = {
   days: "1",
   level: "Iniciante",
   images: [],
+  video_url: "",
+  tags: [],
   description: "",
   highlights: "",
   includes: "",
@@ -115,6 +121,8 @@ const toForm = (t: Trip): Form => ({
       : t.image_url
         ? [t.image_url]
         : [],
+  video_url: t.video_url ?? "",
+  tags: t.tags ?? [],
   description: t.description,
   highlights: (t.highlights ?? []).join("\n"),
   includes: (t.includes ?? []).join("\n"),
@@ -126,6 +134,7 @@ const toForm = (t: Trip): Form => ({
     date: d.date,
     return_date: d.return_date ?? "",
     spots: String(d.spots),
+    meeting_point: d.meeting_point ?? "",
   })),
   tech_sheet: (t.tech_sheet ?? []).map((i) => ({ label: i.label ?? "", value: i.value ?? "" })),
   guide_text: t.guide_text ?? "",
@@ -153,7 +162,7 @@ const slugify = (v: string) =>
 const storageUrl = (path: string) => `/api/public/img/${path}`;
 
 
-const MAX_IMAGES = 5;
+const MAX_IMAGES = 8;
 
 const cleanList = (list: string[]) => list.map((s) => s.trim()).filter(Boolean);
 
@@ -360,6 +369,7 @@ function ItineraryEditor({
 function AdminTrips() {
   const { data: trips = [] } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
+  const { data: tags = [] } = useQuery(tagsQuery);
   const qc = useQueryClient();
 
   const formRef = useRef<HTMLElement>(null);
@@ -514,6 +524,8 @@ function AdminTrips() {
       level: form.level,
       image_url: form.images[0] ?? null,
       images: form.images,
+      video_url: form.video_url.trim(),
+      tags: form.tags,
       description: form.description.trim(),
       highlights: form.highlights.split("\n").map((s) => s.trim()).filter(Boolean),
       includes: form.includes.split("\n").map((s) => s.trim()).filter(Boolean),
@@ -570,6 +582,7 @@ function AdminTrips() {
         date: d.date,
         return_date: d.return_date || null,
         spots: Number(d.spots) || 0,
+        meeting_point: d.meeting_point.trim(),
       }));
 
     if (newDepartures.length > 0) {
@@ -588,6 +601,7 @@ function AdminTrips() {
         date: d.date,
         return_date: d.return_date || null,
         spots: Number(d.spots) || 0,
+        meeting_point: d.meeting_point.trim(),
       }));
 
     for (const d of updatedDepartures) {
@@ -725,6 +739,54 @@ function AdminTrips() {
               <span className={labelCls}>Avaliação (0 a 5)</span>
               <input className={field} type="number" step="0.1" value={form.rating} onChange={(e) => set("rating", e.target.value)} />
             </label>
+
+            <label className="sm:col-span-2">
+              <span className={labelCls}>Vídeo do roteiro (link do YouTube/Vimeo)</span>
+              <input
+                className={field}
+                placeholder="https://www.youtube.com/watch?v=..."
+                value={form.video_url}
+                onChange={(e) => set("video_url", e.target.value)}
+              />
+            </label>
+
+            <div className="sm:col-span-2">
+              <span className={labelCls}>Tags</span>
+              {tags.length === 0 ? (
+                <p className="text-xs text-muted-foreground">
+                  Nenhuma tag cadastrada ainda — crie na aba Tags.
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tg) => {
+                    const on = form.tags.includes(tg.id);
+                    return (
+                      <button
+                        key={tg.id}
+                        type="button"
+                        onClick={() =>
+                          setForm((f) =>
+                            f
+                              ? {
+                                  ...f,
+                                  tags: on ? f.tags.filter((x) => x !== tg.id) : [...f.tags, tg.id],
+                                }
+                              : f,
+                          )
+                        }
+                        className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                          on
+                            ? "border-accent bg-accent text-accent-foreground"
+                            : "border-border text-muted-foreground hover:border-accent hover:text-accent"
+                        }`}
+                      >
+                        {tg.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
 
             <div className="sm:col-span-2">
               <span className={labelCls}>Imagens do roteiro (até {MAX_IMAGES})</span>
@@ -1026,6 +1088,15 @@ function AdminTrips() {
                         className={field}
                         value={d.spots}
                         onChange={(e) => setDep(i, { spots: e.target.value })}
+                      />
+                    </label>
+                    <label className="min-w-[180px] flex-1">
+                      <span className={labelCls}>Ponto de saída</span>
+                      <input
+                        className={field}
+                        placeholder="Ex.: Terminal Rodoviário de Joinville"
+                        value={d.meeting_point}
+                        onChange={(e) => setDep(i, { meeting_point: e.target.value })}
                       />
                     </label>
                     <button

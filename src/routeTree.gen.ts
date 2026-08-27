@@ -16,10 +16,14 @@ import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAtividadesRouteImport } from './routes/admin.atividades'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
+import { Route as AdminComentariosRouteImport } from './routes/admin.comentarios'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
+import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
+import { Route as FichaTokenRouteImport } from './routes/ficha.$token'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 import { Route as ApiPublicImgSplatRouteImport } from './routes/api/public/img/$'
@@ -59,6 +63,16 @@ const AdminAtividadesRoute = AdminAtividadesRouteImport.update({
   path: '/atividades',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminComentariosRoute = AdminComentariosRouteImport.update({
+  id: '/comentarios',
+  path: '/comentarios',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
   id: '/configuracoes',
   path: '/configuracoes',
@@ -67,6 +81,11 @@ const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
 const AdminReservasRoute = AdminReservasRouteImport.update({
   id: '/reservas',
   path: '/reservas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTagsRoute = AdminTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminViagensRoute = AdminViagensRouteImport.update({
@@ -78,6 +97,11 @@ const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
   id: '/whatsapp',
   path: '/whatsapp',
   getParentRoute: () => AdminRoute,
+} as any)
+const FichaTokenRoute = FichaTokenRouteImport.update({
+  id: '/ficha/$token',
+  path: '/ficha/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
   id: '/viagens/',
@@ -102,10 +126,14 @@ export interface FileRoutesByFullPath {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -117,10 +145,14 @@ export interface FileRoutesByTo {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
@@ -134,10 +166,14 @@ export interface FileRoutesById {
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -152,10 +188,14 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/admin/atividades'
+    | '/admin/blog'
+    | '/admin/comentarios'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -167,10 +207,14 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/admin/atividades'
+    | '/admin/blog'
+    | '/admin/comentarios'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin'
     | '/viagens'
@@ -183,10 +227,14 @@ export interface FileRouteTypes {
     | '/conta'
     | '/favoritos'
     | '/admin/atividades'
+    | '/admin/blog'
+    | '/admin/comentarios'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -199,6 +247,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
+  FichaTokenRoute: typeof FichaTokenRoute
   ViagensTripIdRoute: typeof ViagensTripIdRoute
   ViagensIndexRoute: typeof ViagensIndexRoute
   ApiPublicImgSplatRoute: typeof ApiPublicImgSplatRoute
@@ -255,6 +304,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAtividadesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/comentarios': {
+      id: '/admin/comentarios'
+      path: '/comentarios'
+      fullPath: '/admin/comentarios'
+      preLoaderRoute: typeof AdminComentariosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/configuracoes': {
       id: '/admin/configuracoes'
       path: '/configuracoes'
@@ -267,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/reservas'
       fullPath: '/admin/reservas'
       preLoaderRoute: typeof AdminReservasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tags': {
+      id: '/admin/tags'
+      path: '/tags'
+      fullPath: '/admin/tags'
+      preLoaderRoute: typeof AdminTagsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/viagens': {
@@ -282,6 +352,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/whatsapp'
       preLoaderRoute: typeof AdminWhatsappRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/ficha/$token': {
+      id: '/ficha/$token'
+      path: '/ficha/$token'
+      fullPath: '/ficha/$token'
+      preLoaderRoute: typeof FichaTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/viagens/': {
       id: '/viagens/'
@@ -309,8 +386,11 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAtividadesRoute: typeof AdminAtividadesRoute
+  AdminBlogRoute: typeof AdminBlogRoute
+  AdminComentariosRoute: typeof AdminComentariosRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminReservasRoute: typeof AdminReservasRoute
+  AdminTagsRoute: typeof AdminTagsRoute
   AdminViagensRoute: typeof AdminViagensRoute
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -318,8 +398,11 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAtividadesRoute: AdminAtividadesRoute,
+  AdminBlogRoute: AdminBlogRoute,
+  AdminComentariosRoute: AdminComentariosRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminReservasRoute: AdminReservasRoute,
+  AdminTagsRoute: AdminTagsRoute,
   AdminViagensRoute: AdminViagensRoute,
   AdminWhatsappRoute: AdminWhatsappRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -333,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
+  FichaTokenRoute: FichaTokenRoute,
   ViagensTripIdRoute: ViagensTripIdRoute,
   ViagensIndexRoute: ViagensIndexRoute,
   ApiPublicImgSplatRoute: ApiPublicImgSplatRoute,
