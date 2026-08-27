@@ -39,6 +39,7 @@ function EnrollmentForm() {
   const [accepted, setAccepted] = useState(false);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [cepLoading, setCepLoading] = useState(false);
 
   const { data: link, isLoading } = useQuery({
     queryKey: ["enrollment_link", token],
