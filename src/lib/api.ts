@@ -32,6 +32,15 @@ export const settingsQuery = queryOptions({
   },
 });
 
+/** Cotação automática de dólar e euro (atualiza a cada 30 minutos). */
+export const liveFxQuery = queryOptions({
+  queryKey: ["live_fx"],
+  queryFn: async () => await getLiveFx(),
+  staleTime: 30 * 60 * 1000,
+  retry: 1,
+});
+
+
 async function fetchTrips(): Promise<Trip[]> {
   const [{ data: trips, error }, { data: departures, error: depError }] = await Promise.all([
     supabase.from("trips").select("*").order("created_at", { ascending: true }),
