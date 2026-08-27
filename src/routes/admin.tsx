@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { CalendarCheck, LayoutDashboard, LogOut, MessageCircle, Settings, ShieldAlert, MapPinned, Tags } from "lucide-react";
+import { CalendarCheck, FileText, LayoutDashboard, LogOut, MessageCircle, MessageSquare, Newspaper, Settings, ShieldAlert, MapPinned, Tags } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
 
@@ -26,7 +26,11 @@ const tabs = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/viagens", label: "Viagens", icon: MapPinned, exact: false },
   { to: "/admin/atividades", label: "Atividades", icon: Tags, exact: false },
+  { to: "/admin/tags", label: "Tags", icon: Tags, exact: false },
   { to: "/admin/reservas", label: "Reservas", icon: CalendarCheck, exact: false },
+  { to: "/admin/fichas", label: "Fichas de inscrição", icon: FileText, exact: false },
+  { to: "/admin/comentarios", label: "Comentários", icon: MessageSquare, exact: false },
+  { to: "/admin/blog", label: "Blog", icon: Newspaper, exact: false },
   { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle, exact: false },
   { to: "/admin/configuracoes", label: "Configurações", icon: Settings, exact: false },
 ] as const;
