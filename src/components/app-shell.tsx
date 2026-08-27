@@ -13,7 +13,6 @@ import {
   Newspaper,
   Phone,
   User,
-  X,
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { WhatsAppFab } from "./whatsapp-fab";
@@ -94,7 +93,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               aria-label="Abrir menu"
               className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border xl:hidden"
             >
-              {mobileOpen ? <Menu className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <Menu className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -137,6 +136,3 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-const _unused = X;
