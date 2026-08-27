@@ -227,7 +227,7 @@ export const formatForeign = (brl: number, rate: number, currency: "USD" | "EUR"
   });
 
 export const formatDate = (iso: string) =>
-  new Date(`${iso}T12:00:00`).toLocaleDateString("pt-BR", {
+  new Date(iso.includes("T") ? iso : `${iso}T12:00:00`).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
