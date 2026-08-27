@@ -246,7 +246,7 @@ export const daysUntil = (iso: string) => {
 };
 
 /** Número oficial do proprietário (fallback caso as configurações não carreguem). */
-export const DEFAULT_WHATSAPP = "554799030838";
+export const DEFAULT_WHATSAPP = "554733511661";
 
 /** Monta o link do WhatsApp com a mensagem já preenchida e detalhada da viagem. */
 export function whatsappLink(
