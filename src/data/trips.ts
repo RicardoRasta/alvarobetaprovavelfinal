@@ -25,7 +25,10 @@ export type Departure = {
   /** Data de volta (opcional) */
   return_date?: string | null;
   spots: number;
+  /** Ponto de saída/encontro */
+  meeting_point?: string | null;
 };
+
 
 /** Par rótulo/valor da ficha técnica (ex.: "Distância" / "42 km"). */
 export type TechSheetItem = { label: string; value: string };
