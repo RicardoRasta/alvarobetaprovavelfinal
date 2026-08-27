@@ -56,6 +56,39 @@ function EnrollmentForm() {
 
   const set = (k: string, v: string | boolean) => setValues((p) => ({ ...p, [k]: v }));
 
+  /** Busca o endereço no ViaCEP quando o CEP tem 8 dígitos. */
+  const lookupCep = async (raw: string) => {
+    const cep = raw.replace(/\D/g, "");
+    if (cep.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = (await res.json()) as {
+        erro?: boolean;
+        logradouro?: string;
+        bairro?: string;
+        localidade?: string;
+        uf?: string;
+      };
+      if (data.erro) {
+        toast.error("CEP não encontrado.");
+        return;
+      }
+      setValues((p) => ({
+        ...p,
+        street: data.logradouro || String(p.street ?? ""),
+        district: data.bairro || String(p.district ?? ""),
+        city: data.localidade || String(p.city ?? ""),
+        state: data.uf || String(p.state ?? ""),
+        country: String(p.country ?? "") || "Brasil",
+      }));
+    } catch {
+      toast.error("Não foi possível consultar o CEP.");
+    } finally {
+      setCepLoading(false);
+    }
+  };
+
   const submit = async () => {
     if (!link) return;
     if (!String(values.full_name ?? "").trim()) return toast.error("Informe seu nome completo.");
