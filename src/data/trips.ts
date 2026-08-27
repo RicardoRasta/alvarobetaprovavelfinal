@@ -163,11 +163,49 @@ export const tripImage = (trip: Pick<Trip, "slug" | "image_url">) =>
 /** Lista de imagens da viagem (capa primeiro), com fallback para a imagem única. */
 export const tripImages = (trip: Pick<Trip, "slug" | "image_url" | "images">): string[] => {
   const list = (trip.images ?? []).map((u) => normalizeImage(u)).filter(Boolean);
-  return list.length > 0 ? list.slice(0, 5) : [tripImage(trip)];
+  return list.length > 0 ? list.slice(0, 8) : [tripImage(trip)];
 };
 
 export const bannerImage = (settings?: Pick<SiteSettings, "banner_image_url"> | null) =>
   normalizeImage(settings?.banner_image_url) || hero;
+
+/** Imagens do carrossel da home (até 8), com fallback para o banner. */
+export const heroSlides = (
+  settings?: Pick<SiteSettings, "banner_image_url" | "hero_images"> | null,
+): string[] => {
+  const list = (settings?.hero_images ?? []).map((u) => normalizeImage(u)).filter(Boolean);
+  return list.length > 0 ? list.slice(0, 8) : [bannerImage(settings)];
+};
+
+/** Telefone padrão da agência. */
+export const DEFAULT_PHONE = "4733511661";
+
+/** Link "tel:" pronto para ligar. */
+export const phoneHref = (settings?: Pick<SiteSettings, "phone"> | null) => {
+  const digits = (settings?.phone || DEFAULT_PHONE).replace(/\D/g, "") || DEFAULT_PHONE;
+  return `tel:+55${digits.replace(/^55/, "")}`;
+};
+
+/** Telefone formatado para exibição: (47) 3351-1661 */
+export const formatPhone = (settings?: Pick<SiteSettings, "phone"> | null) => {
+  const d = (settings?.phone || DEFAULT_PHONE).replace(/\D/g, "").replace(/^55/, "");
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return d;
+};
+
+/** Converte links do YouTube/Vimeo em endereço de incorporação. */
+export const videoEmbed = (url?: string | null): { type: "embed" | "file"; src: string } | null => {
+  const v = normalizeImage(url);
+  if (!v) return null;
+  const yt = v.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  if (yt) return { type: "embed", src: `https://www.youtube.com/embed/${yt[1]}` };
+  const vm = v.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vm) return { type: "embed", src: `https://player.vimeo.com/video/${vm[1]}` };
+  return { type: "file", src: v };
+};
+
+
 
 
 export const formatPrice = (value: number) =>
