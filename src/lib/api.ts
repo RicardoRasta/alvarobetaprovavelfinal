@@ -1,6 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import type { Activity, Departure, SiteSettings, Trip } from "@/data/trips";
+import type {
+  Activity,
+  BlogPost,
+  Certificate,
+  Departure,
+  SiteSettings,
+  Tag,
+  Testimonial,
+  Trip,
+} from "@/data/trips";
 
 export const activitiesQuery = queryOptions({
   queryKey: ["activities"],
@@ -128,3 +137,106 @@ export const sortByNextDeparture = <T extends Trip>(trips: T[]): T[] =>
     return a.name.localeCompare(b.name);
   });
 
+
+/* ---------- Tags ---------- */
+export const tagsQuery = queryOptions({
+  queryKey: ["tags"],
+  queryFn: async (): Promise<Tag[]> => {
+    const { data, error } = await supabase.from("tags").select("*").order("sort_order", { ascending: true });
+    if (error) throw error;
+    return (data ?? []) as unknown as Tag[];
+  },
+});
+
+/* ---------- Certificados ---------- */
+export const certificatesQuery = queryOptions({
+  queryKey: ["certificates"],
+  queryFn: async (): Promise<Certificate[]> => {
+    const { data, error } = await supabase
+      .from("certificates")
+      .select("*")
+      .order("sort_order", { ascending: true });
+    if (error) throw error;
+    return (data ?? []) as unknown as Certificate[];
+  },
+});
+
+/* ---------- Comentários ---------- */
+export const testimonialsQuery = queryOptions({
+  queryKey: ["testimonials", "approved"],
+  queryFn: async (): Promise<Testimonial[]> => {
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("*")
+      .eq("approved", true)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as Testimonial[];
+  },
+});
+
+export const allTestimonialsQuery = queryOptions({
+  queryKey: ["testimonials", "all"],
+  queryFn: async (): Promise<Testimonial[]> => {
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as Testimonial[];
+  },
+});
+
+/* ---------- Blog ---------- */
+export const blogQuery = queryOptions({
+  queryKey: ["blog_posts"],
+  queryFn: async (): Promise<BlogPost[]> => {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .order("published_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as BlogPost[];
+  },
+});
+
+/* ---------- Fichas de inscrição ---------- */
+export type EnrollmentLink = {
+  id: string;
+  token: string;
+  trip_id: string | null;
+  trip_name: string;
+  active: boolean;
+  created_at: string;
+};
+
+export const enrollmentLinksQuery = queryOptions({
+  queryKey: ["enrollment_links"],
+  queryFn: async (): Promise<EnrollmentLink[]> => {
+    const { data, error } = await supabase
+      .from("enrollment_links")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as EnrollmentLink[];
+  },
+});
+
+export type Enrollment = Record<string, string | boolean | number | null> & {
+  id: string;
+  trip_name: string;
+  full_name: string;
+  created_at: string;
+};
+
+export const enrollmentsQuery = queryOptions({
+  queryKey: ["enrollments"],
+  queryFn: async (): Promise<Enrollment[]> => {
+    const { data, error } = await supabase
+      .from("enrollments")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return (data ?? []) as unknown as Enrollment[];
+  },
+});
