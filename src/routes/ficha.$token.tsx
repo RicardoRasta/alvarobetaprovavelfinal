@@ -217,6 +217,26 @@ function EnrollmentForm() {
                             </option>
                           ))}
                         </select>
+                      ) : f.key === "zip_code" ? (
+                        <>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            placeholder="00000-000"
+                            className={field}
+                            value={String(values[f.key] ?? "")}
+                            onChange={(e) => {
+                              const digits = e.target.value.replace(/\D/g, "").slice(0, 8);
+                              const masked = digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+                              set(f.key, masked);
+                              if (digits.length === 8) void lookupCep(digits);
+                            }}
+                            onBlur={(e) => void lookupCep(e.target.value)}
+                          />
+                          {cepLoading && (
+                            <span className="mt-1 block text-xs text-muted-foreground">Buscando endereço...</span>
+                          )}
+                        </>
                       ) : (
                         <input
                           type={f.kind === "date" ? "date" : f.kind === "email" ? "email" : "text"}
