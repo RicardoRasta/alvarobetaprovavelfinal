@@ -195,7 +195,7 @@ function AdminFichas() {
 function EnrollmentPrint({ data, onClose }: { data: Record<string, unknown> & { id: string; trip_name: string; full_name: string; created_at: string }; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 overflow-auto bg-background/80 p-4 print:p-0">
-      <div className="mx-auto max-w-3xl rounded-lg border border-border bg-card p-6 print:border-0 print:p-0">
+      <div className="print-sheet mx-auto max-w-3xl rounded-lg border border-border bg-card p-6 print:border-0 print:p-0">
         <div className="flex items-center justify-between print:hidden">
           <h2 className="text-lg font-bold uppercase">Ficha de inscrição</h2>
           <div className="flex gap-2">
@@ -216,11 +216,11 @@ function EnrollmentPrint({ data, onClose }: { data: Record<string, unknown> & { 
           </p>
         </div>
 
-        <div className="mt-6 space-y-5">
+        <div className="mt-6 space-y-5 print:mt-2 print:space-y-1">
           {enrollmentGroups.map((g) => (
             <section key={g.title}>
               <h3 className="border-b border-border pb-1 text-xs font-bold uppercase text-accent">{g.title}</h3>
-              <dl className="mt-2 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+              <dl className="print-grid mt-2 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
                 {g.fields.map((f) => {
                   const v = data[f.key];
                   const display =
@@ -244,7 +244,7 @@ function EnrollmentPrint({ data, onClose }: { data: Record<string, unknown> & { 
 
           <section>
             <h3 className="border-b border-border pb-1 text-xs font-bold uppercase text-accent">Termo</h3>
-            <p className="mt-2 text-xs text-muted-foreground">{RISK_TERMS}</p>
+            <p className="print-terms mt-2 text-xs text-muted-foreground">{RISK_TERMS}</p>
             <p className="mt-2 text-sm">
               Aceite: <strong>{data.risk_terms_accepted ? "Sim" : "Não"}</strong>
             </p>
