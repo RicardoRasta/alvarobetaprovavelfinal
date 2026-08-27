@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { DEFAULT_FX, formatForeign, formatPrice } from "@/data/trips";
-import { settingsQuery } from "@/lib/api";
+import { liveFxQuery, settingsQuery } from "@/lib/api";
 
 /**
  * Preço principal em reais e, abaixo, a conversão aproximada em dólar e euro.
- * As cotações são configuráveis em /admin/configuracoes.
+ * Usa a cotação automática do dia; se indisponível, cai para a cotação manual
+ * definida em /admin/configuracoes.
  */
 export function PriceTag({
   value,
@@ -16,8 +17,20 @@ export function PriceTag({
   className?: string;
 }) {
   const { data: settings } = useQuery(settingsQuery);
-  const usd = Number(settings?.fx_usd) > 0 ? Number(settings?.fx_usd) : DEFAULT_FX.usd;
-  const eur = Number(settings?.fx_eur) > 0 ? Number(settings?.fx_eur) : DEFAULT_FX.eur;
+  const { data: liveFx } = useQuery(liveFxQuery);
+  const usd =
+    Number(liveFx?.usd) > 0
+      ? Number(liveFx?.usd)
+      : Number(settings?.fx_usd) > 0
+        ? Number(settings?.fx_usd)
+        : DEFAULT_FX.usd;
+  const eur =
+    Number(liveFx?.eur) > 0
+      ? Number(liveFx?.eur)
+      : Number(settings?.fx_eur) > 0
+        ? Number(settings?.fx_eur)
+        : DEFAULT_FX.eur;
+
 
   const mainCls =
     size === "lg"
