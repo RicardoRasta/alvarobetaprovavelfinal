@@ -18,6 +18,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAtividadesRouteImport } from './routes/admin.atividades'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
+import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
@@ -69,6 +70,11 @@ const AdminReservasRoute = AdminReservasRouteImport.update({
   path: '/reservas',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTagsRoute = AdminTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminViagensRoute = AdminViagensRouteImport.update({
   id: '/viagens',
   path: '/viagens',
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/reservas': typeof AdminReservasRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
     | '/viagens/$tripId'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
     | '/viagens/$tripId'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/admin/atividades'
     | '/admin/configuracoes'
     | '/admin/reservas'
+    | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
     | '/viagens/$tripId'
@@ -269,6 +281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReservasRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/tags': {
+      id: '/admin/tags'
+      path: '/tags'
+      fullPath: '/admin/tags'
+      preLoaderRoute: typeof AdminTagsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/viagens': {
       id: '/admin/viagens'
       path: '/viagens'
@@ -311,6 +330,7 @@ interface AdminRouteChildren {
   AdminAtividadesRoute: typeof AdminAtividadesRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminReservasRoute: typeof AdminReservasRoute
+  AdminTagsRoute: typeof AdminTagsRoute
   AdminViagensRoute: typeof AdminViagensRoute
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -320,6 +340,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAtividadesRoute: AdminAtividadesRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminReservasRoute: AdminReservasRoute,
+  AdminTagsRoute: AdminTagsRoute,
   AdminViagensRoute: AdminViagensRoute,
   AdminWhatsappRoute: AdminWhatsappRoute,
   AdminIndexRoute: AdminIndexRoute,
