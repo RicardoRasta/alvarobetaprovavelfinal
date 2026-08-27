@@ -95,7 +95,35 @@ function AdminSettings() {
     setForm((f) => ({ ...f, banner_image_url: storageUrl(path) }));
     toast.success("Foto enviada! Não esqueça de salvar.");
   };
+  /** Adiciona uma imagem ao carrossel da home (máximo de 8). */
+  const addHeroImage = async (file?: File) => {
+    if (!file) return;
+    setHeroUploading(true);
+    try {
+      const url = await uploadFile(file, "carrossel");
+      setHeroImages((p) => [...p, url].slice(0, MAX_HERO));
+      toast.success("Imagem adicionada! Não esqueça de salvar.");
+    } catch {
+      toast.error("Não foi possível enviar a imagem.");
+    } finally {
+      setHeroUploading(false);
+    }
+  };
 
+  /** Envia a foto usada na página Quem somos. */
+  const uploadAbout = async (file?: File) => {
+    if (!file) return;
+    setAboutUploading(true);
+    try {
+      const url = await uploadFile(file, "quem-somos");
+      setForm((f) => ({ ...f, about_image_url: url }));
+      toast.success("Foto enviada! Não esqueça de salvar.");
+    } catch {
+      toast.error("Não foi possível enviar a foto.");
+    } finally {
+      setAboutUploading(false);
+    }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -105,6 +133,9 @@ function AdminSettings() {
       .update({
         ...rest,
         banner_image_url: form.banner_image_url.trim() || null,
+        about_image_url: form.about_image_url.trim() || null,
+        phone: form.phone.trim() || DEFAULT_PHONE,
+        hero_images: heroImages,
         fx_usd: Number(fx_usd) > 0 ? Number(fx_usd) : DEFAULT_FX.usd,
         fx_eur: Number(fx_eur) > 0 ? Number(fx_eur) : DEFAULT_FX.eur,
         stats: stats.filter((s) => s.label.trim()),
