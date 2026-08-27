@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, CalendarDays, Compass, ShieldCheck, Users } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { bannerImage, formatRange } from "@/data/trips";
+import { HeroCarousel } from "@/components/hero-carousel";
+import { formatRange, heroSlides } from "@/data/trips";
 import { activitiesQuery, settingsQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
@@ -42,17 +43,11 @@ function Index() {
 
   return (
     <div className="animate-fade-up">
-      <section className="relative overflow-hidden">
-        <img
-          src={bannerImage(settings)}
-          alt="Aventureiros em uma montanha brasileira ao amanhecer"
-          width={1920}
-          height={1080}
-          className="h-[380px] w-full object-cover md:h-[460px]"
-        />
-        <div className="gradient-hero absolute inset-0" />
-        <div className="absolute inset-0 flex items-center px-6 md:px-12">
-          <div className="max-w-xl text-primary-foreground">
+      <section className="relative h-[380px] overflow-hidden md:h-[460px]">
+        <HeroCarousel images={heroSlides(settings)} />
+        <div className="gradient-hero pointer-events-none absolute inset-0 z-10" />
+        <div className="absolute inset-0 z-10 flex items-center px-6 md:px-12">
+          <div className="pointer-events-auto max-w-xl text-primary-foreground">
             <span className="inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-accent">
               <Compass className="h-4 w-4" /> Casa de Aventura
             </span>

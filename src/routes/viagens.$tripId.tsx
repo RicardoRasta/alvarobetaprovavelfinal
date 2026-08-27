@@ -13,8 +13,11 @@ import {
   MessageCircle,
   Mountain,
   Backpack,
+  Phone,
+  PlayCircle,
   ShieldCheck,
   Star,
+  Tag as TagIcon,
   UserRound,
   Users,
   Utensils,
@@ -22,15 +25,24 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatPrice, tripImages, whatsappLink } from "@/data/trips";
+import {
+  formatPhone,
+  formatPrice,
+  formatRange,
+  phoneHref,
+  tripImages,
+  videoEmbed,
+  whatsappLink,
+} from "@/data/trips";
 import { PriceTag } from "@/components/price-tag";
 import type { Trip } from "@/data/trips";
-import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, logWhatsAppClick, settingsQuery, tagsQuery, tripsQuery } from "@/lib/api";
 
 function TripGallery({ trip }: { trip: Trip }) {
   const images = tripImages(trip);
   const [active, setActive] = useState(0);
   const current = images[Math.min(active, images.length - 1)];
+  const video = videoEmbed(trip.video_url);
 
   return (
     <div className="space-y-3">
@@ -59,6 +71,26 @@ function TripGallery({ trip }: { trip: Trip }) {
             </button>
           ))}
         </div>
+      )}
+      {video && (
+        <section className="card-surface overflow-hidden">
+          <h2 className="flex items-center gap-2 border-b border-border px-5 py-3 text-sm font-bold uppercase">
+            <PlayCircle className="h-4 w-4 text-accent" /> Vídeo do roteiro
+          </h2>
+          {video.type === "embed" ? (
+            <div className="aspect-video">
+              <iframe
+                src={video.src}
+                title={`Vídeo — ${trip.name}`}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <video src={video.src} controls className="w-full" />
+          )}
+        </section>
       )}
     </div>
   );
@@ -89,6 +121,7 @@ function TripDetail() {
   const { tripId } = Route.useParams();
   const { data: trips = [], isLoading } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
+  const { data: allTags = [] } = useQuery(tagsQuery);
   const { data: settings } = useQuery(settingsQuery);
 
   const trip = trips.find((t) => t.slug === tripId || t.id === tripId);
@@ -121,6 +154,8 @@ function TripDetail() {
 
   const activity = activities.find((a) => a.id === trip.activity_id);
   const total = Number(trip.price) * people;
+  const tripTags = allTags.filter((t) => (trip.tags ?? []).includes(t.id));
+  const selectedDeparture = departures.find((d) => d.date === departure);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,6 +261,20 @@ function TripDetail() {
             </span>
           </div>
 
+          {tripTags.length > 0 && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <TagIcon className="h-3.5 w-3.5 text-accent" />
+              {tripTags.map((t) => (
+                <span
+                  key={t.id}
+                  className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent"
+                >
+                  {t.name}
+                </span>
+              ))}
+            </div>
+          )}
+
           <p className="mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
 
           <div className="mt-6 flex flex-wrap items-baseline gap-3">
@@ -280,10 +329,16 @@ function TripDetail() {
                 >
                   {departures.map((d) => (
                     <option key={d.id} value={d.date}>
-                      {formatDate(d.date)} — {d.spots} vagas
+                      {formatRange(d.date, d.return_date)} — {d.spots} vagas
                     </option>
                   ))}
                 </select>
+                {selectedDeparture?.meeting_point?.trim() && (
+                  <span className="mt-1.5 flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin className="h-3.5 w-3.5 text-accent" /> Ponto de saída:{" "}
+                    {selectedDeparture.meeting_point}
+                  </span>
+                )}
               </label>
             )}
 
@@ -315,6 +370,12 @@ function TripDetail() {
               <MessageCircle className="h-5 w-5" />
               {sending ? "Enviando..." : "Agendar pelo WhatsApp"}
             </button>
+            <a
+              href={phoneHref(settings)}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-accent px-6 py-3 font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <Phone className="h-5 w-5" /> Ligar {formatPhone(settings)}
+            </a>
             <p className="text-center text-xs text-muted-foreground">
               Abrimos o WhatsApp com a mensagem já pronta com o roteiro, a data e o número de
               pessoas.
