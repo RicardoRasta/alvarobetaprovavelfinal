@@ -211,10 +211,161 @@ function AdminSettings() {
           className="h-40 w-full rounded-md object-cover"
         />
 
-
+        <div className="border-t border-border pt-4">
+          <span className={labelCls}>Carrossel da home (até {MAX_HERO} imagens · troca a cada 10s)</span>
+          <div className="mt-2 flex flex-wrap gap-3">
+            {heroImages.map((img, i) => (
+              <div key={i} className="relative">
+                <img
+                  src={normalizeImage(img)}
+                  alt={`Imagem ${i + 1} do carrossel`}
+                  className="h-20 w-28 rounded-md border border-border object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setHeroImages((arr) => arr.filter((_, j) => j !== i))}
+                  aria-label="Remover imagem"
+                  className="absolute -right-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ))}
+            {heroImages.length < MAX_HERO && (
+              <label className="flex h-20 w-28 cursor-pointer items-center justify-center rounded-md border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
+                {heroUploading ? <span className="text-xs">Enviando...</span> : <ImagePlus className="h-6 w-6" />}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => addHeroImage(e.target.files?.[0])}
+                />
+              </label>
+            )}
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Sem imagens no carrossel, mostramos a imagem do banner acima.
+          </p>
+        </div>
       </section>
 
       <div className="space-y-6">
+        <section className="card-surface space-y-4 p-5">
+          <h2 className="text-lg font-bold uppercase">Contato e telefone</h2>
+          <label className="block">
+            <span className={labelCls}>Telefone para o botão "Ligar"</span>
+            <input
+              className={field}
+              placeholder={DEFAULT_PHONE}
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>E-mail de contato</span>
+            <input
+              className={field}
+              value={form.contact_email}
+              onChange={(e) => setForm({ ...form, contact_email: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>Endereço</span>
+            <input
+              className={field}
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+            />
+          </label>
+        </section>
+
+        <section className="card-surface space-y-4 p-5">
+          <h2 className="text-lg font-bold uppercase">Rodapé e redes sociais</h2>
+          <label className="block">
+            <span className={labelCls}>Texto do rodapé</span>
+            <textarea
+              className="min-h-20 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              value={form.footer_text}
+              onChange={(e) => setForm({ ...form, footer_text: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>Instagram (link)</span>
+            <input
+              className={field}
+              value={form.instagram_url}
+              onChange={(e) => setForm({ ...form, instagram_url: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>Facebook (link)</span>
+            <input
+              className={field}
+              value={form.facebook_url}
+              onChange={(e) => setForm({ ...form, facebook_url: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>YouTube (link)</span>
+            <input
+              className={field}
+              value={form.youtube_url}
+              onChange={(e) => setForm({ ...form, youtube_url: e.target.value })}
+            />
+          </label>
+        </section>
+
+        <section className="card-surface space-y-4 p-5">
+          <h2 className="text-lg font-bold uppercase">Página "Quem somos"</h2>
+          <label className="block">
+            <span className={labelCls}>Título</span>
+            <input
+              className={field}
+              value={form.about_title}
+              onChange={(e) => setForm({ ...form, about_title: e.target.value })}
+            />
+          </label>
+          <label className="block">
+            <span className={labelCls}>História da empresa</span>
+            <textarea
+              className="min-h-40 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              value={form.about_text}
+              onChange={(e) => setForm({ ...form, about_text: e.target.value })}
+            />
+          </label>
+          <div>
+            <span className={labelCls}>Foto da equipe</span>
+            <div className="flex flex-wrap items-center gap-3">
+              {form.about_image_url && (
+                <img
+                  src={normalizeImage(form.about_image_url)}
+                  alt="Foto da equipe"
+                  className="h-20 w-28 rounded-md border border-border object-cover"
+                />
+              )}
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
+                <Upload className="h-4 w-4" />
+                {aboutUploading ? "Enviando..." : form.about_image_url ? "Trocar foto" : "Carregar foto"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => uploadAbout(e.target.files?.[0])}
+                />
+              </label>
+              {form.about_image_url && (
+                <button
+                  type="button"
+                  onClick={() => setForm({ ...form, about_image_url: "" })}
+                  className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+                >
+                  Remover
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+
         <section className="card-surface space-y-4 p-5">
           <h2 className="text-lg font-bold uppercase">WhatsApp</h2>
           <label className="block">
