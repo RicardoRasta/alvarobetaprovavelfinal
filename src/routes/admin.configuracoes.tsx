@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Upload } from "lucide-react";
+import { ImagePlus, Plus, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { bannerImage, DEFAULT_FX } from "@/data/trips";
-import { settingsQuery } from "@/lib/api";
+import { bannerImage, DEFAULT_FX, DEFAULT_PHONE, normalizeImage } from "@/data/trips";
+import { certificatesQuery, settingsQuery } from "@/lib/api";
+import { uploadFile } from "@/lib/upload";
 
 export const Route = createFileRoute("/admin/configuracoes")({
   component: AdminSettings,
@@ -15,12 +16,15 @@ type Stat = { label: string; value: string };
 
 const storageUrl = (path: string) => `/api/public/img/${path}`;
 
+const MAX_HERO = 8;
 
 function AdminSettings() {
   const { data: settings } = useQuery(settingsQuery);
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [heroUploading, setHeroUploading] = useState(false);
+  const [aboutUploading, setAboutUploading] = useState(false);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
@@ -32,8 +36,19 @@ function AdminSettings() {
     whatsapp_greeting: "",
     fx_usd: "",
     fx_eur: "",
+    phone: "",
+    contact_email: "",
+    address: "",
+    instagram_url: "",
+    facebook_url: "",
+    youtube_url: "",
+    footer_text: "",
+    about_title: "",
+    about_text: "",
+    about_image_url: "",
   });
   const [stats, setStats] = useState<Stat[]>([]);
+  const [heroImages, setHeroImages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!settings) return;
@@ -46,8 +61,19 @@ function AdminSettings() {
       whatsapp_greeting: settings.whatsapp_greeting ?? "",
       fx_usd: String(settings.fx_usd ?? ""),
       fx_eur: String(settings.fx_eur ?? ""),
+      phone: settings.phone ?? "",
+      contact_email: settings.contact_email ?? "",
+      address: settings.address ?? "",
+      instagram_url: settings.instagram_url ?? "",
+      facebook_url: settings.facebook_url ?? "",
+      youtube_url: settings.youtube_url ?? "",
+      footer_text: settings.footer_text ?? "",
+      about_title: settings.about_title ?? "",
+      about_text: settings.about_text ?? "",
+      about_image_url: settings.about_image_url ?? "",
     });
     setStats(settings.stats ?? []);
+    setHeroImages(settings.hero_images ?? []);
   }, [settings]);
 
   const field =
