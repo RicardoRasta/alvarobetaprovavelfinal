@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { getLiveFx } from "@/lib/fx.functions";
 import type {
   Activity,
   BlogPost,
