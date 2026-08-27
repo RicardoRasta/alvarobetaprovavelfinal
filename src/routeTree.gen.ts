@@ -12,17 +12,23 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CalendarioRouteImport } from './routes/calendario'
+import { Route as ComentariosRouteImport } from './routes/comentarios'
 import { Route as ContaRouteImport } from './routes/conta'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as QuemSomosRouteImport } from './routes/quem-somos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAtividadesRouteImport } from './routes/admin.atividades'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminComentariosRouteImport } from './routes/admin.comentarios'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminFichasRouteImport } from './routes/admin.fichas'
 import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
 import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as FichaTokenRouteImport } from './routes/ficha.$token'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
@@ -43,6 +49,21 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarioRoute = CalendarioRouteImport.update({
+  id: '/calendario',
+  path: '/calendario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComentariosRoute = ComentariosRouteImport.update({
+  id: '/comentarios',
+  path: '/comentarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContaRoute = ContaRouteImport.update({
   id: '/conta',
   path: '/conta',
@@ -51,6 +72,11 @@ const ContaRoute = ContaRouteImport.update({
 const FavoritosRoute = FavoritosRouteImport.update({
   id: '/favoritos',
   path: '/favoritos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuemSomosRoute = QuemSomosRouteImport.update({
+  id: '/quem-somos',
+  path: '/quem-somos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -78,6 +104,11 @@ const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
   path: '/configuracoes',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFichasRoute = AdminFichasRouteImport.update({
+  id: '/fichas',
+  path: '/fichas',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminReservasRoute = AdminReservasRouteImport.update({
   id: '/reservas',
   path: '/reservas',
@@ -97,6 +128,11 @@ const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
   id: '/whatsapp',
   path: '/whatsapp',
   getParentRoute: () => AdminRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
 } as any)
 const FichaTokenRoute = FichaTokenRouteImport.update({
   id: '/ficha/$token',
@@ -123,16 +159,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/calendario': typeof CalendarioRoute
+  '/comentarios': typeof ComentariosRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/fichas': typeof AdminFichasRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -142,16 +184,22 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/calendario': typeof CalendarioRoute
+  '/comentarios': typeof ComentariosRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/fichas': typeof AdminFichasRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin': typeof AdminIndexRoute
@@ -163,16 +211,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/calendario': typeof CalendarioRoute
+  '/comentarios': typeof ComentariosRoute
   '/conta': typeof ContaRoute
   '/favoritos': typeof FavoritosRoute
+  '/quem-somos': typeof QuemSomosRoute
   '/admin/atividades': typeof AdminAtividadesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/comentarios': typeof AdminComentariosRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/fichas': typeof AdminFichasRoute
   '/admin/reservas': typeof AdminReservasRoute
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -185,16 +239,22 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/blog'
+    | '/calendario'
+    | '/comentarios'
     | '/conta'
     | '/favoritos'
+    | '/quem-somos'
     | '/admin/atividades'
     | '/admin/blog'
     | '/admin/comentarios'
     | '/admin/configuracoes'
+    | '/admin/fichas'
     | '/admin/reservas'
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/blog/$slug'
     | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
@@ -204,16 +264,22 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/blog'
+    | '/calendario'
+    | '/comentarios'
     | '/conta'
     | '/favoritos'
+    | '/quem-somos'
     | '/admin/atividades'
     | '/admin/blog'
     | '/admin/comentarios'
     | '/admin/configuracoes'
+    | '/admin/fichas'
     | '/admin/reservas'
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/blog/$slug'
     | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin'
@@ -224,16 +290,22 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/blog'
+    | '/calendario'
+    | '/comentarios'
     | '/conta'
     | '/favoritos'
+    | '/quem-somos'
     | '/admin/atividades'
     | '/admin/blog'
     | '/admin/comentarios'
     | '/admin/configuracoes'
+    | '/admin/fichas'
     | '/admin/reservas'
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/blog/$slug'
     | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
@@ -245,8 +317,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  CalendarioRoute: typeof CalendarioRoute
+  ComentariosRoute: typeof ComentariosRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
+  QuemSomosRoute: typeof QuemSomosRoute
   FichaTokenRoute: typeof FichaTokenRoute
   ViagensTripIdRoute: typeof ViagensTripIdRoute
   ViagensIndexRoute: typeof ViagensIndexRoute
@@ -276,6 +352,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendario': {
+      id: '/calendario'
+      path: '/calendario'
+      fullPath: '/calendario'
+      preLoaderRoute: typeof CalendarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comentarios': {
+      id: '/comentarios'
+      path: '/comentarios'
+      fullPath: '/comentarios'
+      preLoaderRoute: typeof ComentariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/conta': {
       id: '/conta'
       path: '/conta'
@@ -288,6 +385,13 @@ declare module '@tanstack/react-router' {
       path: '/favoritos'
       fullPath: '/favoritos'
       preLoaderRoute: typeof FavoritosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quem-somos': {
+      id: '/quem-somos'
+      path: '/quem-somos'
+      fullPath: '/quem-somos'
+      preLoaderRoute: typeof QuemSomosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -325,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminConfiguracoesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/fichas': {
+      id: '/admin/fichas'
+      path: '/fichas'
+      fullPath: '/admin/fichas'
+      preLoaderRoute: typeof AdminFichasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/reservas': {
       id: '/admin/reservas'
       path: '/reservas'
@@ -352,6 +463,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/whatsapp'
       preLoaderRoute: typeof AdminWhatsappRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/ficha/$token': {
       id: '/ficha/$token'
@@ -389,6 +507,7 @@ interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
   AdminComentariosRoute: typeof AdminComentariosRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminFichasRoute: typeof AdminFichasRoute
   AdminReservasRoute: typeof AdminReservasRoute
   AdminTagsRoute: typeof AdminTagsRoute
   AdminViagensRoute: typeof AdminViagensRoute
@@ -401,6 +520,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
   AdminComentariosRoute: AdminComentariosRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminFichasRoute: AdminFichasRoute,
   AdminReservasRoute: AdminReservasRoute,
   AdminTagsRoute: AdminTagsRoute,
   AdminViagensRoute: AdminViagensRoute,
@@ -410,12 +530,26 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  BlogRoute: BlogRouteWithChildren,
+  CalendarioRoute: CalendarioRoute,
+  ComentariosRoute: ComentariosRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
+  QuemSomosRoute: QuemSomosRoute,
   FichaTokenRoute: FichaTokenRoute,
   ViagensTripIdRoute: ViagensTripIdRoute,
   ViagensIndexRoute: ViagensIndexRoute,
