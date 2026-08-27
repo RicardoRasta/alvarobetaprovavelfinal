@@ -13,8 +13,11 @@ import {
   MessageCircle,
   Mountain,
   Backpack,
+  Phone,
+  PlayCircle,
   ShieldCheck,
   Star,
+  Tag as TagIcon,
   UserRound,
   Users,
   Utensils,
@@ -22,10 +25,19 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatPrice, tripImages, whatsappLink } from "@/data/trips";
+import {
+  formatDate,
+  formatPhone,
+  formatPrice,
+  formatRange,
+  phoneHref,
+  tripImages,
+  videoEmbed,
+  whatsappLink,
+} from "@/data/trips";
 import { PriceTag } from "@/components/price-tag";
 import type { Trip } from "@/data/trips";
-import { activitiesQuery, logWhatsAppClick, settingsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, logWhatsAppClick, settingsQuery, tagsQuery, tripsQuery } from "@/lib/api";
 
 function TripGallery({ trip }: { trip: Trip }) {
   const images = tripImages(trip);
