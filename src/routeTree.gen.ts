@@ -23,6 +23,7 @@ import { Route as AdminReservasRouteImport } from './routes/admin.reservas'
 import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminViagensRouteImport } from './routes/admin.viagens'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
+import { Route as FichaTokenRouteImport } from './routes/ficha.$token'
 import { Route as ViagensIndexRouteImport } from './routes/viagens.index'
 import { Route as ViagensTripIdRouteImport } from './routes/viagens.$tripId'
 import { Route as ApiPublicImgSplatRouteImport } from './routes/api/public/img/$'
@@ -97,6 +98,11 @@ const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
   path: '/whatsapp',
   getParentRoute: () => AdminRoute,
 } as any)
+const FichaTokenRoute = FichaTokenRouteImport.update({
+  id: '/ficha/$token',
+  path: '/ficha/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ViagensIndexRoute = ViagensIndexRouteImport.update({
   id: '/viagens/',
   path: '/viagens/',
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin': typeof AdminIndexRoute
   '/viagens': typeof ViagensIndexRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/admin/tags': typeof AdminTagsRoute
   '/admin/viagens': typeof AdminViagensRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
+  '/ficha/$token': typeof FichaTokenRoute
   '/viagens/$tripId': typeof ViagensTripIdRoute
   '/admin/': typeof AdminIndexRoute
   '/viagens/': typeof ViagensIndexRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin'
     | '/viagens'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/admin/tags'
     | '/admin/viagens'
     | '/admin/whatsapp'
+    | '/ficha/$token'
     | '/viagens/$tripId'
     | '/admin/'
     | '/viagens/'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContaRoute: typeof ContaRoute
   FavoritosRoute: typeof FavoritosRoute
+  FichaTokenRoute: typeof FichaTokenRoute
   ViagensTripIdRoute: typeof ViagensTripIdRoute
   ViagensIndexRoute: typeof ViagensIndexRoute
   ApiPublicImgSplatRoute: typeof ApiPublicImgSplatRoute
@@ -340,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWhatsappRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/ficha/$token': {
+      id: '/ficha/$token'
+      path: '/ficha/$token'
+      fullPath: '/ficha/$token'
+      preLoaderRoute: typeof FichaTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/viagens/': {
       id: '/viagens/'
       path: '/viagens'
@@ -396,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContaRoute: ContaRoute,
   FavoritosRoute: FavoritosRoute,
+  FichaTokenRoute: FichaTokenRoute,
   ViagensTripIdRoute: ViagensTripIdRoute,
   ViagensIndexRoute: ViagensIndexRoute,
   ApiPublicImgSplatRoute: ApiPublicImgSplatRoute,
