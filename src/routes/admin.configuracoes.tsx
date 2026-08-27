@@ -459,6 +459,8 @@ function AdminSettings() {
           </button>
         </section>
 
+        <CertificatesManager />
+
         <button
           type="button"
           onClick={save}
@@ -469,5 +471,136 @@ function AdminSettings() {
         </button>
       </div>
     </div>
+  );
+}
+
+/** Cadastro dos certificados/selos exibidos no rodapé e na página "Quem somos". */
+function CertificatesManager() {
+  const { data: certificates = [] } = useQuery(certificatesQuery);
+  const qc = useQueryClient();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const field =
+    "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["certificates"] });
+
+  const upload = async (file?: File) => {
+    if (!file) return;
+    setBusy(true);
+    try {
+      setImageUrl(await uploadFile(file, "certificado"));
+    } catch {
+      toast.error("Não foi possível enviar a imagem.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const add = async () => {
+    if (!title.trim()) return toast.error("Informe o título do certificado.");
+    setBusy(true);
+    const { error } = await supabase.from("certificates").insert({
+      title: title.trim(),
+      description: description.trim(),
+      image_url: imageUrl || null,
+      sort_order: certificates.length,
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Certificado adicionado!");
+    setTitle("");
+    setDescription("");
+    setImageUrl("");
+    refresh();
+  };
+
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("certificates").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Certificado removido.");
+    refresh();
+  };
+
+  return (
+    <section className="card-surface space-y-4 p-5">
+      <h2 className="text-lg font-bold uppercase">Certificados</h2>
+
+      {certificates.length > 0 && (
+        <ul className="divide-y divide-border">
+          {certificates.map((c) => (
+            <li key={c.id} className="flex items-center gap-3 py-3">
+              {c.image_url ? (
+                <img
+                  src={normalizeImage(c.image_url)}
+                  alt={c.title}
+                  className="h-12 w-12 rounded-md border border-border object-contain p-1"
+                />
+              ) : (
+                <div className="h-12 w-12 rounded-md border border-border" />
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{c.title}</p>
+                {c.description && (
+                  <p className="truncate text-xs text-muted-foreground">{c.description}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => remove(c.id)}
+                aria-label="Remover certificado"
+                className="rounded-md border border-border p-2 text-muted-foreground hover:border-destructive hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="space-y-3 rounded-md border border-dashed border-border p-4">
+        <label className="block">
+          <span className={labelCls}>Título</span>
+          <input className={field} value={title} onChange={(e) => setTitle(e.target.value)} />
+        </label>
+        <label className="block">
+          <span className={labelCls}>Descrição</span>
+          <input className={field} value={description} onChange={(e) => setDescription(e.target.value)} />
+        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          {imageUrl && (
+            <img
+              src={normalizeImage(imageUrl)}
+              alt="Selo"
+              className="h-12 w-12 rounded-md border border-border object-contain p-1"
+            />
+          )}
+          <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent">
+            <Upload className="h-4 w-4" /> {busy ? "Enviando..." : "Imagem do selo"}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => upload(e.target.files?.[0])}
+            />
+          </label>
+          <button
+            type="button"
+            onClick={add}
+            disabled={busy}
+            className="ml-auto inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+          >
+            <Plus className="h-4 w-4" /> Adicionar
+          </button>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Os certificados são salvos na hora, separadamente das demais configurações.
+      </p>
+    </section>
   );
 }
