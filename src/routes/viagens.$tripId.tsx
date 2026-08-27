@@ -26,7 +26,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  formatDate,
+  formatPhone,
   formatPhone,
   formatPrice,
   formatRange,
@@ -155,6 +155,8 @@ function TripDetail() {
 
   const activity = activities.find((a) => a.id === trip.activity_id);
   const total = Number(trip.price) * people;
+  const tripTags = allTags.filter((t) => (trip.tags ?? []).includes(t.id));
+  const selectedDeparture = departures.find((d) => d.date === departure);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
