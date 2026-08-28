@@ -48,15 +48,19 @@ function Comentarios() {
   const [uploading, setUploading] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["testimonials", "approved"] });
+  const sendPhoto = useServerFn(uploadTestimonialPhoto);
 
   const addPhoto = async (file?: File) => {
     if (!file) return;
+    if (photos.length >= 5) return toast.error("Máximo de 5 fotos.");
     setUploading(true);
     try {
-      const url = await uploadFile(file, "depoimento");
+      const fd = new FormData();
+      fd.append("file", file);
+      const { url } = await sendPhoto({ data: fd });
       setPhotos((p) => [...p, url].slice(0, 5));
     } catch (e) {
-      toast.error("Não foi possível enviar a foto.");
+      toast.error(e instanceof Error && e.message ? e.message : "Não foi possível enviar a foto.");
     } finally {
       setUploading(false);
     }
