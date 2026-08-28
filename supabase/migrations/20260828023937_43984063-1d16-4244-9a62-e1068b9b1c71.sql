@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.limit_booking_requests() FROM public, anon, authenticated;
