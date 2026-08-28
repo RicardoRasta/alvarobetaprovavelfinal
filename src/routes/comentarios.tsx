@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ImagePlus, MessageSquare, Star, Upload, X } from "lucide-react";
@@ -6,7 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { testimonialsQuery } from "@/lib/api";
 import { normalizeImage } from "@/data/trips";
-import { uploadFile } from "@/lib/upload";
+import { uploadTestimonialPhoto } from "@/lib/testimonial-upload.functions";
 
 export const Route = createFileRoute("/comentarios")({
   head: () => ({
