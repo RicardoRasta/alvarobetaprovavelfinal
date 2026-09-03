@@ -51,7 +51,7 @@ function Conta() {
 
   return (
     <div className="mx-auto max-w-4xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
-      <h1 className="text-3xl font-bold uppercase md:text-4xl">Minha conta</h1>
+      <h1 className="text-4xl leading-[0.95] md:text-5xl">Minha conta</h1>
 
       <section className="card-surface mt-6 p-6">
         <h2 className="flex items-center gap-2 text-lg font-bold uppercase">

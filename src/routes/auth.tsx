@@ -79,7 +79,7 @@ function AuthPage() {
       <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground">
         <Mountain className="h-6 w-6" />
       </span>
-      <h1 className="mt-4 text-center text-3xl font-bold uppercase">
+      <h1 className="mt-4 text-center text-4xl">
         {mode === "login" ? "Entrar" : "Criar conta"}
       </h1>
       <p className="mt-1 text-center text-sm text-muted-foreground">

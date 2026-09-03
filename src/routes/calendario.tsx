@@ -86,7 +86,7 @@ function Calendario() {
       <header className="mb-6 flex items-center gap-3">
         <CalendarDays className="h-8 w-8 text-accent" />
         <div>
-          <h1 className="text-3xl font-bold uppercase md:text-4xl">Calendário</h1>
+          <h1 className="text-4xl leading-[0.95] md:text-5xl">Calendário</h1>
           <p className="mt-1 text-sm text-muted-foreground">Todas as saídas dos roteiros em um só lugar.</p>
         </div>
       </header>

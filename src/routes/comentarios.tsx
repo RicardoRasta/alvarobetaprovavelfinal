@@ -94,7 +94,7 @@ function Comentarios() {
       <header className="flex items-center gap-3">
         <MessageSquare className="h-8 w-8 text-accent" />
         <div>
-          <h1 className="text-3xl font-bold uppercase md:text-4xl">Comentários</h1>
+          <h1 className="text-4xl leading-[0.95] md:text-5xl">Comentários</h1>
           <p className="mt-1 text-sm text-muted-foreground">O que dizem quem já viajou com a gente.</p>
         </div>
       </header>

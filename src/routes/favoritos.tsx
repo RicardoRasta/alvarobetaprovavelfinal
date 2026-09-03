@@ -26,7 +26,7 @@ function Favoritos() {
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
-      <h1 className="text-3xl font-bold uppercase md:text-4xl">Viagens salvas</h1>
+      <h1 className="text-4xl leading-[0.95] md:text-5xl">Viagens salvas</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         {saved.length} roteiros salvos na sua lista de desejos.
       </p>
