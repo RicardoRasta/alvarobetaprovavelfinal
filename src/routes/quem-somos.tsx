@@ -35,13 +35,13 @@ function QuemSomos() {
     "A Casa de Aventura é uma agência especializada em turismo de aventura pelo Brasil. Há mais de uma década levamos aventureiros a destinos incríveis com segurança, guias credenciados e respeito ao meio ambiente. Canoagem, escalada, trekking e expedições fazem parte do nosso dia a dia.";
 
   return (
-    <div className="mx-auto max-w-5xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
+    <div className="mx-auto max-w-[1200px] animate-fade-up px-4 py-12 md:px-8 md:py-16">
       <header className="flex items-center gap-3">
-        <span className="flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-foreground">
+        <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground">
           <Mountain className="h-6 w-6" />
         </span>
         <div>
-          <h1 className="text-3xl font-bold uppercase md:text-4xl">{aboutTitle}</h1>
+          <h1 className="text-4xl leading-[0.95] md:text-6xl">{aboutTitle}</h1>
           <p className="mt-1 text-sm text-muted-foreground">A história por trás das suas aventuras.</p>
         </div>
       </header>
@@ -50,7 +50,7 @@ function QuemSomos() {
         <div className="card-surface p-6">
           <p className="text-sm leading-relaxed text-muted-foreground md:text-base">{aboutText}</p>
           <div className="mt-5 flex items-center gap-2 text-sm">
-            <a href={phoneHref(settings)} className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 hover:border-accent hover:text-accent">
+            <a href={phoneHref(settings)} className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 hover:border-accent hover:text-accent">
               <Phone className="h-4 w-4" /> {formatPhone(settings)}
             </a>
           </div>
@@ -91,10 +91,10 @@ function QuemSomos() {
                     src={normalizeImage(c.image_url)}
                     alt={c.title}
                     loading="lazy"
-                    className="h-20 w-20 shrink-0 rounded-md border border-border bg-card object-contain p-1"
+                    className="h-20 w-20 shrink-0 rounded-xl border border-border bg-card object-contain p-1"
                   />
                 ) : (
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-md border border-border bg-card">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border border-border bg-card">
                     <Award className="h-8 w-8 text-accent" />
                   </div>
                 )}

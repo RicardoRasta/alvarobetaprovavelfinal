@@ -167,9 +167,9 @@ const MAX_IMAGES = 8;
 const cleanList = (list: string[]) => list.map((s) => s.trim()).filter(Boolean);
 
 const fieldCls =
-  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const areaCls =
-  "min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const label2 = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
 /** Bloco recolhível para organizar as seções longas do formulário. */
@@ -239,7 +239,7 @@ function ListEditor({
       <button
         type="button"
         onClick={() => onChange([...items, ""])}
-        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+        className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
       >
         <Plus className="h-3.5 w-3.5" /> Adicionar item
       </button>
@@ -297,7 +297,7 @@ function PairEditor({
       <button
         type="button"
         onClick={() => onChange([...items, { label: "", value: "" }])}
-        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+        className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
       >
         <Plus className="h-3.5 w-3.5" /> Adicionar linha
       </button>
@@ -323,7 +323,7 @@ function ItineraryEditor({
   return (
     <div className="space-y-3">
       {items.map((d, i) => (
-        <div key={i} className="space-y-2 rounded-md border border-input bg-card p-3">
+        <div key={i} className="space-y-2 rounded-xl border border-input bg-card p-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold uppercase text-muted-foreground">Dia {i + 1}</span>
             <input
@@ -358,7 +358,7 @@ function ItineraryEditor({
       <button
         type="button"
         onClick={() => onChange([...items, { title: "", description: "" }])}
-        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+        className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
       >
         <Plus className="h-3.5 w-3.5" /> Adicionar dia
       </button>
@@ -628,7 +628,7 @@ function AdminTrips() {
     refresh();
   };
 
-  const field = "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  const field = "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
   return (
@@ -638,7 +638,7 @@ function AdminTrips() {
         <button
           type="button"
           onClick={openNew}
-          className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
         >
           <Plus className="h-4 w-4" /> Nova viagem
         </button>
@@ -790,10 +790,10 @@ function AdminTrips() {
 
             <div className="sm:col-span-2">
               <span className={labelCls}>Imagens do roteiro (até {MAX_IMAGES})</span>
-              <div className="space-y-3 rounded-md border border-input bg-card p-3">
+              <div className="space-y-3 rounded-xl border border-input bg-card p-3">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
                   {form.images.map((url, idx) => (
-                    <div key={url} className="relative overflow-hidden rounded-md border border-border">
+                    <div key={url} className="relative overflow-hidden rounded-xl border border-border">
                       <img src={url} alt={`Imagem ${idx + 1}`} className="aspect-square w-full object-cover" />
                       {idx === 0 && (
                         <span className="absolute left-1 top-1 rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
@@ -839,7 +839,7 @@ function AdminTrips() {
                     </div>
                   ))}
                   {form.images.length === 0 && (
-                    <div className="col-span-2 flex h-28 items-center justify-center rounded-md border border-dashed border-border bg-muted sm:col-span-5">
+                    <div className="col-span-2 flex h-28 items-center justify-center rounded-xl border border-dashed border-border bg-muted sm:col-span-5">
                       <span className="text-xs text-muted-foreground">Sem imagens</span>
                     </div>
                   )}
@@ -860,7 +860,7 @@ function AdminTrips() {
                     type="button"
                     disabled={uploading || form.images.length >= MAX_IMAGES}
                     onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
+                    className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
                   >
                     <Upload className="h-4 w-4" />
                     {uploading ? "Enviando..." : "Adicionar imagens"}
@@ -876,7 +876,7 @@ function AdminTrips() {
             <label className="sm:col-span-2">
               <span className={labelCls}>Descrição</span>
               <textarea
-                className="min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
               />
@@ -884,7 +884,7 @@ function AdminTrips() {
             <label>
               <span className={labelCls}>Destaques (um por linha)</span>
               <textarea
-                className="min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 value={form.highlights}
                 onChange={(e) => set("highlights", e.target.value)}
               />
@@ -892,7 +892,7 @@ function AdminTrips() {
             <label>
               <span className={labelCls}>Incluso (um por linha)</span>
               <textarea
-                className="min-h-24 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 value={form.includes}
                 onChange={(e) => set("includes", e.target.value)}
               />
@@ -921,7 +921,7 @@ function AdminTrips() {
                   <img
                     src={form.guide_image_url}
                     alt="Foto do guia"
-                    className="h-20 w-20 rounded-md object-cover"
+                    className="h-20 w-20 rounded-xl object-cover"
                   />
                 )}
                 <input
@@ -938,7 +938,7 @@ function AdminTrips() {
                   type="button"
                   disabled={uploadingGuide}
                   onClick={() => guideInputRef.current?.click()}
-                  className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent disabled:opacity-60"
                 >
                   <Upload className="h-4 w-4" />
                   {uploadingGuide ? "Enviando..." : form.guide_image_url ? "Trocar foto" : "Foto do guia"}
@@ -1049,7 +1049,7 @@ function AdminTrips() {
               <button
                 type="button"
                 onClick={addDep}
-                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1 text-xs font-medium hover:border-accent hover:text-accent"
               >
                 <Plus className="h-3.5 w-3.5" /> Adicionar saída
               </button>
@@ -1062,7 +1062,7 @@ function AdminTrips() {
             ) : (
               <div className="space-y-2">
                 {form.departures.map((d, i) => (
-                  <div key={i} className="flex flex-wrap items-end gap-2 rounded-md border border-input bg-card p-3">
+                  <div key={i} className="flex flex-wrap items-end gap-2 rounded-xl border border-input bg-card p-3">
                     <label className="flex-1 min-w-[140px]">
                       <span className={labelCls}>Data de ida</span>
                       <input
@@ -1116,7 +1116,7 @@ function AdminTrips() {
             type="button"
             onClick={save}
             disabled={saving}
-            className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+            className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
           >
             {saving ? "Salvando..." : "Salvar roteiro"}
           </button>
@@ -1131,7 +1131,7 @@ function AdminTrips() {
               alt={t.name}
               width={160}
               height={120}
-              className="h-28 w-full rounded-md object-cover sm:w-40"
+              className="h-28 w-full rounded-xl object-cover sm:w-40"
             />
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2">
@@ -1164,14 +1164,14 @@ function AdminTrips() {
               <button
                 type="button"
                 onClick={() => openEdit(t)}
-                className="rounded-md border border-border px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
+                className="rounded-xl border border-border px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
               >
                 Editar
               </button>
               <button
                 type="button"
                 onClick={() => remove(t.id)}
-                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
+                className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1.5 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Excluir
               </button>

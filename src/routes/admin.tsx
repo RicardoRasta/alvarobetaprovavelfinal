@@ -76,13 +76,13 @@ function AdminLayout() {
     <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-10">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold uppercase md:text-4xl">Administração</h1>
+          <h1 className="text-4xl leading-[0.95] md:text-5xl">Administração</h1>
           <p className="mt-1 text-sm text-muted-foreground">{session.user.email}</p>
         </div>
         <button
           type="button"
           onClick={() => signOut()}
-          className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent"
         >
           <LogOut className="h-4 w-4" /> Sair
         </button>

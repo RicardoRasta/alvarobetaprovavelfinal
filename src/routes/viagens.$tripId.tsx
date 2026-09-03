@@ -63,7 +63,7 @@ function TripGallery({ trip }: { trip: Trip }) {
               type="button"
               onClick={() => setActive(i)}
               aria-label={`Ver imagem ${i + 1} de ${images.length}`}
-              className={`overflow-hidden rounded-md border transition ${
+              className={`overflow-hidden rounded-xl border transition ${
                 i === active ? "border-accent" : "border-border opacity-70 hover:opacity-100"
               }`}
             >
@@ -144,7 +144,7 @@ function TripDetail() {
   if (!trip) {
     return (
       <div className="mx-auto max-w-xl p-12 text-center">
-        <h1 className="text-2xl font-bold uppercase">Roteiro não encontrado</h1>
+        <h1 className="text-3xl">Roteiro não encontrado</h1>
         <Link to="/viagens" className="mt-4 inline-block text-accent hover:underline">
           Ver todas as viagens
         </Link>
@@ -246,17 +246,17 @@ function TripDetail() {
             <MapPin className="h-3.5 w-3.5" /> {trip.destination} · {trip.state}
             {activity ? ` · ${activity.name}` : ""}
           </span>
-          <h1 className="mt-2 text-3xl font-bold uppercase md:text-4xl">{trip.name}</h1>
+          <h1 className="mt-2 text-4xl leading-[0.95] md:text-6xl">{trip.name}</h1>
 
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
             <span className="flex items-center gap-1">
               <Star className="h-4 w-4 fill-accent text-accent" />
               <span className="font-semibold">{Number(trip.rating).toFixed(1)}</span>
             </span>
-            <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
+            <span className="chip">
               {trip.days} dias
             </span>
-            <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
+            <span className="chip">
               Nível {trip.level}
             </span>
           </div>
@@ -301,7 +301,7 @@ function TripDetail() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Como podemos te chamar?"
-                className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="h-11 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
             </label>
 
@@ -313,7 +313,7 @@ function TripDetail() {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 placeholder="(11) 99999-9999"
-                className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="h-11 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
             </label>
 
@@ -325,7 +325,7 @@ function TripDetail() {
                 <select
                   value={departure}
                   onChange={(e) => setDeparture(e.target.value)}
-                  className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  className="h-11 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none focus:ring-2 focus:ring-ring"
                 >
                   {departures.map((d) => (
                     <option key={d.id} value={d.date}>
@@ -351,7 +351,7 @@ function TripDetail() {
                 min={1}
                 value={people}
                 onChange={(e) => setPeople(Math.max(1, Number(e.target.value) || 1))}
-                className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                className="h-11 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
             </label>
 
@@ -365,14 +365,14 @@ function TripDetail() {
             <button
               type="submit"
               disabled={sending}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 font-semibold text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+              className="btn-pill w-full justify-center disabled:opacity-60"
             >
               <MessageCircle className="h-5 w-5" />
               {sending ? "Enviando..." : "Agendar pelo WhatsApp"}
             </button>
             <a
               href={phoneHref(settings)}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-accent px-6 py-3 font-semibold text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="btn-pill-outline w-full justify-center"
             >
               <Phone className="h-5 w-5" /> Ligar {formatPhone(settings)}
             </a>
@@ -475,7 +475,7 @@ function TripDetails({ trip }: { trip: Trip }) {
                 src={trip.guide_image_url}
                 alt="Condutor da viagem"
                 loading="lazy"
-                className="h-32 w-32 shrink-0 rounded-md object-cover"
+                className="h-32 w-32 shrink-0 rounded-xl object-cover"
               />
             )}
             <p className="whitespace-pre-line leading-relaxed text-muted-foreground">

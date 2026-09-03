@@ -86,7 +86,7 @@ function Calendario() {
       <header className="mb-6 flex items-center gap-3">
         <CalendarDays className="h-8 w-8 text-accent" />
         <div>
-          <h1 className="text-3xl font-bold uppercase md:text-4xl">Calendário</h1>
+          <h1 className="text-4xl leading-[0.95] md:text-5xl">Calendário</h1>
           <p className="mt-1 text-sm text-muted-foreground">Todas as saídas dos roteiros em um só lugar.</p>
         </div>
       </header>
@@ -102,7 +102,7 @@ function Calendario() {
                 type="button"
                 onClick={prev}
                 aria-label="Mês anterior"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border hover:border-accent hover:text-accent"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border hover:border-accent hover:text-accent"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -110,7 +110,7 @@ function Calendario() {
                 type="button"
                 onClick={next}
                 aria-label="Próximo mês"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border hover:border-accent hover:text-accent"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border hover:border-accent hover:text-accent"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -135,7 +135,7 @@ function Calendario() {
                   type="button"
                   key={iso}
                   onClick={() => setSelected(isSel ? null : iso)}
-                  className={`relative aspect-square rounded-md border text-sm transition-colors ${
+                  className={`relative aspect-square rounded-xl border text-sm transition-colors ${
                     isSel
                       ? "border-accent bg-accent text-accent-foreground"
                       : has
@@ -166,7 +166,7 @@ function Calendario() {
           ) : (
             <ul className="mt-3 space-y-3">
               {selectedDeps.map((d) => (
-                <li key={d.id} className="rounded-md border border-border bg-card p-3">
+                <li key={d.id} className="rounded-xl border border-border bg-card p-3">
                   <Link
                     to="/viagens/$tripId"
                     params={{ tripId: d.tripSlug }}
@@ -192,7 +192,7 @@ function Calendario() {
                     })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-accent px-3 py-1.5 text-xs font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-xl border border-accent px-3 py-1.5 text-xs font-semibold text-accent hover:bg-accent hover:text-accent-foreground"
                   >
                     <MessageCircle className="h-3.5 w-3.5" /> Agendar
                   </a>

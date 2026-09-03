@@ -50,7 +50,7 @@ function BlogPost() {
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
           <CalendarDays className="h-3.5 w-3.5" /> {formatDate(post.published_at)}
         </span>
-        <h1 className="mt-2 text-3xl font-bold uppercase leading-tight md:text-4xl">{post.title}</h1>
+        <h1 className="mt-2 text-4xl leading-[0.98] md:text-5xl">{post.title}</h1>
         {post.excerpt && <p className="mt-3 text-base text-muted-foreground">{post.excerpt}</p>}
       </header>
 

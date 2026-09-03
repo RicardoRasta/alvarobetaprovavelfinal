@@ -41,7 +41,7 @@ function Conta() {
         <Link
           to="/auth"
           search={{ next: "/conta" }}
-          className="mt-6 inline-flex rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
+          className="mt-6 inline-flex rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground"
         >
           Entrar ou criar conta
         </Link>
@@ -51,7 +51,7 @@ function Conta() {
 
   return (
     <div className="mx-auto max-w-4xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
-      <h1 className="text-3xl font-bold uppercase md:text-4xl">Minha conta</h1>
+      <h1 className="text-4xl leading-[0.95] md:text-5xl">Minha conta</h1>
 
       <section className="card-surface mt-6 p-6">
         <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
@@ -71,7 +71,7 @@ function Conta() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
             >
               <LayoutDashboard className="h-4 w-4" /> Painel administrativo
             </Link>
@@ -79,7 +79,7 @@ function Conta() {
           <button
             type="button"
             onClick={() => signOut()}
-            className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm hover:border-accent hover:text-accent"
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm hover:border-accent hover:text-accent"
           >
             <LogOut className="h-4 w-4" /> Sair
           </button>

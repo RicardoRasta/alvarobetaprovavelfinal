@@ -19,7 +19,7 @@ const slugify = (v: string) =>
     .replace(/^-|-$/g, "");
 
 const field =
-  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 
 function AdminTags() {
   const { data: tags = [] } = useQuery(tagsQuery);
@@ -77,7 +77,7 @@ function AdminTags() {
             type="button"
             onClick={add}
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-60"
           >
             <Plus className="h-4 w-4" /> Adicionar
           </button>

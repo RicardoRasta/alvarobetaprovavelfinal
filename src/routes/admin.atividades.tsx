@@ -115,7 +115,7 @@ function AdminActivities() {
     refresh();
   };
 
-  const field = "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  const field = "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
   return (
@@ -125,7 +125,7 @@ function AdminActivities() {
         <button
           type="button"
           onClick={openNew}
-          className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
         >
           <Plus className="h-4 w-4" /> Nova atividade
         </button>
@@ -193,7 +193,7 @@ function AdminActivities() {
             type="button"
             onClick={save}
             disabled={saving}
-            className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+            className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
           >
             {saving ? "Salvando..." : "Salvar atividade"}
           </button>
@@ -238,14 +238,14 @@ function AdminActivities() {
                 <button
                   type="button"
                   onClick={() => openEdit(a)}
-                  className="rounded-md border border-border px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
+                  className="rounded-xl border border-border px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
                 >
                   Editar
                 </button>
                 <button
                   type="button"
                   onClick={() => remove(a.id)}
-                  className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
+                  className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1.5 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Excluir
                 </button>
