@@ -45,9 +45,9 @@ const empty: Form = {
 };
 
 const field =
-  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const area =
-  "min-h-32 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "min-h-32 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
 function AdminBlog() {
@@ -154,7 +154,7 @@ function AdminBlog() {
             setEditing("new");
             setForm({ ...empty });
           }}
-          className="inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground"
         >
           <Plus className="h-4 w-4" /> Novo post
         </button>
@@ -200,7 +200,7 @@ function AdminBlog() {
             <div className="flex flex-wrap gap-2">
               {form.images.map((url, i) => (
                 <div key={url} className="relative">
-                  <img src={normalizeImage(url)} alt="" className="h-24 w-24 rounded-md border border-border object-cover" />
+                  <img src={normalizeImage(url)} alt="" className="h-24 w-24 rounded-xl border border-border object-cover" />
                   <button
                     type="button"
                     onClick={() => set("images", form.images.filter((_, j) => j !== i))}
@@ -212,7 +212,7 @@ function AdminBlog() {
                 </div>
               ))}
             </div>
-            <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
+            <label className="mt-2 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
               <Upload className="h-4 w-4" /> {uploading ? "Enviando..." : "Adicionar fotos"}
               <input
                 type="file"
@@ -254,11 +254,11 @@ function AdminBlog() {
               <button
                 type="button"
                 onClick={() => form.videos.length < MAX_MEDIA && set("videos", [...form.videos, ""])}
-                className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-medium hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-1 rounded-xl border border-border px-3 py-1.5 text-xs font-medium hover:border-accent hover:text-accent"
               >
                 <Plus className="h-3.5 w-3.5" /> Adicionar link de vídeo
               </button>
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs font-medium hover:border-accent hover:text-accent">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-xs font-medium hover:border-accent hover:text-accent">
                 <Upload className="h-3.5 w-3.5" /> Enviar arquivo de vídeo
                 <input
                   type="file"
@@ -285,7 +285,7 @@ function AdminBlog() {
               type="button"
               onClick={save}
               disabled={saving}
-              className="rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+              className="rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
             >
               {saving ? "Salvando..." : "Salvar post"}
             </button>
@@ -295,7 +295,7 @@ function AdminBlog() {
                 setEditing(null);
                 setForm(null);
               }}
-              className="rounded-md border border-border px-5 py-2.5 text-sm"
+              className="rounded-xl border border-border px-5 py-2.5 text-sm"
             >
               Cancelar
             </button>
@@ -307,7 +307,7 @@ function AdminBlog() {
         {posts.map((p) => (
           <article key={p.id} className="card-surface flex flex-wrap items-center gap-4 p-4">
             {p.cover_url && (
-              <img src={normalizeImage(p.cover_url)} alt="" className="h-16 w-24 rounded-md object-cover" />
+              <img src={normalizeImage(p.cover_url)} alt="" className="h-16 w-24 rounded-xl object-cover" />
             )}
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{p.title}</p>
@@ -320,7 +320,7 @@ function AdminBlog() {
             <button
               type="button"
               onClick={() => startEdit(p)}
-              className="rounded-md border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
+              className="rounded-xl border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
             >
               Editar
             </button>

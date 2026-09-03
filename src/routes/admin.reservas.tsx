@@ -62,7 +62,7 @@ function AdminBookings() {
                     <select
                       value={b.status}
                       onChange={(e) => update(b.id, e.target.value)}
-                      className="h-8 rounded-md border border-input bg-card px-2 text-xs"
+                      className="h-8 rounded-xl border border-input bg-card px-2 text-xs"
                     >
                       {statuses.map((s) => (
                         <option key={s} value={s}>

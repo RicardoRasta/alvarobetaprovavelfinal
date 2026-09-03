@@ -41,76 +41,78 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-border: var(--sidebar-border);
-  --font-display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anton", "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree", "Barlow", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.5rem;
-  --background: oklch(0.985 0.005 120);
-  --foreground: oklch(0.22 0.03 155);
+  --radius: 1rem;
+  --background: oklch(0.975 0.004 100);
+  --foreground: oklch(0.21 0.028 165);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.03 155);
+  --card-foreground: oklch(0.21 0.028 165);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.03 155);
-  --primary: oklch(0.36 0.072 158);
-  --primary-foreground: oklch(0.985 0.005 120);
-  --secondary: oklch(0.95 0.015 150);
-  --secondary-foreground: oklch(0.3 0.05 158);
-  --muted: oklch(0.955 0.008 140);
-  --muted-foreground: oklch(0.5 0.02 155);
-  --accent: oklch(0.68 0.18 47);
+  --popover-foreground: oklch(0.21 0.028 165);
+  --primary: oklch(0.27 0.045 165);
+  --primary-foreground: oklch(0.98 0.005 100);
+  --secondary: oklch(0.945 0.006 120);
+  --secondary-foreground: oklch(0.26 0.04 165);
+  --muted: oklch(0.955 0.005 110);
+  --muted-foreground: oklch(0.52 0.015 165);
+  --accent: oklch(0.66 0.212 40);
   --accent-foreground: oklch(0.99 0.01 80);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --success: oklch(0.6 0.13 155);
-  --border: oklch(0.9 0.012 150);
-  --input: oklch(0.9 0.012 150);
-  --ring: oklch(0.68 0.18 47);
-  --sidebar: oklch(0.28 0.055 158);
-  --sidebar-foreground: oklch(0.93 0.02 140);
-  --sidebar-accent: oklch(0.36 0.072 158);
-  --sidebar-border: oklch(0.34 0.06 158);
+  --border: oklch(0.9 0.008 120);
+  --input: oklch(0.9 0.008 120);
+  --ring: oklch(0.66 0.212 40);
+  --sidebar: oklch(0.21 0.028 165);
+  --sidebar-foreground: oklch(0.93 0.015 120);
+  --sidebar-accent: oklch(0.28 0.045 165);
+  --sidebar-border: oklch(0.32 0.045 165);
 
   --gradient-hero: linear-gradient(
-    100deg,
-    color-mix(in oklab, var(--primary) 92%, black) 0%,
-    color-mix(in oklab, var(--primary) 55%, transparent) 55%,
-    transparent 100%
+    to top,
+    color-mix(in oklab, oklch(0.21 0.028 165) 78%, transparent) 0%,
+    color-mix(in oklab, oklch(0.21 0.028 165) 30%, transparent) 45%,
+    transparent 80%
   );
-  --shadow-card: 0 1px 2px oklch(0.22 0.03 155 / 0.06), 0 12px 28px -18px oklch(0.22 0.03 155 / 0.35);
-  --shadow-lift: 0 18px 40px -22px oklch(0.22 0.03 155 / 0.5);
-  --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-card: 0 1px 2px oklch(0.21 0.028 165 / 0.05), 0 18px 40px -26px oklch(0.21 0.028 165 / 0.3);
+  --shadow-lift: 0 26px 50px -28px oklch(0.21 0.028 165 / 0.45);
+  --transition-base: 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+
 .dark {
-  --background: oklch(0.19 0.022 158);
-  --foreground: oklch(0.95 0.01 140);
-  --card: oklch(0.235 0.028 158);
-  --card-foreground: oklch(0.95 0.01 140);
-  --popover: oklch(0.235 0.028 158);
-  --popover-foreground: oklch(0.95 0.01 140);
-  --primary: oklch(0.62 0.11 158);
-  --primary-foreground: oklch(0.15 0.02 158);
-  --secondary: oklch(0.28 0.035 158);
-  --secondary-foreground: oklch(0.95 0.01 140);
-  --muted: oklch(0.27 0.03 158);
-  --muted-foreground: oklch(0.72 0.02 145);
-  --accent: oklch(0.72 0.17 50);
-  --accent-foreground: oklch(0.18 0.03 60);
+  --background: oklch(0.18 0.022 165);
+  --foreground: oklch(0.95 0.01 120);
+  --card: oklch(0.225 0.026 165);
+  --card-foreground: oklch(0.95 0.01 120);
+  --popover: oklch(0.225 0.026 165);
+  --popover-foreground: oklch(0.95 0.01 120);
+  --primary: oklch(0.9 0.02 120);
+  --primary-foreground: oklch(0.18 0.022 165);
+  --secondary: oklch(0.27 0.03 165);
+  --secondary-foreground: oklch(0.95 0.01 120);
+  --muted: oklch(0.26 0.028 165);
+  --muted-foreground: oklch(0.73 0.018 130);
+  --accent: oklch(0.7 0.195 42);
+  --accent-foreground: oklch(0.16 0.03 60);
   --destructive: oklch(0.65 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   --success: oklch(0.7 0.14 155);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.72 0.17 50);
-  --sidebar: oklch(0.16 0.02 158);
-  --sidebar-foreground: oklch(0.9 0.015 140);
-  --sidebar-accent: oklch(0.26 0.04 158);
+  --ring: oklch(0.7 0.195 42);
+  --sidebar: oklch(0.15 0.02 165);
+  --sidebar-foreground: oklch(0.9 0.015 120);
+  --sidebar-accent: oklch(0.25 0.035 165);
   --sidebar-border: oklch(1 0 0 / 10%);
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 12px 28px -18px oklch(0 0 0 / 0.7);
   --shadow-lift: 0 18px 40px -22px oklch(0 0 0 / 0.8);
 }
+
 
 @layer base {
   * {
@@ -129,15 +131,24 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
+    line-height: 0.95;
+    /* Anton tem apenas um peso: evita negrito falso e sujo. */
+    font-synthesis-weight: none;
   }
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-synthesis-weight: none;
+  letter-spacing: -0.015em;
 }
 
 @utility card-surface {
   background-color: var(--color-card);
   color: var(--color-card-foreground);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
 }
 
@@ -155,6 +166,88 @@
 @utility gradient-hero {
   background-image: var(--gradient-hero);
 }
+
+/* Botão pílula laranja: ação principal do site. */
+@utility btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition:
+    transform var(--transition-base),
+    filter var(--transition-base);
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+}
+
+/* Botão pílula secundário (contorno). */
+@utility btn-pill-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card);
+  color: var(--color-foreground);
+  padding: 0.6875rem 1.375rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition:
+    border-color var(--transition-base),
+    color var(--transition-base);
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+/* Chip de data / local. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-foreground);
+  padding: 0.3125rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Chip sobre imagem escura. */
+@utility chip-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  background-color: oklch(1 0 0 / 0.22);
+  color: oklch(1 0 0);
+  backdrop-filter: blur(6px);
+  padding: 0.3125rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Moldura de imagem grande e arredondada. */
+@utility media-frame {
+  overflow: hidden;
+  border-radius: var(--radius-3xl);
+  background-color: var(--color-muted);
+}
+
 
 @keyframes fade-up {
   from {

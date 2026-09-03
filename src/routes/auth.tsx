@@ -76,7 +76,7 @@ function AuthPage() {
 
   return (
     <div className="mx-auto flex max-w-md animate-fade-up flex-col px-4 py-12">
-      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-md bg-accent text-accent-foreground">
+      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground">
         <Mountain className="h-6 w-6" />
       </span>
       <h1 className="mt-4 text-center text-3xl font-bold uppercase">
@@ -97,7 +97,7 @@ function AuthPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
           </label>
           <label className="block">
@@ -110,13 +110,13 @@ function AuthPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
           </label>
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+            className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
             {busy ? "Aguarde..." : mode === "login" ? "Entrar" : "Criar conta"}
           </button>
@@ -129,7 +129,7 @@ function AuthPage() {
         <button
           type="button"
           onClick={google}
-          className="w-full rounded-md border border-border px-4 py-2.5 text-sm font-medium hover:border-accent hover:text-accent"
+          className="w-full rounded-xl border border-border px-4 py-2.5 text-sm font-medium hover:border-accent hover:text-accent"
         >
           Continuar com Google
         </button>

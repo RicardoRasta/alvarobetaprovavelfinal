@@ -31,9 +31,9 @@ export const Route = createFileRoute("/comentarios")({
 });
 
 const field =
-  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const area =
-  "min-h-28 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  "min-h-28 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
 function Comentarios() {
@@ -139,7 +139,7 @@ function Comentarios() {
             <div className="flex flex-wrap gap-3">
               {photos.map((p, i) => (
                 <div key={i} className="relative">
-                  <img src={normalizeImage(p)} alt={`Foto ${i + 1}`} className="h-20 w-20 rounded-md border border-border object-cover" />
+                  <img src={normalizeImage(p)} alt={`Foto ${i + 1}`} className="h-20 w-20 rounded-xl border border-border object-cover" />
                   <button
                     type="button"
                     onClick={() => setPhotos((arr) => arr.filter((_, idx) => idx !== i))}
@@ -151,7 +151,7 @@ function Comentarios() {
                 </div>
               ))}
               {photos.length < 5 && (
-                <label className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-md border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
+                <label className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-xl border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
                   {uploading ? <span className="text-xs">Enviando...</span> : <ImagePlus className="h-6 w-6" />}
                   <input
                     type="file"
@@ -167,7 +167,7 @@ function Comentarios() {
             type="button"
             onClick={submit}
             disabled={sending}
-            className="inline-flex items-center gap-2 rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground disabled:opacity-60"
           >
             <Upload className="h-4 w-4" /> {sending ? "Enviando..." : "Enviar depoimento"}
           </button>
@@ -208,7 +208,7 @@ function Comentarios() {
                         src={normalizeImage(p)}
                         alt={`Foto ${i + 1}`}
                         loading="lazy"
-                        className="h-16 w-16 rounded-md border border-border object-cover"
+                        className="h-16 w-16 rounded-xl border border-border object-cover"
                       />
                     ))}
                   </div>

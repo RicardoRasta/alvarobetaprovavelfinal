@@ -54,7 +54,7 @@ function AdminComments() {
               key={p}
               src={normalizeImage(p)}
               alt="Foto enviada pelo cliente"
-              className="h-20 w-20 rounded-md border border-border object-cover"
+              className="h-20 w-20 rounded-xl border border-border object-cover"
             />
           ))}
         </div>
@@ -64,7 +64,7 @@ function AdminComments() {
           <button
             type="button"
             onClick={() => setApproved(t.id, true)}
-            className="inline-flex items-center gap-2 rounded-md bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground"
           >
             <Check className="h-4 w-4" /> Aprovar
           </button>
@@ -72,7 +72,7 @@ function AdminComments() {
           <button
             type="button"
             onClick={() => setApproved(t.id, false)}
-            className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
           >
             <X className="h-4 w-4" /> Ocultar
           </button>
@@ -80,7 +80,7 @@ function AdminComments() {
         <button
           type="button"
           onClick={() => remove(t.id)}
-          className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+          className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" /> Excluir
         </button>

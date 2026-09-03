@@ -1,16 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { activitiesQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
+import { activitiesQuery, sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
 
-type CatalogSearch = { atividade?: string; q?: string };
+type CatalogSearch = { atividade?: string; q?: string; data?: string; tag?: string };
 
 export const Route = createFileRoute("/viagens/")({
   validateSearch: (search: Record<string, unknown>): CatalogSearch => ({
     atividade: typeof search.atividade === "string" ? search.atividade : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
+    data: typeof search.data === "string" ? search.data : undefined,
+    tag: typeof search.tag === "string" ? search.tag : undefined,
   }),
   head: () => ({
     meta: [
@@ -33,11 +35,12 @@ export const Route = createFileRoute("/viagens/")({
 });
 
 function Viagens() {
-  const { atividade } = Route.useSearch();
+  const { atividade, data, tag } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [query, setQuery] = useState("");
   const { data: trips = [], isLoading } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
+  const { data: tags = [] } = useQuery(tagsQuery);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -46,55 +49,85 @@ function Viagens() {
         (t) =>
           t.published &&
           (!atividade || t.activity_id === atividade) &&
+          (!tag || (t.tags ?? []).includes(tag)) &&
+          (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
       ),
     );
-  }, [atividade, query, trips]);
+  }, [atividade, data, tag, query, trips]);
 
-  const setAtividade = (id?: string) =>
-    navigate({ search: (prev: CatalogSearch) => ({ ...prev, atividade: id }) });
+  const patch = (next: Partial<CatalogSearch>) =>
+    navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
 
   return (
-    <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-12">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold uppercase md:text-4xl">Viagens</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+    <div className="mx-auto max-w-[1400px] animate-fade-up px-4 py-12 md:px-8 md:py-16">
+      <header className="mb-10">
+        <h1 className="text-5xl leading-[0.95] md:text-7xl">
+          Nossa agenda
+          <br />
+          <span className="text-accent">completa</span>
+        </h1>
+        <p className="mt-4 text-sm text-muted-foreground">
           {isLoading ? "Carregando roteiros..." : `${filtered.length} roteiro(s) disponíveis`}
         </p>
       </header>
 
-      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center">
-        <label className="relative flex flex-1 items-center">
-          <Search className="pointer-events-none absolute left-3 h-4 w-4 text-muted-foreground" />
+      <div className="card-surface mb-6 flex flex-col gap-3 rounded-3xl p-3 md:flex-row md:items-center md:rounded-full md:p-2.5">
+        <label className="flex flex-1 items-center gap-2 px-4 py-2">
+          <Search className="h-5 w-5 shrink-0 text-accent" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             type="search"
             placeholder="Buscar por destino, estado ou atividade..."
-            className="h-11 w-full rounded-md border border-input bg-card pl-9 pr-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-ring"
+            className="w-full bg-transparent text-sm outline-none"
+          />
+        </label>
+        <span className="hidden h-8 w-px bg-border md:block" />
+        <label className="flex items-center gap-2 px-4 py-2">
+          <CalendarDays className="h-5 w-5 shrink-0 text-accent" />
+          <input
+            type="date"
+            value={data ?? ""}
+            onChange={(e) => patch({ data: e.target.value || undefined })}
+            aria-label="A partir da data"
+            className="bg-transparent text-sm outline-none"
           />
         </label>
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-2">
-        <FilterChip active={!atividade} onClick={() => setAtividade(undefined)} label="Todas" />
+      <div className="mb-4 flex flex-wrap gap-2">
+        <FilterChip active={!atividade} onClick={() => patch({ atividade: undefined })} label="Todas" />
         {activities.map((a) => (
           <FilterChip
             key={a.id}
             active={atividade === a.id}
-            onClick={() => setAtividade(a.id)}
+            onClick={() => patch({ atividade: a.id })}
             label={a.name}
           />
         ))}
       </div>
 
+      {tags.length > 0 && (
+        <div className="mb-12 flex flex-wrap gap-2">
+          {tags.map((t) => (
+            <FilterChip
+              key={t.id}
+              active={tag === t.id}
+              onClick={() => patch({ tag: tag === t.id ? undefined : t.id })}
+              label={t.name}
+            />
+          ))}
+        </div>
+      )}
+
       {!isLoading && filtered.length === 0 ? (
-        <p className="card-surface p-10 text-center text-muted-foreground">
+        <p className="card-surface p-12 text-center text-muted-foreground">
           Nenhuma viagem encontrada para esta busca.
         </p>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((t) => (
             <TripCard key={t.id} trip={t} />
           ))}
@@ -117,7 +150,7 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
         active
           ? "border-accent bg-accent text-accent-foreground"
           : "border-border bg-card text-muted-foreground hover:border-accent hover:text-accent"
@@ -127,3 +160,4 @@ function FilterChip({
     </button>
   );
 }
+

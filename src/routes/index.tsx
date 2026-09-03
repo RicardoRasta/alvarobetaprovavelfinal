@@ -1,8 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, CalendarDays, Compass, ShieldCheck, Users } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, CalendarDays, Compass, Search, ShieldCheck, Users } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { HeroCarousel } from "@/components/hero-carousel";
+import { SectionHeading } from "@/components/section-heading";
+import { upcomingMonths } from "@/components/departure-chips";
 import { formatRange, heroSlides } from "@/data/trips";
 import { activitiesQuery, settingsQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
 
@@ -18,7 +21,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "A Casa de Aventura — Viagens de aventura pelo Brasil" },
       {
         property: "og:description",
-        content: "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp.",
+        content:
+          "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil. Agende sua saída pelo WhatsApp.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,119 +37,131 @@ function Index() {
   const { data: settings } = useQuery(settingsQuery);
 
   const visible = trips.filter((t) => t.published);
-  const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 4);
+  const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 6);
+  const heroTrips = featured.length > 0 ? featured.slice(0, 4) : sortByNextDeparture(visible).slice(0, 4);
   const today = new Date().toISOString().slice(0, 10);
   const nextDepartures = visible
     .flatMap((t) => (t.departures ?? []).map((d) => ({ trip: t, ...d })))
     .filter((d) => d.date >= today)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(0, 5);
+    .slice(0, 6);
 
   return (
     <div className="animate-fade-up">
-      <section className="relative h-[380px] overflow-hidden md:h-[460px]">
-        <HeroCarousel images={heroSlides(settings)} />
-        <div className="gradient-hero pointer-events-none absolute inset-0 z-10" />
-        <div className="absolute inset-0 z-10 flex items-center px-6 md:px-12">
-          <div className="pointer-events-auto max-w-xl text-primary-foreground">
-            <span className="inline-flex items-center gap-2 font-display text-sm font-bold uppercase tracking-[0.2em] text-accent">
-              <Compass className="h-4 w-4" /> Casa de Aventura
-            </span>
-            {settings?.banner_badge && (
-              <span className="mt-3 inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wide text-accent-foreground">
-                {settings.banner_badge}
-              </span>
-            )}
-            <h1 className="mt-4 text-4xl font-bold uppercase leading-[1.05] md:text-6xl">
-              {settings?.banner_title || "Viagens de aventura pelo Brasil"}
-            </h1>
-            <p className="mt-4 max-w-md text-sm opacity-90 md:text-base">
-              {settings?.banner_subtitle ||
-                "Canoagem, escalada, trekking e expedições guiadas por todo o Brasil."}
-            </p>
-            <Link
-              to="/viagens"
-              className="mt-6 inline-flex items-center gap-2 rounded-md bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:translate-x-1"
-            >
-              Ver roteiros <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
+      <section className="mx-auto max-w-[1400px] px-4 pt-2 md:px-8">
+        <HeroCarousel
+          images={heroSlides(settings)}
+          trips={heroTrips}
+          fallbackTitle={settings?.banner_title || "Viagens de aventura pelo Brasil"}
+          fallbackDescription={
+            settings?.banner_subtitle ||
+            "Canoagem, escalada, trekking e expedições guiadas por todo o Brasil."
+          }
+        />
       </section>
 
-      <div className="mx-auto max-w-7xl space-y-14 px-4 py-10 md:px-6 md:py-14">
+      <div className="mx-auto max-w-[1400px] space-y-24 px-4 py-20 md:px-8">
+        <AgendaSearch />
+
         {(settings?.stats?.length ?? 0) > 0 && (
-          <section className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+          <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {settings!.stats.map((s) => (
-              <div key={s.label} className="card-surface p-4 md:p-5">
-                <p className="font-display text-2xl font-bold text-accent md:text-3xl">{s.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground md:text-sm">{s.label}</p>
+              <div key={s.label} className="card-surface p-6">
+                <p className="font-display text-4xl text-accent md:text-5xl">{s.value}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{s.label}</p>
               </div>
             ))}
           </section>
         )}
 
-        <section>
-          <header className="mb-5 flex items-end justify-between">
-            <h2 className="text-2xl font-bold uppercase md:text-3xl">Atividades</h2>
-            <Link to="/viagens" className="text-sm font-medium text-accent hover:underline">
-              Ver tudo
-            </Link>
-          </header>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {activities.map((a) => (
-              <Link
-                key={a.id}
-                to="/viagens"
-                search={{ atividade: a.id }}
-                className="card-surface hover-lift p-4"
-              >
-                <p className="font-semibold">{a.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{a.description}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
         {featured.length > 0 && (
           <section>
-            <h2 className="mb-5 text-2xl font-bold uppercase md:text-3xl">Roteiros em destaque</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <SectionHeading title="Roteiros em destaque" linkTo="/viagens" linkLabel="Ver todos os roteiros" />
+            <ul className="grid gap-x-10 gap-y-1 md:grid-cols-2">
               {featured.map((t) => (
-                <TripCard key={t.id} trip={t} />
+                <li key={t.id} className="border-b border-border">
+                  <Link
+                    to="/viagens/$tripId"
+                    params={{ tripId: t.slug }}
+                    className="group flex flex-col gap-1 py-5 transition-colors hover:text-accent"
+                  >
+                    <span className="font-display text-2xl leading-[0.95] md:text-3xl">{t.name}</span>
+                    <span className="flex flex-wrap gap-1.5 text-xs capitalize text-muted-foreground">
+                      {upcomingMonths(t, 5).length > 0
+                        ? upcomingMonths(t, 5).map((m) => (
+                            <span key={m} className="chip">
+                              {m}
+                            </span>
+                          ))
+                        : "Datas sob consulta"}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {nextDepartures.length > 0 && (
+          <section>
+            <SectionHeading title="Próximas aventuras" linkTo="/calendario" linkLabel="Ver calendário" />
+            <ul className="divide-y divide-border">
+              {nextDepartures.map((d) => (
+                <li key={d.id}>
+                  <Link
+                    to="/viagens/$tripId"
+                    params={{ tripId: d.trip.slug }}
+                    className="group flex flex-wrap items-center gap-4 py-5"
+                  >
+                    <span className="chip">
+                      <CalendarDays className="h-3.5 w-3.5" />
+                      {formatRange(d.date, d.return_date)}
+                    </span>
+                    <span className="font-display min-w-0 flex-1 truncate text-xl transition-colors group-hover:text-accent md:text-2xl">
+                      {d.trip.name}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {d.trip.destination} · {d.trip.state}
+                    </span>
+                    <span className="chip">{d.spots} vagas</span>
+                    <ArrowRight className="h-4 w-4 text-accent transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {activities.length > 0 && (
+          <section>
+            <SectionHeading title="Atividades" linkTo="/viagens" linkLabel="Ver tudo" />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {activities.map((a) => (
+                <Link
+                  key={a.id}
+                  to="/viagens"
+                  search={{ atividade: a.id }}
+                  className="card-surface hover-lift group flex items-start justify-between gap-4 p-6"
+                >
+                  <div>
+                    <p className="font-display text-2xl leading-none">{a.name}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{a.description}</p>
+                  </div>
+                  <ArrowRight className="mt-1 h-5 w-5 shrink-0 text-accent transition-transform group-hover:translate-x-1" />
+                </Link>
               ))}
             </div>
           </section>
         )}
 
-        {nextDepartures.length > 0 && (
-          <section className="card-surface overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-secondary px-5 py-4">
-              <h2 className="flex items-center gap-2 text-xl font-bold uppercase">
-                <CalendarDays className="h-5 w-5 text-accent" /> Próximas saídas
-              </h2>
-              <p className="text-sm text-muted-foreground">Reserve enquanto houver vagas</p>
-            </div>
-            <ul className="divide-y divide-border">
-              {nextDepartures.map((d) => (
-                <li key={d.id} className="flex flex-wrap items-center gap-3 px-5 py-4">
-                  <span className="w-56 text-sm font-semibold">{formatRange(d.date, d.return_date)}</span>
-                  <Link
-                    to="/viagens/$tripId"
-                    params={{ tripId: d.trip.slug }}
-                    className="min-w-0 flex-1 truncate font-medium hover:text-accent"
-                  >
-                    {d.trip.name}
-                  </Link>
-                  <span className="text-sm text-muted-foreground">
-                    {d.trip.destination} · {d.trip.state}
-                  </span>
-                  <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
-                    {d.spots} vagas
-                  </span>
-                </li>
+        {featured.length > 0 && (
+          <section>
+            <SectionHeading title="Saídas confirmadas" linkTo="/viagens" linkLabel="Todos os roteiros" />
+            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.slice(0, 3).map((t) => (
+                <TripCard key={t.id} trip={t} />
               ))}
-            </ul>
+            </div>
           </section>
         )}
 
@@ -155,16 +171,91 @@ function Index() {
             { icon: ShieldCheck, title: "Seguro aventura incluso", text: "Cobertura durante toda a viagem." },
             { icon: Users, title: "Grupos pequenos", text: "No máximo 16 pessoas por saída." },
           ].map((b) => (
-            <div key={b.title} className="card-surface flex items-start gap-3 p-5">
-              <b.icon className="h-6 w-6 shrink-0 text-accent" />
+            <div key={b.title} className="card-surface flex items-start gap-4 p-6">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/12 text-accent">
+                <b.icon className="h-5 w-5" />
+              </span>
               <div>
-                <p className="font-semibold">{b.title}</p>
-                <p className="text-sm text-muted-foreground">{b.text}</p>
+                <p className="font-display text-xl leading-none">{b.title}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{b.text}</p>
               </div>
             </div>
           ))}
         </section>
       </div>
     </div>
+  );
+}
+
+/** Bloco "Explore a nossa agenda completa" com busca em pílula. */
+function AgendaSearch() {
+  const navigate = useNavigate();
+  const { data: activities = [] } = useQuery(activitiesQuery);
+  const [date, setDate] = useState("");
+  const [atividade, setAtividade] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate({
+      to: "/viagens",
+      search: { atividade: atividade || undefined, data: date || undefined },
+    });
+  };
+
+  return (
+    <section className="grid items-center gap-10 lg:grid-cols-2">
+      <div>
+        <h2 className="text-4xl leading-[0.95] md:text-6xl">
+          Explore a nossa
+          <br />
+          agenda completa
+        </h2>
+        <Link to="/viagens" className="btn-pill mt-8">
+          Acessar agenda <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+
+      <form
+        onSubmit={submit}
+        className="card-surface flex flex-col gap-3 rounded-3xl p-3 sm:flex-row sm:items-center sm:rounded-full sm:p-2.5"
+      >
+        <label className="flex flex-1 items-center gap-2 px-4 py-2">
+          <CalendarDays className="h-5 w-5 shrink-0 text-accent" />
+          <span className="sr-only">A partir de</span>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full bg-transparent text-sm outline-none"
+            aria-label="Datas"
+          />
+        </label>
+        <span className="hidden h-8 w-px bg-border sm:block" />
+        <label className="flex flex-1 items-center gap-2 px-4 py-2">
+          <Compass className="h-5 w-5 shrink-0 text-accent" />
+          <span className="sr-only">Categoria</span>
+          <select
+            value={atividade}
+            onChange={(e) => setAtividade(e.target.value)}
+            className="w-full bg-transparent text-sm outline-none"
+            aria-label="Categorias"
+          >
+            <option value="">Todas as categorias</option>
+            {activities.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="submit"
+          aria-label="Buscar aventuras"
+          className="inline-flex h-12 w-12 shrink-0 items-center justify-center self-end rounded-full bg-accent text-accent-foreground transition-transform hover:scale-105 sm:self-auto"
+        >
+          <Search className="h-5 w-5" />
+        </button>
+      </form>
+    </section>
   );
 }

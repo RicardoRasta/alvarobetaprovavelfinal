@@ -12,7 +12,7 @@ export const Route = createFileRoute("/admin/fichas")({
 });
 
 const btn =
-  "inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent";
+  "inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent";
 
 function AdminFichas() {
   const { data: links = [] } = useQuery(enrollmentLinksQuery);
@@ -90,7 +90,7 @@ function AdminFichas() {
             <select
               value={tripId}
               onChange={(e) => setTripId(e.target.value)}
-              className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Todos os roteiros</option>
               {trips.map((t) => (
@@ -143,7 +143,7 @@ function AdminFichas() {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="h-9 rounded-md border border-input bg-card px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="h-9 rounded-xl border border-input bg-card px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Todas</option>
               {trips.map((t) => (

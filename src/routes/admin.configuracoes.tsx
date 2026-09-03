@@ -77,7 +77,7 @@ function AdminSettings() {
   }, [settings]);
 
   const field =
-    "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+    "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
   /** Envia a foto escolhida para o armazenamento e guarda o endereço público. */
@@ -162,7 +162,7 @@ function AdminSettings() {
         <label className="block">
           <span className={labelCls}>Subtítulo</span>
           <textarea
-            className="min-h-20 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+            className="min-h-20 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             value={form.banner_subtitle}
             onChange={(e) => setForm({ ...form, banner_subtitle: e.target.value })}
           />
@@ -184,7 +184,7 @@ function AdminSettings() {
               type="button"
               disabled={uploading}
               onClick={() => bannerInputRef.current?.click()}
-              className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent disabled:opacity-60"
             >
               <Upload className="h-4 w-4" />
               {uploading ? "Enviando..." : form.banner_image_url ? "Trocar foto" : "Carregar foto"}
@@ -193,7 +193,7 @@ function AdminSettings() {
               <button
                 type="button"
                 onClick={() => setForm({ ...form, banner_image_url: "" })}
-                className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+                className="rounded-xl border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
               >
                 Remover foto
               </button>
@@ -208,7 +208,7 @@ function AdminSettings() {
           alt="Pré-visualização do banner"
           width={640}
           height={240}
-          className="h-40 w-full rounded-md object-cover"
+          className="h-40 w-full rounded-xl object-cover"
         />
 
         <div className="border-t border-border pt-4">
@@ -219,7 +219,7 @@ function AdminSettings() {
                 <img
                   src={normalizeImage(img)}
                   alt={`Imagem ${i + 1} do carrossel`}
-                  className="h-20 w-28 rounded-md border border-border object-cover"
+                  className="h-20 w-28 rounded-xl border border-border object-cover"
                 />
                 <button
                   type="button"
@@ -232,7 +232,7 @@ function AdminSettings() {
               </div>
             ))}
             {heroImages.length < MAX_HERO && (
-              <label className="flex h-20 w-28 cursor-pointer items-center justify-center rounded-md border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
+              <label className="flex h-20 w-28 cursor-pointer items-center justify-center rounded-xl border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
                 {heroUploading ? <span className="text-xs">Enviando...</span> : <ImagePlus className="h-6 w-6" />}
                 <input
                   type="file"
@@ -284,7 +284,7 @@ function AdminSettings() {
           <label className="block">
             <span className={labelCls}>Texto do rodapé</span>
             <textarea
-              className="min-h-20 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="min-h-20 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
               value={form.footer_text}
               onChange={(e) => setForm({ ...form, footer_text: e.target.value })}
             />
@@ -328,7 +328,7 @@ function AdminSettings() {
           <label className="block">
             <span className={labelCls}>História da empresa</span>
             <textarea
-              className="min-h-40 w-full rounded-md border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              className="min-h-40 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
               value={form.about_text}
               onChange={(e) => setForm({ ...form, about_text: e.target.value })}
             />
@@ -340,10 +340,10 @@ function AdminSettings() {
                 <img
                   src={normalizeImage(form.about_image_url)}
                   alt="Foto da equipe"
-                  className="h-20 w-28 rounded-md border border-border object-cover"
+                  className="h-20 w-28 rounded-xl border border-border object-cover"
                 />
               )}
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
                 <Upload className="h-4 w-4" />
                 {aboutUploading ? "Enviando..." : form.about_image_url ? "Trocar foto" : "Carregar foto"}
                 <input
@@ -357,7 +357,7 @@ function AdminSettings() {
                 <button
                   type="button"
                   onClick={() => setForm({ ...form, about_image_url: "" })}
-                  className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+                  className="rounded-xl border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
                 >
                   Remover
                 </button>
@@ -444,7 +444,7 @@ function AdminSettings() {
               <button
                 type="button"
                 onClick={() => setStats(stats.filter((_, j) => j !== i))}
-                className="rounded-md border border-border px-3 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
+                className="rounded-xl border border-border px-3 text-xs text-muted-foreground hover:border-destructive hover:text-destructive"
               >
                 Remover
               </button>
@@ -453,7 +453,7 @@ function AdminSettings() {
           <button
             type="button"
             onClick={() => setStats([...stats, { value: "", label: "" }])}
-            className="rounded-md border border-dashed border-border px-4 py-2 text-xs text-muted-foreground hover:border-accent hover:text-accent"
+            className="rounded-xl border border-dashed border-border px-4 py-2 text-xs text-muted-foreground hover:border-accent hover:text-accent"
           >
             + Adicionar estatística
           </button>
@@ -465,7 +465,7 @@ function AdminSettings() {
           type="button"
           onClick={save}
           disabled={saving}
-          className="w-full rounded-md bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+          className="w-full rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground disabled:opacity-60"
         >
           {saving ? "Salvando..." : "Salvar configurações"}
         </button>
@@ -484,7 +484,7 @@ function CertificatesManager() {
   const [busy, setBusy] = useState(false);
 
   const field =
-    "h-10 w-full rounded-md border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+    "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["certificates"] });
@@ -538,10 +538,10 @@ function CertificatesManager() {
                 <img
                   src={normalizeImage(c.image_url)}
                   alt={c.title}
-                  className="h-12 w-12 rounded-md border border-border object-contain p-1"
+                  className="h-12 w-12 rounded-xl border border-border object-contain p-1"
                 />
               ) : (
-                <div className="h-12 w-12 rounded-md border border-border" />
+                <div className="h-12 w-12 rounded-xl border border-border" />
               )}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{c.title}</p>
@@ -553,7 +553,7 @@ function CertificatesManager() {
                 type="button"
                 onClick={() => remove(c.id)}
                 aria-label="Remover certificado"
-                className="rounded-md border border-border p-2 text-muted-foreground hover:border-destructive hover:text-destructive"
+                className="rounded-xl border border-border p-2 text-muted-foreground hover:border-destructive hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -562,7 +562,7 @@ function CertificatesManager() {
         </ul>
       )}
 
-      <div className="space-y-3 rounded-md border border-dashed border-border p-4">
+      <div className="space-y-3 rounded-xl border border-dashed border-border p-4">
         <label className="block">
           <span className={labelCls}>Título</span>
           <input className={field} value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -576,10 +576,10 @@ function CertificatesManager() {
             <img
               src={normalizeImage(imageUrl)}
               alt="Selo"
-              className="h-12 w-12 rounded-md border border-border object-contain p-1"
+              className="h-12 w-12 rounded-xl border border-border object-contain p-1"
             />
           )}
-          <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent">
+          <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent">
             <Upload className="h-4 w-4" /> {busy ? "Enviando..." : "Imagem do selo"}
             <input
               type="file"
@@ -592,7 +592,7 @@ function CertificatesManager() {
             type="button"
             onClick={add}
             disabled={busy}
-            className="ml-auto inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-60"
+            className="ml-auto inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-60"
           >
             <Plus className="h-4 w-4" /> Adicionar
           </button>

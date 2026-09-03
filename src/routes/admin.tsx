@@ -82,7 +82,7 @@ function AdminLayout() {
         <button
           type="button"
           onClick={() => signOut()}
-          className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm hover:border-accent hover:text-accent"
         >
           <LogOut className="h-4 w-4" /> Sair
         </button>
