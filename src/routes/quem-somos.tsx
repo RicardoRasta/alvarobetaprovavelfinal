@@ -46,16 +46,16 @@ function QuemSomos() {
         </div>
       </header>
 
-      <section className="mt-8 grid gap-6 md:grid-cols-2">
-        <div className="card-surface p-6">
-          <p className="text-sm leading-relaxed text-muted-foreground md:text-base">{aboutText}</p>
-          <div className="mt-5 flex items-center gap-2 text-sm">
+      <section className="mt-8 grid gap-6 md:grid-cols-[1.4fr_1fr]">
+        <div className="card-surface p-6 md:p-8">
+          <RichText text={aboutText} />
+          <div className="mt-6 flex items-center gap-2 text-sm">
             <a href={phoneHref(settings)} className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 hover:border-accent hover:text-accent">
               <Phone className="h-4 w-4" /> {formatPhone(settings)}
             </a>
           </div>
         </div>
-        <div className="card-surface overflow-hidden">
+        <div className="card-surface h-fit overflow-hidden md:sticky md:top-24">
           {settings?.about_image_url ? (
             <img
               src={normalizeImage(settings.about_image_url)}
@@ -70,6 +70,7 @@ function QuemSomos() {
           )}
         </div>
       </section>
+
 
       <section className="mt-12">
         <h2 className="flex items-center gap-2 text-2xl font-bold uppercase">
@@ -109,6 +110,37 @@ function QuemSomos() {
           </div>
         )}
       </section>
+    </div>
+  );
+}
+
+/** Renderiza o texto do "Quem somos" preservando parágrafos, títulos e negrito. */
+function RichText({ text }: { text: string }) {
+  const blocks = text.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
+  return (
+    <div className="space-y-4">
+      {blocks.map((block, i) => {
+        if (block.startsWith("## ")) {
+          return (
+            <h2 key={i} className="pt-4 text-2xl font-bold uppercase md:text-3xl">
+              {block.slice(3)}
+            </h2>
+          );
+        }
+        return (
+          <p key={i} className="text-sm leading-relaxed text-muted-foreground md:text-base">
+            {block.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
+              part.startsWith("**") && part.endsWith("**") ? (
+                <strong key={j} className="font-semibold text-foreground">
+                  {part.slice(2, -2)}
+                </strong>
+              ) : (
+                <span key={j}>{part}</span>
+              ),
+            )}
+          </p>
+        );
+      })}
     </div>
   );
 }
