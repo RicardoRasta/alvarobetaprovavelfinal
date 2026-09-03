@@ -1,6 +1,6 @@
 # Novo visual do site — linha Quintal de Casa
 
-Redesign completo das páginas públicas, bem próximo da referência: fundo off-white, laranja forte de destaque, verde escuro quase preto para texto e detalhes, tipografia display condensada e pesada, cantos bem arredondados e muito respiro. O painel admin não muda.
+Redesign completo das páginas públicas, bem próximo da referência: fundo off-white, laranja forte de destaque, verde escuro quase preto para texto e detalhes, tipografia display condensada e pesada, cantos bem arredondados e muito respiro. O painel admin entra na mesma pegada visual, mantendo todos os campos e funções como estão.
 
 ## Linguagem visual
 
