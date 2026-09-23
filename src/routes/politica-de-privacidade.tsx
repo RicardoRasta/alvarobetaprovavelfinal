@@ -32,7 +32,7 @@ function PrivacyPolicy() {
         </div>
       </header>
 
-      <article className="card-surface content-copy mt-6 p-6 text-sm leading-7 text-muted-foreground md:p-10 md:text-base">
+      <article className="card-surface content-copy mt-6 p-5 text-sm leading-7 text-muted-foreground sm:p-7 md:p-10 md:text-base">
         <h2>Condições Gerais</h2>
         <p>
           Esta política de privacidade estabelece a forma como usamos e protegemos todas as informações que você fornece quando realiza transações comerciais conosco ou utiliza este site.
