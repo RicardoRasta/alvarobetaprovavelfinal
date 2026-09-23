@@ -61,14 +61,14 @@
   --muted: oklch(0.955 0.005 110);
   --muted-foreground: #66776E;
   /* Ocre da identidade visual da marca */
-  --accent: #A65335;
+  --accent: #B3833F;
   --accent-foreground: #FFFFFF;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --success: oklch(0.6 0.13 155);
   --border: oklch(0.9 0.008 120);
   --input: oklch(0.9 0.008 120);
-  --ring: #A65335;
+  --ring: #B3833F;
   --sidebar: #2C5642;
   --sidebar-foreground: oklch(0.93 0.015 120);
   --sidebar-accent: #3A6A53;
@@ -99,14 +99,14 @@
   --secondary-foreground: oklch(0.95 0.01 120);
   --muted: oklch(0.26 0.028 165);
   --muted-foreground: oklch(0.73 0.018 130);
-  --accent: #A65335;
+  --accent: #B3833F;
   --accent-foreground: oklch(0.18 0.025 70);
   --destructive: oklch(0.65 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   --success: oklch(0.7 0.14 155);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: #A65335;
+  --ring: #B3833F;
   --sidebar: oklch(0.15 0.02 165);
   --sidebar-foreground: oklch(0.9 0.015 120);
   --sidebar-accent: oklch(0.25 0.035 165);
@@ -126,7 +126,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.65;
+    letter-spacing: 0.005em;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -136,9 +137,9 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
-    line-height: 1.08;
-    font-weight: 700;
+    letter-spacing: 0.005em;
+    line-height: 1.12;
+    font-weight: 650;
     font-synthesis-weight: none;
   }
 }
@@ -146,7 +147,7 @@
 @utility font-display {
   font-family: var(--font-display);
   font-synthesis-weight: none;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.005em;
 }
 
 @utility content-copy {
