@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-3 px-3 sm:h-20 sm:gap-4 sm:px-4 md:px-8">
           <Link to="/" className="flex min-w-0 shrink-0 items-center">
             <img
-              src="/assets/casa-de-aventura-logo-horizontal-transparente.svg"
+              src="/assets/casa-de-aventura-logo-horizontal.png"
               alt="A Casa de Aventura Outdoors"
               className="h-10 w-auto max-w-[190px] object-contain sm:h-11 sm:max-w-[240px] md:h-12 md:max-w-none"
             />
