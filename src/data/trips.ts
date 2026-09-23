@@ -269,6 +269,7 @@ export function whatsappLink(
     state?: string | null;
     days?: number | null;
     price?: number | null;
+    priceUsd?: number | null;
     slug?: string | null;
     general?: boolean;
   },
@@ -293,7 +294,9 @@ export function whatsappLink(
     lines.push(`📅 Saída: ${formatRange(params.date, params.returnDate ?? undefined)}`);
   }
   if (params.days && params.days > 0) lines.push(`⏱️ Duração: ${params.days} dia(s)`);
-  if (params.price != null) {
+  if (params.priceUsd != null && params.priceUsd > 0) {
+    lines.push(`💵 Valor em dólar: ${formatForeign(params.priceUsd, 1, "USD")} por pessoa`);
+  } else if (params.price != null) {
     lines.push(
       params.price > 0 ? `💰 Valor anunciado: ${formatPrice(params.price)} por pessoa` : "💰 Valor: sob consulta",
     );
