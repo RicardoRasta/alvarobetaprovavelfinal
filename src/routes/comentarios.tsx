@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ImagePlus, MessageSquare, Star, Upload, X } from "lucide-react";
+import { TestimonialCard } from "@/components/testimonial-card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { testimonialsQuery } from "@/lib/api";
@@ -201,39 +202,7 @@ function Comentarios() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
             {items.map((t) => (
-              <article key={t.id} className="card-surface p-5">
-                <header className="flex flex-wrap items-center gap-2">
-                  <span className="font-semibold">{t.name}</span>
-                  <span className="flex gap-0.5 text-accent">
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                    ))}
-                  </span>
-                  {t.trip_name && <span className="text-xs text-muted-foreground">· {t.trip_name}</span>}
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    {new Date(t.created_at).toLocaleDateString("pt-BR")}
-                  </span>
-                </header>
-                {t.activity_date && (
-                  <p className="mt-2 text-xs font-medium text-foreground/70">
-                    Data da atividade: {new Date(t.activity_date + "T12:00:00").toLocaleDateString("pt-BR")}
-                  </p>
-                )}
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t.comment}</p>
-                {t.photos.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {t.photos.map((p, i) => (
-                      <img
-                        key={i}
-                        src={normalizeImage(p)}
-                        alt={`Foto ${i + 1}`}
-                        loading="lazy"
-                        className="h-16 w-16 rounded-xl border border-border object-cover"
-                      />
-                    ))}
-                  </div>
-                )}
-              </article>
+              <TestimonialCard key={t.id} testimonial={t} />
             ))}
           </div>
         )}
