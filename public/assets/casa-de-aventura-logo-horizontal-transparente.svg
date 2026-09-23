@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 657">
+<g fill="#2C5642" font-family="Georgia, 'Times New Roman', serif">
+<text x="560" y="220" font-size="135" text-anchor="middle">CASA</text>
+<text x="790" y="220" font-size="95" text-anchor="middle">de</text>
+<text x="880" y="385" font-size="160" text-anchor="middle">VENTURA</text>
+</g>
+<path d="M0 560 L190 5 L385 560 L310 560 L270 430 L120 430 L80 560 Z" fill="#2C5642"/>
+<path d="M130 330 L195 245 L275 335 L230 310 L195 275 L160 310 Z" fill="#fff"/>
+<path d="M195 245 C295 450 390 545 505 600 C375 595 280 555 195 465 Z" fill="#2C5642"/>
+<g stroke="#2C5642" stroke-width="7"><line x1="575" y1="465" x2="1390" y2="465"/><line x1="830" y1="465" x2="1080" y2="465"/></g>
+<path d="M955 445 l25 45 -25 45 -25 -45z" fill="#2C5642"/>
+<text x="990" y="570" fill="#A65335" font-family="Arial, sans-serif" font-size="62" letter-spacing="22" text-anchor="middle">OUTDOORS</text>
+</svg>
