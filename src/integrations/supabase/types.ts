@@ -478,6 +478,7 @@ export type Database = {
       }
       testimonials: {
         Row: {
+          activity_date: string | null
           approved: boolean
           comment: string
           created_at: string
@@ -488,6 +489,7 @@ export type Database = {
           trip_name: string
         }
         Insert: {
+          activity_date?: string | null
           approved?: boolean
           comment: string
           created_at?: string
@@ -498,6 +500,7 @@ export type Database = {
           trip_name?: string
         }
         Update: {
+          activity_date?: string | null
           approved?: boolean
           comment?: string
           created_at?: string
