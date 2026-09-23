@@ -51,7 +51,7 @@ export function HeroCarousel({
     places: [],
   }));
 
-  const slides = fromTrips.length > 0 ? fromTrips : fromImages;
+  const slides = fromImages.length > 0 ? fromImages : fromTrips;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
