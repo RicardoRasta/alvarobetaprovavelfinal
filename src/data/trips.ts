@@ -93,6 +93,8 @@ export type Testimonial = {
   comment: string;
   photos: string[];
   approved: boolean;
+  /** Data em que a atividade/roteiro aconteceu; nula para depoimentos antigos. */
+  activity_date: string | null;
   created_at: string;
 };
 
