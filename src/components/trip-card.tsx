@@ -65,7 +65,7 @@ export function TripCard({ trip }: { trip: Trip }) {
         >
           {trip.name}
         </Link>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{trip.description}</p>
+        <p className="content-copy line-clamp-2 text-sm text-muted-foreground">{trip.description}</p>
 
         <div className="flex items-center gap-1 text-sm">
           <Star className="h-4 w-4 fill-accent text-accent" />
