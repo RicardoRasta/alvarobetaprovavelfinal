@@ -30,7 +30,7 @@ function RentalContract() {
         </div>
       </header>
 
-      <article className="card-surface content-copy mt-6 p-5 text-sm leading-7 text-muted-foreground sm:p-6 md:p-10 md:text-base">
+      <article className="card-surface content-copy mt-6 p-5 text-sm leading-7 text-muted-foreground sm:p-7 md:p-10 md:text-base">
         <h2>INSTRUMENTO PARTICULAR DE LOCAÇÃO DE EQUIPAMENTOS RECREATIVOS E ESPORTIVOS POR PRAZO DETERMINADO E OUTRAS AVENÇAS.</h2>
 
         <p>
