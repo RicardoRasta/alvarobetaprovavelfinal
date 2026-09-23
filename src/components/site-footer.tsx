@@ -7,7 +7,6 @@ import {
   Mail,
   MapPin,
   MessageCircle,
-  Mountain,
   Phone,
   Youtube,
 } from "lucide-react";
@@ -53,15 +52,12 @@ export function SiteFooter() {
 
         <div className="grid gap-10 py-12 md:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                <Mountain className="h-5 w-5" />
-              </span>
-              <span className="font-display text-lg uppercase leading-[0.9]">
-                A Casa de
-                <br />
-                Aventura
-              </span>
+            <div className="flex items-center">
+              <img
+                src="/assets/casa-de-aventura-logo-horizontal.svg"
+                alt="A Casa de Aventura Outdoors"
+                className="h-14 w-auto max-w-[260px] object-contain"
+              />
             </div>
             <p className="mt-5 text-sm text-sidebar-foreground/70">
               {settings?.footer_text?.trim() ||
