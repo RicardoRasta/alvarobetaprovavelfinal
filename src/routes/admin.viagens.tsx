@@ -36,6 +36,9 @@ type Form = {
   price: string;
   price_on_request: boolean;
   old_price: string;
+  price_usd: string;
+  investment_text: string;
+  cancellation_policy: string;
   days: string;
   level: string;
   images: string[];
@@ -78,6 +81,9 @@ const empty: Form = {
   price: "",
   price_on_request: false,
   old_price: "",
+  price_usd: "",
+  investment_text: "",
+  cancellation_policy: "",
   days: "1",
   level: "Iniciante",
   images: [],
@@ -113,6 +119,9 @@ const toForm = (t: Trip): Form => ({
   price: t.price > 0 ? String(t.price) : "",
   price_on_request: !t.price || t.price <= 0,
   old_price: t.old_price == null ? "" : String(t.old_price),
+  price_usd: t.price_usd == null ? "" : String(t.price_usd),
+  investment_text: t.investment_text ?? "",
+  cancellation_policy: t.cancellation_policy ?? "",
   days: String(t.days),
   level: t.level,
   images:
@@ -520,6 +529,9 @@ function AdminTrips() {
       activity_id: form.activity_id || null,
       price: form.price_on_request ? 0 : Number(form.price),
       old_price: form.old_price ? Number(form.old_price) : null,
+      price_usd: form.price_usd ? Number(form.price_usd) : null,
+      investment_text: form.investment_text.trim() || null,
+      cancellation_policy: form.cancellation_policy.trim() || null,
       days: Number(form.days) || 1,
       level: form.level,
       image_url: form.images[0] ?? null,
@@ -730,6 +742,18 @@ function AdminTrips() {
             <label>
               <span className={labelCls}>Preço antigo (opcional)</span>
               <input className={field} type="number" value={form.old_price} onChange={(e) => set("old_price", e.target.value)} />
+            </label>
+            <label>
+              <span className={labelCls}>Valor em dólares (opcional)</span>
+              <input
+                className={field}
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Ex.: 1250"
+                value={form.price_usd}
+                onChange={(e) => set("price_usd", e.target.value)}
+              />
             </label>
             <label>
               <span className={labelCls}>Duração (dias)</span>
@@ -990,6 +1014,24 @@ function AdminTrips() {
 
             <Block title="Programação (dia a dia)">
               <ItineraryEditor items={form.itinerary} onChange={(v) => set("itinerary", v)} />
+            </Block>
+
+            <Block title="Investimento e formas de pagamento" hint="Use este campo para explicar valores, condições e formas de pagamento.">
+              <textarea
+                className={areaCls}
+                placeholder="Ex.: investimento por pessoa, parcelamento, Pix, cartão, transferência..."
+                value={form.investment_text}
+                onChange={(e) => set("investment_text", e.target.value)}
+              />
+            </Block>
+
+            <Block title="Política de cancelamento">
+              <textarea
+                className={areaCls}
+                placeholder="Informe aqui as regras de cancelamento deste roteiro."
+                value={form.cancellation_policy}
+                onChange={(e) => set("cancellation_policy", e.target.value)}
+              />
             </Block>
 
             <Block title="Não inclui">
