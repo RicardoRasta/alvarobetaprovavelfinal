@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -48,30 +49,30 @@
 :root {
   --radius: 1rem;
   --background: oklch(0.975 0.004 100);
-  --foreground: oklch(0.21 0.028 165);
+  --foreground: #2C5642;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.028 165);
+  --card-foreground: #2C5642;
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.028 165);
-  --primary: oklch(0.27 0.045 165);
-  --primary-foreground: oklch(0.98 0.005 100);
+  --popover-foreground: #2C5642;
+  --primary: #2C5642;
+  --primary-foreground: #FFFFFF;
   --secondary: oklch(0.945 0.006 120);
-  --secondary-foreground: oklch(0.26 0.04 165);
+  --secondary-foreground: #2C5642;
   --muted: oklch(0.955 0.005 110);
-  --muted-foreground: oklch(0.52 0.015 165);
+  --muted-foreground: #66776E;
   /* Ocre da identidade visual da marca */
-  --accent: oklch(0.58 0.12 47);
-  --accent-foreground: oklch(0.98 0.01 95);
+  --accent: #A65335;
+  --accent-foreground: #FFFFFF;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --success: oklch(0.6 0.13 155);
   --border: oklch(0.9 0.008 120);
   --input: oklch(0.9 0.008 120);
-  --ring: oklch(0.58 0.12 47);
-  --sidebar: oklch(0.21 0.028 165);
+  --ring: #A65335;
+  --sidebar: #2C5642;
   --sidebar-foreground: oklch(0.93 0.015 120);
-  --sidebar-accent: oklch(0.28 0.045 165);
-  --sidebar-border: oklch(0.32 0.045 165);
+  --sidebar-accent: #3A6A53;
+  --sidebar-border: #47745F;
 
   --gradient-hero: linear-gradient(
     to top,
@@ -185,7 +186,7 @@
   background-image: var(--gradient-hero);
 }
 
-/* Botão pílula laranja: ação principal do site. */
+/* Botão pílula ocre: ação principal do site. */
 @utility btn-pill {
   display: inline-flex;
   align-items: center;
