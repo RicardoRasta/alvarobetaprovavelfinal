@@ -63,7 +63,7 @@ function BlogPost() {
       )}
 
       {post.content && (
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-foreground md:text-base">
+        <div className="content-copy mt-6 space-y-4 text-sm leading-relaxed text-foreground md:text-base">
           {post.content.split("\n").map((line, i) => (
             <p key={i} className={line.trim() ? "" : "h-2"}>
               {line}
