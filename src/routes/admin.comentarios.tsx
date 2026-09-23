@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { allTestimonialsQuery } from "@/lib/api";
 import { normalizeImage } from "@/data/trips";
+import { TestimonialCard } from "@/components/testimonial-card";
 
 export const Route = createFileRoute("/admin/comentarios")({
   component: AdminComments,
@@ -43,22 +44,10 @@ function AdminComments() {
   const approved = items.filter((i) => i.approved);
 
   const Card = ({ t }: { t: (typeof items)[number] }) => (
-    <article className="card-surface space-y-3 p-4">
-      <header className="flex flex-wrap items-center gap-2">
-        <span className="font-semibold">{t.name}</span>
-        <span className="flex items-center gap-0.5 text-accent">
-          {Array.from({ length: t.rating }).map((_, i) => (
-            <Star key={i} className="h-3.5 w-3.5 fill-current" />
-          ))}
-        </span>
-        {t.trip_name && <span className="text-xs text-muted-foreground">· {t.trip_name}</span>}
-        <span className="ml-auto text-xs text-muted-foreground">
-          {new Date(t.created_at).toLocaleDateString("pt-BR")}
-        </span>
-      </header>
-      <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-end">
-        <p className="text-sm leading-relaxed text-muted-foreground">{t.comment}</p>
-        <label className="text-xs font-medium uppercase text-muted-foreground">
+    <div className="space-y-3">
+      <TestimonialCard testimonial={t} />
+      <div className="card-surface flex flex-wrap gap-2 p-4">
+        <label className="w-full text-xs font-medium uppercase text-muted-foreground sm:w-[220px]">
           Data da atividade
           <input
             type="date"
@@ -70,46 +59,34 @@ function AdminComments() {
             className="mt-1 h-10 w-full rounded-xl border border-input bg-card px-3 text-sm font-normal normal-case text-foreground outline-none focus:ring-2 focus:ring-ring"
           />
         </label>
-      </div>
-      {t.photos.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {t.photos.map((p) => (
-            <img
-              key={p}
-              src={normalizeImage(p)}
-              alt="Foto enviada pelo cliente"
-              className="h-20 w-20 rounded-xl border border-border object-cover"
-            />
-          ))}
+        <div className="flex flex-1 items-end gap-2">
+          {!t.approved ? (
+            <button
+              type="button"
+              onClick={() => setApproved(t.id, true)}
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground"
+            >
+              <Check className="h-4 w-4" /> Aprovar
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setApproved(t.id, false)}
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
+            >
+              <X className="h-4 w-4" /> Ocultar
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => remove(t.id)}
+            className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+          >
+            <Trash2 className="h-4 w-4" /> Excluir
+          </button>
         </div>
-      )}
-      <div className="flex flex-wrap gap-2">
-        {!t.approved ? (
-          <button
-            type="button"
-            onClick={() => setApproved(t.id, true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-accent px-3 py-1.5 text-sm font-semibold text-accent-foreground"
-          >
-            <Check className="h-4 w-4" /> Aprovar
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setApproved(t.id, false)}
-            className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm hover:border-accent hover:text-accent"
-          >
-            <X className="h-4 w-4" /> Ocultar
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => remove(t.id)}
-          className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" /> Excluir
-        </button>
       </div>
-    </article>
+    </div>
   );
 
   return (
