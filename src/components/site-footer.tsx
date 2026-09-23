@@ -21,7 +21,6 @@ const links = [
   { to: "/quem-somos", label: "Quem somos" },
 ] as const;
 
-/** Rodapé escuro com contato, links, redes sociais e selos. */
 export function SiteFooter() {
   const { data: settings } = useQuery(settingsQuery);
   const { data: certificates = [] } = useQuery(certificatesQuery);
@@ -35,7 +34,7 @@ export function SiteFooter() {
     <footer className="mt-20 bg-sidebar text-sidebar-foreground">
       <div className="mx-auto max-w-[1400px] px-4 py-14 md:px-8 md:py-20">
         <div className="flex flex-col gap-8 border-b border-sidebar-border pb-12 md:flex-row md:items-end md:justify-between">
-          <h2 className="max-w-2xl text-4xl leading-[0.95] md:text-6xl">
+          <h2 className="max-w-2xl text-4xl leading-[0.98] sm:text-5xl md:text-6xl">
             Vamos marcar a sua
             <br />
             <span className="text-accent">próxima aventura?</span>
@@ -44,7 +43,7 @@ export function SiteFooter() {
             href={whatsappLink(settings, { tripName: "Contato geral", general: true })}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-pill shrink-0"
+            className="btn-pill w-full sm:w-auto"
           >
             <MessageCircle className="h-5 w-5" /> Agendar no WhatsApp
           </a>
@@ -59,12 +58,12 @@ export function SiteFooter() {
               aria-label="Ver certificado Cadastur"
             >
               <img
-                src="/assets/casa-de-aventura-logo-horizontal.svg"
+                src="/assets/casa-de-aventura-logo-horizontal-transparente.svg"
                 alt="A Casa de Aventura Outdoors — ver certificado Cadastur"
                 className="h-14 w-auto max-w-[260px] object-contain"
               />
             </Link>
-            <p className="mt-5 text-sm text-sidebar-foreground/70">
+            <p className="mt-5 max-w-md text-sm leading-6 text-sidebar-foreground/70">
               {settings?.footer_text?.trim() ||
                 "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil."}
             </p>
@@ -91,35 +90,23 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-3 text-sm">
               {links.map((l) => (
                 <li key={l.to}>
-                  <Link
-                    to={l.to}
-                    className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
-                  >
+                  <Link to={l.to} className="inline-flex text-sidebar-foreground/85 transition-colors hover:text-accent">
                     {l.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link
-                  to="/politica-de-privacidade"
-                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
-                >
+                <Link to="/politica-de-privacidade" className="inline-flex text-sidebar-foreground/85 transition-colors hover:text-accent">
                   Política de Privacidade
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/politica-de-cancelamentos"
-                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
-                >
+                <Link to="/politica-de-cancelamentos" className="inline-flex text-sidebar-foreground/85 transition-colors hover:text-accent">
                   Política de Cancelamentos
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/contrato-aluguel-de-equipamentos"
-                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
-                >
+                <Link to="/contrato-aluguel-de-equipamentos" className="inline-flex text-sidebar-foreground/85 transition-colors hover:text-accent">
                   Contrato de Aluguel de equipamentos
                 </Link>
               </li>
@@ -131,7 +118,7 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-3 text-sm text-sidebar-foreground/85">
               <li>
                 <a href={phoneHref(settings)} className="flex items-center gap-2 hover:text-accent">
-                  <Phone className="h-4 w-4 text-accent" /> {formatPhone(settings)}
+                  <Phone className="h-4 w-4 shrink-0 text-accent" /> {formatPhone(settings)}
                 </a>
               </li>
               <li>
@@ -141,16 +128,13 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 hover:text-accent"
                 >
-                  <MessageCircle className="h-4 w-4 text-accent" /> WhatsApp
+                  <MessageCircle className="h-4 w-4 shrink-0 text-accent" /> WhatsApp
                 </a>
               </li>
               {settings?.contact_email?.trim() && (
                 <li>
-                  <a
-                    href={`mailto:${settings.contact_email}`}
-                    className="flex items-center gap-2 hover:text-accent"
-                  >
-                    <Mail className="h-4 w-4 text-accent" /> {settings.contact_email}
+                  <a href={`mailto:${settings.contact_email}`} className="flex items-center gap-2 hover:text-accent">
+                    <Mail className="h-4 w-4 shrink-0 text-accent" /> {settings.contact_email}
                   </a>
                 </li>
               )}
@@ -170,16 +154,16 @@ export function SiteFooter() {
               className="mt-5 flex items-center gap-3 rounded-2xl border border-sidebar-border p-3 transition-colors hover:border-accent"
             >
               <img
-                src="/assets/certificado-cadastur-original.jpg?v=20260923"
+                src="/assets/certificado-cadastur.svg"
                 alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
-                className="h-14 w-24 rounded-lg bg-white object-contain"
+                className="h-16 w-24 rounded-lg bg-white object-contain"
               />
-              <span className="text-xs text-sidebar-foreground/80">
+              <span className="min-w-0 text-xs leading-5 text-sidebar-foreground/80">
                 <strong className="block text-sidebar-foreground">CADASTUR</strong>
                 CNPJ 13.849.141/0001-25
               </span>
             </Link>
-            {certificates.length > 0 ? (
+            {certificates.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-3">
                 {certificates.slice(0, 6).map((c) =>
                   c.image_url ? (
@@ -200,10 +184,6 @@ export function SiteFooter() {
                   ),
                 )}
               </div>
-            ) : (
-              <p className="mt-5 text-sm text-sidebar-foreground/70">
-                Guias credenciados e operação com seguro aventura.
-              </p>
             )}
             <Link
               to="/quem-somos"
