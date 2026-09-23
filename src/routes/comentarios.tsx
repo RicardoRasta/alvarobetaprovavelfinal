@@ -41,6 +41,7 @@ function Comentarios() {
   const qc = useQueryClient();
   const [name, setName] = useState("");
   const [tripName, setTripName] = useState("");
+  const [activityDate, setActivityDate] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
@@ -68,11 +69,13 @@ function Comentarios() {
 
   const submit = async () => {
     if (!name.trim()) return toast.error("Informe seu nome.");
+    if (!activityDate) return toast.error("Informe a data da atividade.");
     if (!comment.trim()) return toast.error("Escreva seu comentário.");
     setSending(true);
     const { error } = await supabase.from("testimonials").insert({
       name: name.trim(),
       trip_name: tripName.trim(),
+      activity_date: activityDate || null,
       rating,
       comment: comment.trim(),
       photos,
@@ -83,6 +86,7 @@ function Comentarios() {
     toast.success("Obrigado! Seu comentário foi enviado e será publicado após aprovação.");
     setName("");
     setTripName("");
+    setActivityDate("");
     setRating(5);
     setComment("");
     setPhotos([]);
@@ -110,6 +114,17 @@ function Comentarios() {
             <label>
               <span className={labelCls}>Viagem (opcional)</span>
               <input className={field} value={tripName} onChange={(e) => setTripName(e.target.value)} placeholder="Ex.: Trekking Chapada Diamantina" />
+            </label>
+            <label>
+              <span className={labelCls}>Data da atividade *</span>
+              <input
+                type="date"
+                className={field}
+                value={activityDate}
+                max={new Date().toISOString().slice(0, 10)}
+                onChange={(e) => setActivityDate(e.target.value)}
+                required
+              />
             </label>
           </div>
           <div>
@@ -199,7 +214,12 @@ function Comentarios() {
                     {new Date(t.created_at).toLocaleDateString("pt-BR")}
                   </span>
                 </header>
-                <p className="mt-3 text-sm text-muted-foreground">{t.comment}</p>
+                {t.activity_date && (
+                  <p className="mt-2 text-xs font-medium text-foreground/70">
+                    Data da atividade: {new Date(t.activity_date + "T12:00:00").toLocaleDateString("pt-BR")}
+                  </p>
+                )}
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t.comment}</p>
                 {t.photos.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {t.photos.map((p, i) => (
