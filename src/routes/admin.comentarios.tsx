@@ -4,7 +4,6 @@ import { Check, Star, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { allTestimonialsQuery } from "@/lib/api";
-import { normalizeImage } from "@/data/trips";
 import { TestimonialCard } from "@/components/testimonial-card";
 
 export const Route = createFileRoute("/admin/comentarios")({
