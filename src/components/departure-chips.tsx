@@ -35,8 +35,8 @@ export function DepartureChips({
 }) {
   const chip = glass ? "chip-glass" : "chip";
   const label = glass
-    ? "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary-foreground/90"
-    : "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground";
+    ? "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white"
+    : "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white";
 
   if (months.length === 0 && places.length === 0) return null;
 
