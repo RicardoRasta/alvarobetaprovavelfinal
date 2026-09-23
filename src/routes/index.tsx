@@ -3,11 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ArrowRight, CalendarDays, Compass, Search, ShieldCheck, Users } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
+import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
 import { upcomingMonths } from "@/components/departure-chips";
 import { formatRange, heroSlides } from "@/data/trips";
-import { activitiesQuery, settingsQuery, sortByNextDeparture, tripsQuery } from "@/lib/api";
+import { activitiesQuery, settingsQuery, sortByNextDeparture, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,6 +36,7 @@ function Index() {
   const { data: trips = [] } = useQuery(tripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: settings } = useQuery(settingsQuery);
+  const { data: testimonials = [] } = useQuery(testimonialsQuery);
 
   const visible = trips.filter((t) => t.published);
   const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 6);
@@ -160,6 +162,17 @@ function Index() {
             <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {featured.slice(0, 3).map((t) => (
                 <TripCard key={t.id} trip={t} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {testimonials.length > 0 && (
+          <section>
+            <SectionHeading title="Comentários" linkTo="/comentarios" linkLabel="Ver todos os comentários" />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {testimonials.slice(0, 6).map((t) => (
+                <TestimonialCard key={t.id} testimonial={t} />
               ))}
             </div>
           </section>
