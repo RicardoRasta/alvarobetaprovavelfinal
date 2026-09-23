@@ -151,6 +151,10 @@
 }
 
 @utility content-copy {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+
   & p {
     text-align: justify;
     text-justify: inter-word;
@@ -158,6 +162,10 @@
   }
 
   @media (max-width: 640px) {
+    & {
+      text-align: left;
+    }
+
     & p {
       text-align: left;
     }
