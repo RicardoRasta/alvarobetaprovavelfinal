@@ -72,7 +72,7 @@ function QuemSomos() {
       </section>
 
 
-      <section className="mt-12">
+      <section id="certificado-cadastur" className="mt-12 scroll-mt-24">
         <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
           <div className="card-surface overflow-hidden p-3">
             <img
