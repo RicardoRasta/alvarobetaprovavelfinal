@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { X } from "lucide-react";
+import { createPortal } from "react-dom";
+import { X, ZoomIn } from "lucide-react";
 
 export function ImageLightbox({
   src,
@@ -26,31 +27,38 @@ export function ImageLightbox({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-3 backdrop-blur-sm sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label="Visualização ampliada da imagem"
-      onMouseDown={(event) => {
+      onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <button
-        type="button"
-        onClick={onClose}
-        aria-label="Fechar imagem"
-        className="absolute right-4 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20"
-      >
-        <X className="h-5 w-5" />
-      </button>
-      <img
-        src={src}
-        alt={alt}
-        className="max-h-[90vh] max-w-[95vw] rounded-xl object-contain shadow-2xl"
-      />
-    </div>
+      <div className="relative flex max-h-[94vh] max-w-[96vw] items-center justify-center">
+        <img
+          src={src}
+          alt={alt}
+          className="max-h-[94vh] max-w-[96vw] rounded-xl object-contain shadow-2xl"
+          onClick={(event) => event.stopPropagation()}
+        />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fechar imagem"
+          className="absolute -right-2 -top-2 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#214936] shadow-xl ring-1 ring-black/10 transition hover:scale-105 sm:-right-4 sm:-top-4"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        <div className="pointer-events-none absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-xs font-medium text-white">
+          <ZoomIn className="h-3.5 w-3.5" /> Foto ampliada
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 }
