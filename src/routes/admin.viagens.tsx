@@ -1105,7 +1105,7 @@ function AdminTrips() {
               <div className="space-y-2">
                 {form.departures.map((d, i) => (
                   <div key={i} className="flex flex-wrap items-end gap-2 rounded-xl border border-input bg-card p-3">
-                    <label className="flex-1 min-w-[140px]">
+                    <label className="min-w-0 flex-1 sm:min-w-[140px]">
                       <span className={labelCls}>Data de ida</span>
                       <input
                         type="date"
