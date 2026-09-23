@@ -118,7 +118,7 @@ function QuemSomos() {
 function RichText({ text }: { text: string }) {
   const blocks = text.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
   return (
-    <div className="space-y-4">
+    <div className="content-copy space-y-4">
       {blocks.map((block, i) => {
         if (block.startsWith("## ")) {
           return (
