@@ -148,6 +148,20 @@
   letter-spacing: -0.01em;
 }
 
+@utility content-copy {
+  & p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+  }
+
+  @media (max-width: 640px) {
+    & p {
+      text-align: left;
+    }
+  }
+}
+
 @utility card-surface {
   background-color: var(--color-card);
   color: var(--color-card-foreground);
