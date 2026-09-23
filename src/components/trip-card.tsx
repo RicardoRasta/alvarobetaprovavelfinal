@@ -46,6 +46,9 @@ export function TripCard({ trip }: { trip: Trip }) {
         </div>
 
         <div className="absolute inset-x-0 bottom-0 p-4">
+          <h3 className="mb-3 font-display text-2xl font-semibold leading-tight text-white drop-shadow-md md:text-3xl">
+            {trip.name}
+          </h3>
           <DepartureChips
             months={upcomingMonths(trip, 3)}
             places={[trip.destination, trip.state].filter(Boolean) as string[]}
@@ -58,7 +61,7 @@ export function TripCard({ trip }: { trip: Trip }) {
         <Link
           to="/viagens/$tripId"
           params={{ tripId: trip.slug }}
-          className="font-display text-2xl leading-[0.95] transition-colors hover:text-accent"
+          className="font-display text-2xl leading-[0.98] transition-colors hover:text-accent"
         >
           {trip.name}
         </Link>
