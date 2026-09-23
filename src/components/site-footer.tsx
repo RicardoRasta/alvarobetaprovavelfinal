@@ -140,6 +140,21 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-sm uppercase tracking-[0.2em] text-sidebar-foreground/60">Certificações</h3>
+            <Link
+              to="/quem-somos"
+              hash="certificado-cadastur"
+              className="mt-5 flex items-center gap-3 rounded-2xl border border-sidebar-border p-3 transition-colors hover:border-accent"
+            >
+              <img
+                src="/assets/certificado-cadastur-original.jpg"
+                alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
+                className="h-14 w-24 rounded-lg bg-white object-contain"
+              />
+              <span className="text-xs text-sidebar-foreground/80">
+                <strong className="block text-sidebar-foreground">CADASTUR</strong>
+                CNPJ 13.849.141/0001-25
+              </span>
+            </Link>
             {certificates.length > 0 ? (
               <div className="mt-5 flex flex-wrap gap-3">
                 {certificates.slice(0, 6).map((c) =>
