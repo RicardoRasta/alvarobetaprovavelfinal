@@ -52,13 +52,18 @@ export function SiteFooter() {
 
         <div className="grid gap-10 py-12 md:grid-cols-4">
           <div>
-            <div className="flex items-center">
+            <Link
+              to="/quem-somos"
+              hash="certificado-cadastur"
+              className="inline-flex rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="Ver certificado Cadastur"
+            >
               <img
                 src="/assets/casa-de-aventura-logo-horizontal.svg"
-                alt="A Casa de Aventura Outdoors"
+                alt="A Casa de Aventura Outdoors — ver certificado Cadastur"
                 className="h-14 w-auto max-w-[260px] object-contain"
               />
-            </div>
+            </Link>
             <p className="mt-5 text-sm text-sidebar-foreground/70">
               {settings?.footer_text?.trim() ||
                 "Agência de viagens de aventura: canoagem, escalada, trekking e expedições guiadas por todo o Brasil."}
