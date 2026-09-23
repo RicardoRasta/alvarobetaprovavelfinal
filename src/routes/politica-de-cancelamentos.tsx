@@ -32,7 +32,7 @@ function CancellationPolicy() {
         </div>
       </header>
 
-      <article className="card-surface content-copy mt-6 p-6 text-sm leading-7 text-muted-foreground md:p-10 md:text-base">
+      <article className="card-surface content-copy mt-6 p-5 text-sm leading-7 text-muted-foreground sm:p-7 md:p-10 md:text-base">
         <h2>Para cancelamento de Cursos, Passeios e Aluguéis:</h2>
         <p>
           Em caso de cancelamento por iniciativa do cliente, de acordo com as normas da EMBRATUR, a devolução será feita nas seguintes condições:
