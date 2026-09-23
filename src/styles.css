@@ -107,11 +107,11 @@
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
   --ring: #B3833F;
-  /* O rodapé permanece verde da marca também no modo escuro. */
-  --sidebar: #2C5642;
+  /* Rodapé preto em qualquer tema. */
+  --sidebar: #000000;
   --sidebar-foreground: #F3F5F0;
-  --sidebar-accent: #3A6A53;
-  --sidebar-border: #47745F;
+  --sidebar-accent: #2C5642;
+  --sidebar-border: #2F2F2F;
   --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 12px 28px -18px oklch(0 0 0 / 0.7);
   --shadow-lift: 0 18px 40px -22px oklch(0 0 0 / 0.8);
 }
