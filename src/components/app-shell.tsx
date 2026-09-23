@@ -19,7 +19,6 @@ const nav = [
   { to: "/conta", label: "Minha conta" },
 ] as const;
 
-/** Layout base: barra fixa no topo + rodapé completo. */
 export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -31,13 +30,13 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto flex h-20 max-w-[1400px] items-center gap-4 px-4 md:px-8">
-          <Link to="/" className="flex shrink-0 items-center">
+      <header className="sticky top-0 z-40 bg-background/90 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-3 px-3 sm:h-20 sm:gap-4 sm:px-4 md:px-8">
+          <Link to="/" className="flex min-w-0 shrink-0 items-center">
             <img
-              src="/assets/casa-de-aventura-logo-horizontal.svg"
+              src="/assets/casa-de-aventura-logo-horizontal-transparente.svg"
               alt="A Casa de Aventura Outdoors"
-              className="h-11 w-auto object-contain md:h-12"
+              className="h-10 w-auto max-w-[190px] object-contain sm:h-11 sm:max-w-[240px] md:h-12 md:max-w-none"
             />
           </Link>
 
@@ -47,24 +46,17 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={`relative whitespace-nowrap rounded-full px-3 py-2 text-sm transition-colors ${
-                  isActive(item.to)
-                    ? "font-bold text-foreground"
-                    : "font-medium text-muted-foreground hover:text-foreground"
+                  isActive(item.to) ? "font-bold text-foreground" : "font-medium text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
-                {isActive(item.to) && (
-                  <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />
-                )}
+                {isActive(item.to) && <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />}
               </Link>
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2">
-            <a
-              href={phoneHref(settings)}
-              className="hidden h-10 items-center gap-2 rounded-full px-3 text-sm font-semibold text-foreground transition-colors hover:text-accent md:inline-flex"
-            >
+          <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <a href={phoneHref(settings)} className="hidden h-10 items-center gap-2 rounded-full px-3 text-sm font-semibold text-foreground transition-colors hover:text-accent md:inline-flex">
               <Phone className="h-4 w-4 text-accent" />
               <span className="hidden whitespace-nowrap 2xl:inline">{formatPhone(settings)}</span>
             </a>
@@ -88,20 +80,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <div
-          className={`overflow-hidden border-border transition-all duration-300 xl:hidden ${
-            mobileOpen ? "max-h-[520px] border-t" : "max-h-0"
-          }`}
-        >
-          <nav className="mx-auto grid max-w-[1400px] gap-1 px-4 py-4 sm:grid-cols-2 md:px-8">
+        <div className={`overflow-hidden border-border transition-all duration-300 xl:hidden ${mobileOpen ? "max-h-[650px] border-t" : "max-h-0"}`}>
+          <nav className="mx-auto grid max-w-[1400px] gap-1 px-3 py-3 sm:grid-cols-2 sm:px-4 md:px-8">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`rounded-full px-4 py-3 text-sm transition-colors ${
-                  isActive(item.to)
-                    ? "bg-secondary font-bold text-foreground"
-                    : "font-medium text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                className={`rounded-xl px-4 py-3 text-sm transition-colors ${
+                  isActive(item.to) ? "bg-secondary font-bold text-foreground" : "font-medium text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -114,8 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="flex-1">{children}</main>
-
+      <main className="min-w-0 flex-1">{children}</main>
       <SiteFooter />
       <WhatsAppFab />
     </div>
