@@ -547,7 +547,7 @@ function TripDetails({ trip }: { trip: Trip }) {
       />
 
       <DetailText
-        title="Investimento e formas de pagamento"
+        title="INVESTIMENTO"
         text={trip.investment_text}
         icon={<TagIcon className="h-5 w-5 text-accent" />}
       />
@@ -586,18 +586,6 @@ function TripDetails({ trip }: { trip: Trip }) {
           </ol>
         </section>
       )}
-
-      <DetailText
-        title="Investimento e formas de pagamento"
-        text={trip.investment_text}
-        icon={<TagIcon className="h-5 w-5 text-accent" />}
-      />
-
-      <DetailText
-        title="Política de cancelamento"
-        text={trip.cancellation_policy}
-        icon={<X className="h-5 w-5 text-accent" />}
-      />
 
       <DetailList
         title="Não inclui"
