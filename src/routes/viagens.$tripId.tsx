@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
   formatPhone,
+  formatForeign,
   formatPrice,
   formatRange,
   phoneHref,
@@ -35,12 +36,14 @@ import {
   whatsappLink,
 } from "@/data/trips";
 import { PriceTag } from "@/components/price-tag";
+import { ImageLightbox } from "@/components/image-lightbox";
 import type { Trip } from "@/data/trips";
 import { activitiesQuery, logWhatsAppClick, settingsQuery, tagsQuery, tripsQuery } from "@/lib/api";
 
 function TripGallery({ trip }: { trip: Trip }) {
   const images = tripImages(trip);
   const [active, setActive] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const current = images[Math.min(active, images.length - 1)];
   const video = videoEmbed(trip.video_url);
 
@@ -52,8 +55,17 @@ function TripGallery({ trip }: { trip: Trip }) {
           alt={`${trip.name} em ${trip.destination}, ${trip.state}`}
           width={1024}
           height={768}
-          className="aspect-[4/3] w-full object-cover"
+          className="aspect-[4/3] w-full cursor-zoom-in object-cover"
+          onClick={() => setLightboxOpen(true)}
         />
+        {current && (
+          <ImageLightbox
+            src={current}
+            alt={`${trip.name} em ${trip.destination}, ${trip.state}`}
+            open={lightboxOpen}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
       </div>
       {images.length > 1 && (
         <div className="grid grid-cols-5 gap-2">
@@ -154,6 +166,7 @@ function TripDetail() {
 
   const activity = activities.find((a) => a.id === trip.activity_id);
   const total = Number(trip.price) * people;
+  const usdTotal = trip.price_usd != null ? Number(trip.price_usd) * people : null;
   const tripTags = allTags.filter((t) => (trip.tags ?? []).includes(t.id));
   const selectedDeparture = departures.find((d) => d.date === departure);
 
@@ -277,15 +290,31 @@ function TripDetail() {
 
           <p className="content-copy mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
 
-          <div className="mt-6 flex flex-wrap items-baseline gap-3">
-            <PriceTag value={trip.price} size="lg" />
+          <div className="mt-6 flex flex-wrap items-end gap-x-5 gap-y-2">
+            <div>
+              <PriceTag value={trip.price} size="lg" />
+              {trip.price > 0 && <span className="mt-1 block text-xs text-muted-foreground">por pessoa</span>}
+            </div>
+            {trip.price_usd != null && Number(trip.price_usd) > 0 && (
+              <div>
+                <p className="text-2xl font-semibold text-foreground">
+                  {formatForeign(Number(trip.price_usd), 1, "USD")}
+                </p>
+                <p className="text-xs text-muted-foreground">valor em dólar por pessoa</p>
+              </div>
+            )}
             {trip.old_price != null && (
               <span className="text-lg text-muted-foreground line-through">
                 {formatPrice(trip.old_price)}
               </span>
             )}
-            {trip.price > 0 && <span className="text-sm text-muted-foreground">por pessoa</span>}
           </div>
+
+          {trip.price_usd != null && Number(trip.price_usd) > 0 && (
+            <p className="mt-2 text-sm font-medium text-accent">
+              Para {people} pessoa(s): {formatForeign(usdTotal ?? 0, 1, "USD")}
+            </p>
+          )}
 
           <form className="card-surface mt-6 space-y-4 p-5" onSubmit={handleSubmit}>
             <h2 className="flex items-center gap-2 text-lg font-bold uppercase">
@@ -498,9 +527,21 @@ function TripDetails({ trip }: { trip: Trip }) {
       />
 
       <DetailText
-        title="Características"
+        title="Para quem é este roteiro"
         text={trip.characteristics}
         icon={<Mountain className="h-5 w-5 text-accent" />}
+      />
+
+      <DetailText
+        title="Investimento e formas de pagamento"
+        text={trip.investment_text}
+        icon={<TagIcon className="h-5 w-5 text-accent" />}
+      />
+
+      <DetailText
+        title="Política de cancelamento"
+        text={trip.cancellation_policy}
+        icon={<X className="h-5 w-5 text-accent" />}
       />
       <DetailText title="Clima" text={trip.climate} icon={<Cloud className="h-5 w-5 text-accent" />} />
       <DetailText
