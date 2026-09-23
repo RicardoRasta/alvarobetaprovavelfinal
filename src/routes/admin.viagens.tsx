@@ -996,7 +996,7 @@ function AdminTrips() {
               />
             </Block>
 
-            <Block title="Características">
+            <Block title="Para quem é este roteiro...">
               <textarea
                 className={areaCls}
                 value={form.characteristics}
