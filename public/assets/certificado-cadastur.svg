@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 848">
+  <rect width="1200" height="848" fill="#fff"/>
+  <rect x="18" y="18" width="1164" height="812" rx="8" fill="#fff" stroke="#1f6b4d" stroke-width="4"/>
+  <rect x="34" y="34" width="1132" height="780" rx="4" fill="none" stroke="#d2a557" stroke-width="2"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#173f31" text-anchor="middle">
+    <text x="600" y="105" font-size="26" font-weight="700" letter-spacing="4">MINISTÉRIO DO TURISMO</text>
+    <text x="600" y="150" font-size="18" letter-spacing="2">CADASTUR</text>
+    <text x="600" y="215" font-size="38" font-weight="700">CERTIFICADO</text>
+    <text x="600" y="258" font-size="21">Prestador Especializado em Segmentos Turísticos</text>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#294f3f">
+    <text x="120" y="345" font-size="20" font-weight="700">Prestador:</text>
+    <text x="120" y="382" font-size="27">ALVARO DIOGO BADO WALENDOWSKY</text>
+    <text x="120" y="445" font-size="20" font-weight="700">Número do cadastro:</text>
+    <text x="120" y="482" font-size="27">13.849.141/0001-25</text>
+    <text x="120" y="545" font-size="20" font-weight="700">Validade:</text>
+    <text x="120" y="582" font-size="27">01/09/2025 a 01/09/2027</text>
+  </g>
+  <g transform="translate(900 470)">
+    <path d="M0 230 L90 0 L180 230 L150 230 L127 160 L53 160 L30 230 Z" fill="#2C5642"/>
+    <path d="M55 130 L92 82 L132 130 L111 118 L92 96 L74 118 Z" fill="#fff"/>
+    <path d="M92 82 C145 170 187 206 230 230 C175 228 127 205 92 170 Z" fill="#2C5642"/>
+    <text x="95" y="274" fill="#2C5642" font-family="Georgia,serif" font-size="25" text-anchor="middle">CASA de VENTURA</text>
+  </g>
+  <text x="600" y="755" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#62776c" text-anchor="middle">Documento apresentado pela A Casa de Aventura</text>
+</svg>
