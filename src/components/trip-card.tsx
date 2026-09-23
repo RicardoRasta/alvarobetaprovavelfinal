@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowUpRight, CalendarDays, MessageCircle, Star } from "lucide-react";
+import { ArrowUpRight, CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
 import { formatForeign, formatPrice, formatRange, tripImage, whatsappLink, type Trip } from "@/data/trips";
 import { PriceTag } from "@/components/price-tag";
-import { DepartureChips, upcomingMonths } from "@/components/departure-chips";
+import { upcomingMonths } from "@/components/departure-chips";
 import { logWhatsAppClick, nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
@@ -15,11 +15,11 @@ export function TripCard({ trip }: { trip: Trip }) {
       : null;
 
   return (
-    <article className="group flex flex-col">
+    <article className="group flex min-w-0 flex-col">
       <Link
         to="/viagens/$tripId"
         params={{ tripId: trip.slug }}
-        className="media-frame relative block aspect-[4/3]"
+        className="media-frame relative block aspect-[4/3] min-h-[280px] overflow-hidden sm:min-h-0"
       >
         <img
           src={tripImage(trip)}
@@ -29,43 +29,53 @@ export function TripCard({ trip }: { trip: Trip }) {
           height={600}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
-        <div className="gradient-hero absolute inset-0 opacity-80" />
+        <div className="gradient-hero absolute inset-0 opacity-95" />
 
-        <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-2">
-          <div className="flex flex-wrap gap-1.5">
+        <div className="absolute left-3 right-3 top-3 flex items-start justify-between gap-2 sm:left-4 sm:right-4 sm:top-4">
+          <div className="flex min-w-0 flex-wrap gap-1.5">
             {discount != null && (
-              <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">
+              <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold text-accent-foreground sm:px-3 sm:text-xs">
                 -{discount}%
               </span>
             )}
             <span className="chip-glass">{trip.days} dias</span>
           </div>
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-transform group-hover:rotate-45">
+          <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-transform group-hover:rotate-45 sm:h-9 sm:w-9">
             <ArrowUpRight className="h-4 w-4" />
           </span>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 p-4">
-          <h3 className="mb-3 font-display text-2xl font-semibold leading-tight text-white drop-shadow-md md:text-3xl">
+        <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
+          <h3 className="mb-2 font-display text-[1.35rem] font-semibold leading-[1.08] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] sm:text-2xl md:text-3xl">
             {trip.name}
           </h3>
-          <DepartureChips
-            months={upcomingMonths(trip, 3)}
-            places={[trip.destination, trip.state].filter(Boolean) as string[]}
-            glass
-          />
+
+          <div className="grid gap-1.5 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.65)] sm:grid-cols-2">
+            <div className="flex min-w-0 items-center gap-1.5 text-xs font-semibold sm:text-sm">
+              <CalendarDays className="h-4 w-4 shrink-0 text-white" />
+              <span className="truncate">
+                {next ? formatRange(next.date, next.return_date) : "Datas sob consulta"}
+              </span>
+            </div>
+            <div className="flex min-w-0 items-center gap-1.5 text-xs font-semibold sm:text-sm">
+              <MapPin className="h-4 w-4 shrink-0 text-white" />
+              <span className="truncate">
+                {[trip.destination, trip.state].filter(Boolean).join(" · ") || "Local sob consulta"}
+              </span>
+            </div>
+          </div>
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col gap-2 px-1 pt-4">
+      <div className="flex flex-1 min-w-0 flex-col gap-2 px-1 pt-4">
         <Link
           to="/viagens/$tripId"
           params={{ tripId: trip.slug }}
-          className="font-display text-2xl leading-[0.98] transition-colors hover:text-accent"
+          className="font-display text-xl leading-[1.05] transition-colors hover:text-accent sm:text-2xl"
         >
           {trip.name}
         </Link>
-        <p className="content-copy line-clamp-2 text-sm text-muted-foreground">{trip.description}</p>
+        <p className="content-copy line-clamp-2 text-sm leading-6 text-muted-foreground">{trip.description}</p>
 
         <div className="flex items-center gap-1 text-sm">
           <Star className="h-4 w-4 fill-accent text-accent" />
@@ -83,21 +93,14 @@ export function TripCard({ trip }: { trip: Trip }) {
               <span className="text-sm font-semibold text-muted-foreground">Sob consulta</span>
             )}
             {trip.old_price != null && trip.price > 0 && (
-              <span className="text-sm text-muted-foreground line-through">
-                {formatPrice(trip.old_price)}
-              </span>
+              <span className="text-sm text-muted-foreground line-through">{formatPrice(trip.old_price)}</span>
             )}
             {(trip.price > 0 || (trip.price_usd != null && Number(trip.price_usd) > 0)) && (
               <span className="text-xs text-muted-foreground">por pessoa</span>
             )}
           </div>
-          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-            <CalendarDays className="h-3.5 w-3.5" />
-            {next
-              ? `Próxima saída: ${formatRange(next.date, next.return_date)}`
-              : "Datas sob consulta"}
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
+
+          <div className="mt-4 grid gap-2 sm:flex">
             <a
               href={whatsappLink(settings, {
                 tripName: trip.name,
@@ -120,14 +123,14 @@ export function TripCard({ trip }: { trip: Trip }) {
                   departureDate: next?.date,
                 })
               }
-              className="btn-pill flex-1 !px-4 !py-2.5 !text-sm"
+              className="btn-pill min-w-0 flex-1 !px-4 !py-2.5 !text-sm"
             >
               <MessageCircle className="h-4 w-4" /> Agendar no WhatsApp
             </a>
             <Link
               to="/viagens/$tripId"
               params={{ tripId: trip.slug }}
-              className="btn-pill-outline !px-4 !py-2 !text-sm"
+              className="btn-pill-outline min-w-0 !px-4 !py-2 !text-sm"
             >
               Ver roteiro
             </Link>
