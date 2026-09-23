@@ -33,15 +33,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-md">
         <div className="mx-auto flex h-20 max-w-[1400px] items-center gap-4 px-4 md:px-8">
-          <Link to="/" className="flex shrink-0 items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-background">
-              <Mountain className="h-5 w-5" />
-            </span>
-            <span className="font-display text-base leading-[0.9] uppercase md:text-lg">
-              A Casa de
-              <br />
-              <span className="text-accent">Aventura</span>
-            </span>
+          <Link to="/" className="flex shrink-0 items-center">
+            <img
+              src="/assets/casa-de-aventura-logo-horizontal.svg"
+              alt="A Casa de Aventura Outdoors"
+              className="h-11 w-auto object-contain md:h-12"
+            />
           </Link>
 
           <nav className="mx-auto hidden items-center gap-1 xl:flex">
