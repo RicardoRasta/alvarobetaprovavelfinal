@@ -275,7 +275,7 @@ function TripDetail() {
             </div>
           )}
 
-          <p className="mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
+          <p className="content-copy mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
 
           <div className="mt-6 flex flex-wrap items-baseline gap-3">
             <PriceTag value={trip.price} size="lg" />
@@ -436,7 +436,7 @@ function DetailText({
   return (
     <section className="card-surface p-5">
       <h2 className="flex items-center gap-2 text-lg font-bold uppercase">{icon} {title}</h2>
-      <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{text}</p>
+      <p className="content-copy mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{text}</p>
     </section>
   );
 }
@@ -478,7 +478,7 @@ function TripDetails({ trip }: { trip: Trip }) {
                 className="h-32 w-32 shrink-0 rounded-xl object-cover"
               />
             )}
-            <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
+            <p className="content-copy whitespace-pre-line leading-relaxed text-muted-foreground">
               {trip.guide_text}
             </p>
           </div>
@@ -522,7 +522,7 @@ function TripDetails({ trip }: { trip: Trip }) {
                   {d.title ? ` — ${d.title}` : ""}
                 </h3>
                 {d.description && (
-                  <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                  <p className="content-copy mt-1 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
                     {d.description}
                   </p>
                 )}
