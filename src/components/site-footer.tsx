@@ -58,7 +58,7 @@ export function SiteFooter() {
               aria-label="Ver certificado Cadastur"
             >
               <img
-                src="/assets/casa-de-aventura-logo-horizontal-transparente.svg"
+                src="/assets/casa-de-aventura-logo-horizontal.png"
                 alt="A Casa de Aventura Outdoors — ver certificado Cadastur"
                 className="h-14 w-auto max-w-[260px] object-contain"
               />
