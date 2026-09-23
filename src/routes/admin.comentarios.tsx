@@ -22,6 +22,16 @@ function AdminComments() {
     refresh();
   };
 
+  const saveActivityDate = async (id: string, value: string) => {
+    const { error } = await supabase
+      .from("testimonials")
+      .update({ activity_date: value || null })
+      .eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Data da atividade atualizada.");
+    refresh();
+  };
+
   const remove = async (id: string) => {
     const { error } = await supabase.from("testimonials").delete().eq("id", id);
     if (error) return toast.error(error.message);
@@ -46,7 +56,21 @@ function AdminComments() {
           {new Date(t.created_at).toLocaleDateString("pt-BR")}
         </span>
       </header>
-      <p className="text-sm text-muted-foreground">{t.comment}</p>
+      <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-end">
+        <p className="text-sm leading-relaxed text-muted-foreground">{t.comment}</p>
+        <label className="text-xs font-medium uppercase text-muted-foreground">
+          Data da atividade
+          <input
+            type="date"
+            defaultValue={t.activity_date ?? ""}
+            onBlur={(e) => {
+              const next = e.currentTarget.value;
+              if (next !== (t.activity_date ?? "")) void saveActivityDate(t.id, next);
+            }}
+            className="mt-1 h-10 w-full rounded-xl border border-input bg-card px-3 text-sm font-normal normal-case text-foreground outline-none focus:ring-2 focus:ring-ring"
+          />
+        </label>
+      </div>
       {t.photos.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {t.photos.map((p) => (
