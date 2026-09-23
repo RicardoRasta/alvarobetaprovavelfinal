@@ -31,7 +31,7 @@ export function SiteFooter() {
   ].filter((s) => (s.url ?? "").trim());
 
   return (
-    <footer className="mt-20 bg-sidebar text-sidebar-foreground">
+    <footer className="mt-20 w-full bg-[#2C5642] text-white">
       <div className="mx-auto max-w-[1400px] px-4 py-14 md:px-8 md:py-20">
         <div className="flex flex-col gap-8 border-b border-sidebar-border pb-12 md:flex-row md:items-end md:justify-between">
           <h2 className="max-w-2xl text-4xl leading-[0.98] sm:text-5xl md:text-6xl">
