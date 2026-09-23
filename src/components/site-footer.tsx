@@ -100,9 +100,28 @@ export function SiteFooter() {
                 </li>
               ))}
               <li>
-                <span className="inline-flex items-center gap-1 text-sidebar-foreground/70">
-                  Política de cancelamento
-                </span>
+                <Link
+                  to="/politica-de-privacidade"
+                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
+                >
+                  Política de Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/politica-de-cancelamentos"
+                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
+                >
+                  Política de Cancelamentos
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contrato-aluguel-de-equipamentos"
+                  className="inline-flex items-center gap-1 text-sidebar-foreground/85 transition-colors hover:text-accent"
+                >
+                  Contrato de Aluguel de equipamentos
+                </Link>
               </li>
             </ul>
           </div>
@@ -151,7 +170,7 @@ export function SiteFooter() {
               className="mt-5 flex items-center gap-3 rounded-2xl border border-sidebar-border p-3 transition-colors hover:border-accent"
             >
               <img
-                src="/assets/certificado-cadastur-original.jpg"
+                src="/assets/certificado-cadastur-original.jpg?v=20260923"
                 alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
                 className="h-14 w-24 rounded-lg bg-white object-contain"
               />
