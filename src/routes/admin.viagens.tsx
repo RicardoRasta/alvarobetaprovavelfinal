@@ -1132,7 +1132,7 @@ function AdminTrips() {
                         onChange={(e) => setDep(i, { spots: e.target.value })}
                       />
                     </label>
-                    <label className="min-w-[180px] flex-1">
+                    <label className="min-w-0 flex-1 sm:min-w-[180px]">
                       <span className={labelCls}>Ponto de saída</span>
                       <input
                         className={field}
