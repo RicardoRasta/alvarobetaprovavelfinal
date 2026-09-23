@@ -45,6 +45,12 @@ export type Trip = {
   activity_id: string | null;
   price: number;
   old_price: number | null;
+  /** Valor manual em dólares, quando aplicável. */
+  price_usd?: number | null;
+  /** Texto livre para investimento e formas de pagamento. */
+  investment_text?: string | null;
+  /** Política de cancelamento específica do roteiro. */
+  cancellation_policy?: string | null;
   days: number;
   level: string;
   image_url: string | null;
@@ -180,7 +186,7 @@ export const heroSlides = (
 };
 
 /** Telefone padrão da agência. */
-export const DEFAULT_PHONE = "4733511661";
+export const DEFAULT_PHONE = "4733517661";
 
 /** Link "tel:" pronto para ligar. */
 export const phoneHref = (settings?: Pick<SiteSettings, "phone"> | null) => {
@@ -248,7 +254,7 @@ export const daysUntil = (iso: string) => {
 };
 
 /** Número oficial do proprietário (fallback caso as configurações não carreguem). */
-export const DEFAULT_WHATSAPP = "554733511661";
+export const DEFAULT_WHATSAPP = "554733517661";
 
 /** Monta o link do WhatsApp com a mensagem já preenchida e detalhada da viagem. */
 export function whatsappLink(
