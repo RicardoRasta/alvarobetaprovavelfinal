@@ -538,6 +538,9 @@ export type Database = {
           name: string
           not_included: string[]
           old_price: number | null
+          price_usd: number | null
+          investment_text: string | null
+          cancellation_policy: string | null
           prerequisites: string[]
           price: number
           published: boolean
@@ -574,6 +577,9 @@ export type Database = {
           name: string
           not_included?: string[]
           old_price?: number | null
+          price_usd?: number | null
+          investment_text?: string | null
+          cancellation_policy?: string | null
           prerequisites?: string[]
           price?: number
           published?: boolean
@@ -610,6 +616,9 @@ export type Database = {
           name?: string
           not_included?: string[]
           old_price?: number | null
+          price_usd?: number | null
+          investment_text?: string | null
+          cancellation_policy?: string | null
           prerequisites?: string[]
           price?: number
           published?: boolean
