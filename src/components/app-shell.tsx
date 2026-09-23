@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { MessageCircle, Mountain, Phone, User, X, Menu } from "lucide-react";
+import { MessageCircle, Phone, User, X, Menu } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { WhatsAppFab } from "./whatsapp-fab";
 import { SiteFooter } from "./site-footer";
