@@ -393,7 +393,15 @@ function TripDetail() {
               <span className="flex items-center gap-1 text-muted-foreground">
                 <Users className="h-4 w-4" /> {people} pessoa(s)
               </span>
-              <PriceTag value={total} size="lg" className="items-end text-right" />
+              {trip.price > 0 ? (
+                  <PriceTag value={total} size="lg" className="items-end text-right" />
+                ) : trip.price_usd != null && Number(trip.price_usd) > 0 ? (
+                  <span className="text-xl font-semibold text-foreground">
+                    {formatForeign(usdTotal ?? 0, 1, "USD")}
+                  </span>
+                ) : (
+                  <span className="text-sm font-semibold text-muted-foreground">Sob consulta</span>
+                )}
             </div>
 
             <button
