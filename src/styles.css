@@ -6,7 +6,7 @@
 
 /*
  * CASA DE AVENTURA — Design System
- * Paleta: verde escuro (marca), branco/off-white (fundo), laranja (acento).
+ * Paleta: verde da marca, branco/off-white (fundo), ocre (acento).
  * Todos os valores em oklch. Nunca usar cores fixas nos componentes.
  */
 
@@ -41,8 +41,8 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-border: var(--sidebar-border);
-  --font-display: "Anton", "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Figtree", "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -59,14 +59,15 @@
   --secondary-foreground: oklch(0.26 0.04 165);
   --muted: oklch(0.955 0.005 110);
   --muted-foreground: oklch(0.52 0.015 165);
-  --accent: oklch(0.66 0.212 40);
-  --accent-foreground: oklch(0.99 0.01 80);
+  /* Ocre da identidade visual da marca */
+  --accent: oklch(0.58 0.12 47);
+  --accent-foreground: oklch(0.98 0.01 95);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
   --success: oklch(0.6 0.13 155);
   --border: oklch(0.9 0.008 120);
   --input: oklch(0.9 0.008 120);
-  --ring: oklch(0.66 0.212 40);
+  --ring: oklch(0.58 0.12 47);
   --sidebar: oklch(0.21 0.028 165);
   --sidebar-foreground: oklch(0.93 0.015 120);
   --sidebar-accent: oklch(0.28 0.045 165);
@@ -97,14 +98,14 @@
   --secondary-foreground: oklch(0.95 0.01 120);
   --muted: oklch(0.26 0.028 165);
   --muted-foreground: oklch(0.73 0.018 130);
-  --accent: oklch(0.7 0.195 42);
-  --accent-foreground: oklch(0.16 0.03 60);
+  --accent: oklch(0.67 0.15 48);
+  --accent-foreground: oklch(0.18 0.025 70);
   --destructive: oklch(0.65 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   --success: oklch(0.7 0.14 155);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.7 0.195 42);
+  --ring: oklch(0.67 0.15 48);
   --sidebar: oklch(0.15 0.02 165);
   --sidebar-foreground: oklch(0.9 0.015 120);
   --sidebar-accent: oklch(0.25 0.035 165);
@@ -123,7 +124,10 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -131,9 +135,9 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.015em;
-    line-height: 0.95;
-    /* Anton tem apenas um peso: evita negrito falso e sujo. */
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+    font-weight: 700;
     font-synthesis-weight: none;
   }
 }
@@ -141,7 +145,7 @@
 @utility font-display {
   font-family: var(--font-display);
   font-synthesis-weight: none;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
 }
 
 @utility card-surface {
