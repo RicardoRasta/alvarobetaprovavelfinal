@@ -99,6 +99,11 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <span className="inline-flex items-center gap-1 text-sidebar-foreground/70">
+                  Política de cancelamento
+                </span>
+              </li>
             </ul>
           </div>
 
