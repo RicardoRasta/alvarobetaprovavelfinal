@@ -291,10 +291,12 @@ function TripDetail() {
           <p className="content-copy mt-4 leading-relaxed text-muted-foreground">{trip.description}</p>
 
           <div className="mt-6 flex flex-wrap items-end gap-x-5 gap-y-2">
-            <div>
-              <PriceTag value={trip.price} size="lg" />
-              {trip.price > 0 && <span className="mt-1 block text-xs text-muted-foreground">por pessoa</span>}
-            </div>
+            {trip.price > 0 && (
+              <div>
+                <PriceTag value={trip.price} size="lg" />
+                <span className="mt-1 block text-xs text-muted-foreground">por pessoa</span>
+              </div>
+            )}
             {trip.price_usd != null && Number(trip.price_usd) > 0 && (
               <div>
                 <p className="text-2xl font-semibold text-foreground">
@@ -303,7 +305,10 @@ function TripDetail() {
                 <p className="text-xs text-muted-foreground">valor em dólar por pessoa</p>
               </div>
             )}
-            {trip.old_price != null && (
+            {trip.price <= 0 && (!trip.price_usd || Number(trip.price_usd) <= 0) && (
+              <p className="text-2xl font-semibold text-foreground">Sob consulta</p>
+            )}
+            {trip.old_price != null && trip.price > 0 && (
               <span className="text-lg text-muted-foreground line-through">
                 {formatPrice(trip.old_price)}
               </span>
