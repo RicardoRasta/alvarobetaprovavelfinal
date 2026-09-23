@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, CalendarDays, Compass, Search, ShieldCheck, Users } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
@@ -37,6 +37,18 @@ function Index() {
   const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: settings } = useQuery(settingsQuery);
   const { data: testimonials = [] } = useQuery(testimonialsQuery);
+  const [homeTestimonials, setHomeTestimonials] = useState<typeof testimonials>([]);
+
+  useEffect(() => {
+    if (testimonials.length === 0) {
+      setHomeTestimonials([]);
+      return;
+    }
+
+    const shuffled = [...testimonials].sort(() => Math.random() - 0.5);
+    const count = Math.min(shuffled.length, 3 + Math.floor(Math.random() * 3));
+    setHomeTestimonials(shuffled.slice(0, count));
+  }, [testimonials]);
 
   const visible = trips.filter((t) => t.published);
   const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 6);
@@ -167,11 +179,11 @@ function Index() {
           </section>
         )}
 
-        {testimonials.length > 0 && (
+        {homeTestimonials.length > 0 && (
           <section>
             <SectionHeading title="Comentários" linkTo="/comentarios" linkLabel="Ver todos os comentários" />
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {testimonials.slice(0, 6).map((t) => (
+              {homeTestimonials.map((t) => (
                 <TestimonialCard key={t.id} testimonial={t} />
               ))}
             </div>
