@@ -73,6 +73,39 @@ function QuemSomos() {
 
 
       <section className="mt-12">
+        <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
+          <div className="card-surface overflow-hidden p-3">
+            <img
+              src="/assets/certificado-cadastur.svg"
+              alt="Certificado Cadastur da A Casa de Aventura"
+              className="w-full rounded-2xl object-contain"
+              loading="lazy"
+            />
+          </div>
+          <div className="card-surface p-6 md:p-8">
+            <div className="flex items-center gap-3">
+              <img
+                src="/assets/casa-de-aventura-logo-redonda.svg"
+                alt="A Casa de Aventura"
+                className="h-16 w-16 rounded-full object-cover"
+              />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-accent">Credencial oficial</p>
+                <h2 className="mt-1 text-2xl font-bold">Certificado Cadastur</h2>
+              </div>
+            </div>
+            <div className="content-copy mt-6 space-y-3 text-sm text-muted-foreground">
+              <p><strong className="text-foreground">Atividade:</strong> Prestador Especializado em Segmentos Turísticos</p>
+              <p><strong className="text-foreground">Nome do prestador:</strong> ALVARO DIOGO BADO WALENDOWSKY</p>
+              <p><strong className="text-foreground">Número do cadastro:</strong> 13.849.141/0001-25</p>
+              <p><strong className="text-foreground">Validade:</strong> 01/09/2025 a 01/09/2027</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="mt-12">
         <h2 className="flex items-center gap-2 text-2xl font-bold uppercase">
           <Award className="h-6 w-6 text-accent" /> Certificações
         </h2>
