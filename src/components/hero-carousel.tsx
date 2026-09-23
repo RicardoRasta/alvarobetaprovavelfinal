@@ -65,7 +65,7 @@ export function HeroCarousel({
 
   return (
     <div>
-      <div className="media-frame relative h-[440px] md:h-[620px]">
+      <div className="media-frame relative h-[420px] sm:h-[440px] md:h-[620px]">
         {slides.map((s, i) => (
           <div
             key={s.key}
@@ -82,7 +82,7 @@ export function HeroCarousel({
               className="h-full w-full object-cover"
             />
             <div className="gradient-hero absolute inset-0" />
-            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-5 p-6 text-primary-foreground md:p-10">
+            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-5 p-4 pb-20 text-primary-foreground sm:p-6 sm:pb-20 md:p-10 md:pb-10">
               {s.title && (
                 <div className="max-w-2xl">
                   <h2 className="text-3xl leading-[0.95] text-primary-foreground md:text-5xl">
@@ -112,7 +112,7 @@ export function HeroCarousel({
         ))}
 
         {slides.length > 1 && (
-          <div className="absolute bottom-6 right-4 z-20 flex gap-2 md:right-8">
+          <div className="absolute bottom-4 right-3 z-20 flex gap-2 sm:bottom-6 sm:right-4 md:right-8">
             <button
               type="button"
               onClick={() => go(-1)}
