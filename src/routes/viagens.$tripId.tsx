@@ -204,6 +204,7 @@ function TripDetail() {
       state: trip.state,
       days: trip.days,
       price: trip.price,
+      priceUsd: trip.price_usd,
       slug: trip.slug,
     });
     window.open(url, "_blank", "noopener,noreferrer");
