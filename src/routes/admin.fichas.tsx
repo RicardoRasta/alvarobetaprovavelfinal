@@ -85,7 +85,7 @@ function AdminFichas() {
           <Link2 className="h-5 w-5 text-accent" /> Gerar link de ficha
         </h2>
         <div className="mt-4 flex flex-wrap items-end gap-3">
-          <label className="flex-1 min-w-56">
+          <label className="min-w-0 flex-1 sm:min-w-56">
             <span className="mb-1 block text-xs font-medium uppercase text-muted-foreground">Roteiro</span>
             <select
               value={tripId}
