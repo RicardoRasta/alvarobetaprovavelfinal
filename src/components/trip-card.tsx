@@ -40,7 +40,7 @@ export function TripCard({ trip }: { trip: Trip }) {
             )}
             <span className="chip-glass">{trip.days} dias</span>
           </div>
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-background text-foreground transition-transform group-hover:rotate-45">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-transform group-hover:rotate-45">
             <ArrowUpRight className="h-4 w-4" />
           </span>
         </div>
