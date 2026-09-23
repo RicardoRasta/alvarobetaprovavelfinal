@@ -50,18 +50,24 @@ export function TripCard({ trip }: { trip: Trip }) {
             {trip.name}
           </h3>
 
-          <div className="grid gap-1.5 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.65)] sm:grid-cols-2">
-            <div className="flex min-w-0 items-center gap-1.5 text-xs font-semibold sm:text-sm">
-              <CalendarDays className="h-4 w-4 shrink-0 text-white" />
-              <span className="truncate">
+          <div className="grid gap-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.7)] sm:grid-cols-2 sm:gap-3">
+            <div className="min-w-0">
+              <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-xs">
+                <CalendarDays className="h-4 w-4 shrink-0 text-white" />
+                Próxima saída
+              </p>
+              <p className="mt-1 truncate text-xs font-semibold text-white sm:text-sm">
                 {next ? formatRange(next.date, next.return_date) : "Datas sob consulta"}
-              </span>
+              </p>
             </div>
-            <div className="flex min-w-0 items-center gap-1.5 text-xs font-semibold sm:text-sm">
-              <MapPin className="h-4 w-4 shrink-0 text-white" />
-              <span className="truncate">
+            <div className="min-w-0">
+              <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-xs">
+                <MapPin className="h-4 w-4 shrink-0 text-white" />
+                Local
+              </p>
+              <p className="mt-1 truncate text-xs font-semibold text-white sm:text-sm">
                 {[trip.destination, trip.state].filter(Boolean).join(" · ") || "Local sob consulta"}
-              </span>
+              </p>
             </div>
           </div>
         </div>
