@@ -70,7 +70,7 @@ function QuemSomos() {
         <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
           <div className="card-surface overflow-hidden p-3 sm:p-4">
             <img
-              src="/assets/certificado-cadastur-original.jpg"
+              src="/assets/certificado-cadastur-original.jpg?v=20260924"
               alt="Certificado Cadastur da A Casa de Aventura"
               className="block max-h-[760px] w-full rounded-xl object-contain object-center"
               loading="lazy"
