@@ -77,7 +77,14 @@ function Viagens() {
                 )
               : true)) &&
           (!atividade || t.activity_id === atividade) &&
-          (!tag || (selectedTag ? (t.tags ?? []).includes(selectedTag.id) : false)) &&
+          (!tag ||
+            (selectedTag
+              ? (t.tags ?? []).some(
+                  (value) =>
+                    value === selectedTag.id ||
+                    normalizeTagName(value) === normalizeTagName(selectedTag.name),
+                )
+              : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
@@ -92,12 +99,22 @@ function Viagens() {
     <div className="mx-auto max-w-[1400px] animate-fade-up px-4 py-12 md:px-8 md:py-16">
       <header className="mb-10">
         <h1 className="text-5xl leading-[0.95] md:text-7xl">
-          Nossa agenda
-          <br />
-          <span className="text-accent">completa</span>
+          {isCoursesPage ? (
+            <>
+              Nossos
+              <br />
+              <span className="text-accent">cursos</span>
+            </>
+          ) : (
+            <>
+              Nossa agenda
+              <br />
+              <span className="text-accent">completa</span>
+            </>
+          )}
         </h1>
         <p className="mt-4 text-sm text-muted-foreground">
-          {isLoading ? "Carregando roteiros..." : `${filtered.length} roteiro(s) disponíveis`}
+          {isLoading ? "Carregando..." : `${filtered.length} ${isCoursesPage ? "curso(s)" : "roteiro(s)"} disponíveis`}
         </p>
       </header>
 
