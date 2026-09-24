@@ -45,6 +45,9 @@ function Viagens() {
   const selectedTag = tags.find(
     (t) => t.id === tag || t.name.trim().toLowerCase() === (tag ?? "").trim().toLowerCase(),
   );
+  const cursosTag = tags.find((t) => t.name.trim().toLowerCase() === "cursos");
+  const isCoursesPage =
+    selectedTag?.name.trim().toLowerCase() === "cursos";
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -52,6 +55,9 @@ function Viagens() {
       trips.filter(
         (t) =>
           t.published &&
+          (isCoursesPage
+            ? (cursosTag ? (t.tags ?? []).includes(cursosTag.id) : false)
+            : (cursosTag ? !(t.tags ?? []).includes(cursosTag.id) : true)) &&
           (!atividade || t.activity_id === atividade) &&
           (!tag || (selectedTag ? (t.tags ?? []).includes(selectedTag.id) : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
@@ -59,7 +65,7 @@ function Viagens() {
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
       ),
     );
-  }, [atividade, data, tag, query, trips, selectedTag]);
+  }, [atividade, data, tag, query, trips, selectedTag, cursosTag, isCoursesPage]);
 
   const patch = (next: Partial<CatalogSearch>) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
