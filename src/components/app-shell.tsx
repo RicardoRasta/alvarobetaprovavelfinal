@@ -26,7 +26,12 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => setMobileOpen(false), [pathname]);
 
-  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+  const routeSearch = useRouterState({ select: (s) => s.location.search as { tag?: string } });
+  const isActive = (to: string, label?: string) => {
+    if (label === "Cursos") return pathname.startsWith("/viagens") && routeSearch?.tag === "cursos";
+    if (label === "Viagens") return pathname.startsWith("/viagens") && routeSearch?.tag !== "cursos";
+    return to === "/" ? pathname === "/" : pathname.startsWith(to);
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
@@ -47,11 +52,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={item.to}
                 search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`relative whitespace-nowrap rounded-full px-3 py-2 text-sm transition-colors ${
-                  isActive(item.to) ? "font-bold text-foreground" : "font-medium text-muted-foreground hover:text-foreground"
+                  isActive(item.to, item.label) ? "font-bold text-foreground" : "font-medium text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
-                {isActive(item.to) && <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />}
+                {isActive(item.to, item.label) && <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />}
               </Link>
             ))}
           </nav>
@@ -89,7 +94,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={item.to}
                 search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`rounded-xl px-4 py-3 text-sm transition-colors ${
-                  isActive(item.to) ? "bg-secondary font-bold text-foreground" : "font-medium text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                  isActive(item.to, item.label) ? "bg-secondary font-bold text-foreground" : "font-medium text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
                 }`}
               >
                 {item.label}
