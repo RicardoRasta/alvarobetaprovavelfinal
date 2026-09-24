@@ -50,14 +50,7 @@ function Viagens() {
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
     normalizeTagName(selectedTag?.name ?? "") === "cursos";
-  const hiddenTagNames = new Set([
-    "confirmado",
-    "inscricoes abertas",
-    "ultimas vagas",
-    "curso aca",
-    "internacional",
-    "grupo privado",
-  ]);
+  const hiddenTagNames = new Set(["cursos"]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
