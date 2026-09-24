@@ -29,6 +29,10 @@ export function SiteFooter() {
     { url: settings?.facebook_url, Icon: Facebook, label: "Facebook" },
     { url: settings?.youtube_url, Icon: Youtube, label: "YouTube" },
   ].filter((s) => (s.url ?? "").trim());
+  const cadasturImage =
+    settings?.cadastur_image_url ||
+    certificates.find((c) => c.title.trim().toLowerCase().includes("cadastur"))?.image_url ||
+    "";
 
   return (
     <footer className="mt-20 w-full bg-[#000000] text-white">
@@ -153,17 +157,17 @@ export function SiteFooter() {
               hash="certificado-cadastur"
               className="mt-5 flex items-center gap-3 rounded-2xl border border-sidebar-border p-3 transition-colors hover:border-accent"
             >
-              <img
-                src={
-                  settings?.cadastur_image_url
-                    ? normalizeImage(settings.cadastur_image_url)
-                    : certificates.find((c) => c.title.trim().toLowerCase().includes("cadastur"))?.image_url
-                      ? normalizeImage(certificates.find((c) => c.title.trim().toLowerCase().includes("cadastur"))!.image_url)
-                      : ""
-                }
-                alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
-                className="h-16 w-24 rounded-lg bg-white object-contain"
-              />
+              {cadasturImage ? (
+                <img
+                  src={normalizeImage(cadasturImage)}
+                  alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
+                  className="h-16 w-24 rounded-lg bg-white object-contain"
+                />
+              ) : (
+                <div className="flex h-16 w-24 items-center justify-center rounded-lg bg-white px-2 text-center text-[10px] font-semibold text-[#2C5642]">
+                  Cadastur
+                </div>
+              )}
               <span className="min-w-0 text-xs leading-5 text-sidebar-foreground/80">
                 <strong className="block text-sidebar-foreground">CADASTUR</strong>
                 CNPJ 13.849.141/0001-25
