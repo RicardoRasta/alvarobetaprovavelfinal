@@ -42,6 +42,10 @@ function Viagens() {
   const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: tags = [] } = useQuery(tagsQuery);
 
+  const selectedTag = tags.find(
+    (t) => t.id === tag || t.name.trim().toLowerCase() === (tag ?? "").trim().toLowerCase(),
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return sortByNextDeparture(
@@ -49,13 +53,13 @@ function Viagens() {
         (t) =>
           t.published &&
           (!atividade || t.activity_id === atividade) &&
-          (!tag || (t.tags ?? []).includes(tag)) &&
+          (!tag || (selectedTag ? (t.tags ?? []).includes(selectedTag.id) : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
       ),
     );
-  }, [atividade, data, tag, query, trips]);
+  }, [atividade, data, tag, query, trips, selectedTag]);
 
   const patch = (next: Partial<CatalogSearch>) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
