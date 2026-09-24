@@ -72,15 +72,15 @@ function Viagens() {
           (isCoursesPage ? isCourseTrip(t) : !isCourseTrip(t)) &&
           (!atividade || t.activity_id === atividade) &&
           (!tag ||
-            (selectedTag
-              ? normalizeTagName(selectedTag.name) === "cursos"
-                ? isCourseTrip(t)
-                : (t.tags ?? []).some(
+            normalizeTagName(tag) === "cursos"
+              ? isCourseTrip(t)
+              : selectedTag
+                ? (t.tags ?? []).some(
                     (value) =>
                       value === selectedTag.id ||
                       normalizeTagValue(value) === normalizeTagName(selectedTag.name),
                   )
-              : false)) &&
+                : false) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
