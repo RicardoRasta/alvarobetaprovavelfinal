@@ -60,7 +60,8 @@ function Viagens() {
     normalizeTagName(tag ?? "") === "cursos" ||
     isCourseLikeTag(selectedTag?.name ?? "");
   const isCourseTrip = (trip: (typeof trips)[number]) =>
-    (trip.tags ?? []).some((value) => isCourseLikeTag(value));
+    (trip.tags ?? []).some((value) => isCourseLikeTag(value)) ||
+    normalizeTagName(trip.name).includes("curso ");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
