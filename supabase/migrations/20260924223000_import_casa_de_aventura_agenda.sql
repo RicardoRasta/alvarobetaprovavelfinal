@@ -369,7 +369,7 @@ BEGIN
         v_slug,v_name,v_destination,v_state,NULL,v_price,NULL,NULL,NULL,NULL,v_days,'Iniciante',
         NULL,'{}','',v_description,'{}','{}',5,false,true,'[]'::jsonb,'',NULL,'',
         '{}','', '', '','[]'::jsonb,'{}','{}','{}',
-        ARRAY[]::text[],now(),now()
+        ARRAY[]::uuid[],now(),now()
       )
       RETURNING id INTO v_trip_id;
     ELSE
