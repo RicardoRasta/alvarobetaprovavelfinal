@@ -46,20 +46,21 @@ function Viagens() {
   const selectedTag = tags.find(
     (t) => t.id === tag || normalizeTagName(t.name) === normalizeTagName(tag ?? ""),
   );
-  const cursosTag = tags.find((t) => normalizeTagName(t.name) === "cursos");
+  const tagNameById = useMemo(
+    () => new Map(tags.map((t) => [t.id, t.name])),
+    [tags],
+  );
+  const normalizeTagValue = (value: string) =>
+    normalizeTagName(tagNameById.get(value) ?? value);
   const isCourseLikeTag = (value: string) => {
-    const normalized = normalizeTagName(value);
+    const normalized = normalizeTagValue(value);
     return normalized === "cursos" || normalized.startsWith("curso ");
   };
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
     isCourseLikeTag(selectedTag?.name ?? "");
   const isCourseTrip = (trip: (typeof trips)[number]) =>
-    (trip.tags ?? []).some(
-      (value) =>
-        (cursosTag && value === cursosTag.id) ||
-        isCourseLikeTag(value),
-    );
+    (trip.tags ?? []).some((value) => isCourseLikeTag(value));
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -74,7 +75,7 @@ function Viagens() {
               ? (t.tags ?? []).some(
                   (value) =>
                     value === selectedTag.id ||
-                    normalizeTagName(value) === normalizeTagName(selectedTag.name),
+                    normalizeTagValue(value) === normalizeTagName(selectedTag.name),
                 )
               : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
@@ -82,7 +83,7 @@ function Viagens() {
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
       ),
     );
-  }, [atividade, data, tag, query, trips, selectedTag, cursosTag, isCoursesPage]);
+  }, [atividade, data, tag, query, trips, selectedTag, tagNameById, isCoursesPage]);
 
   const patch = (next: Partial<CatalogSearch>) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
