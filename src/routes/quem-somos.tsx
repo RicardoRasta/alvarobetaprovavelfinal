@@ -55,9 +55,9 @@ function QuemSomos() {
             </a>
           </div>
         </div>
-        <div className="card-surface overflow-hidden md:sticky md:top-24">
+        <div className="card-surface overflow-hidden md:sticky md:top-24 md:self-start">
           {settings?.about_image_url ? (
-            <img src={normalizeImage(settings.about_image_url)} alt="Equipe A Casa de Aventura" loading="lazy" className="h-full min-h-56 w-full object-cover" />
+            <img src={normalizeImage(settings.about_image_url)} alt="Equipe A Casa de Aventura" loading="lazy" className="aspect-[4/3] h-auto w-full object-cover object-center sm:aspect-[16/10] md:aspect-[4/3]" />
           ) : (
             <div className="flex min-h-56 items-center justify-center bg-secondary text-muted-foreground">
               <Users className="h-10 w-10" />
