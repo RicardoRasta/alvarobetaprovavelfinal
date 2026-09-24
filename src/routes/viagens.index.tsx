@@ -41,12 +41,23 @@ function Viagens() {
   const { data: trips = [], isLoading } = useQuery(tripsQuery);
   const { data: tags = [] } = useQuery(tagsQuery);
 
+  const normalizeTagName = (value: string) =>
+    value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const selectedTag = tags.find(
-    (t) => t.id === tag || t.name.trim().toLowerCase() === (tag ?? "").trim().toLowerCase(),
+    (t) => t.id === tag || normalizeTagName(t.name) === normalizeTagName(tag ?? ""),
   );
-  const cursosTag = tags.find((t) => t.name.trim().toLowerCase() === "cursos");
+  const cursosTag = tags.find((t) => normalizeTagName(t.name) === "cursos");
   const isCoursesPage =
-    selectedTag?.name.trim().toLowerCase() === "cursos";
+    normalizeTagName(tag ?? "") === "cursos" ||
+    normalizeTagName(selectedTag?.name ?? "") === "cursos";
+  const hiddenTagNames = new Set([
+    "confirmado",
+    "inscricoes abertas",
+    "ultimas vagas",
+    "curso aca",
+    "internacional",
+    "grupo privado",
+  ]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -55,8 +66,16 @@ function Viagens() {
         (t) =>
           t.published &&
           (isCoursesPage
-            ? (cursosTag ? (t.tags ?? []).includes(cursosTag.id) : false)
-            : (cursosTag ? !(t.tags ?? []).includes(cursosTag.id) : true)) &&
+            ? (cursosTag
+              ? (t.tags ?? []).some((value) =>
+                  value === cursosTag.id || normalizeTagName(value) === "cursos",
+                )
+              : false)
+            : (cursosTag
+              ? !(t.tags ?? []).some((value) =>
+                  value === cursosTag.id || normalizeTagName(value) === "cursos",
+                )
+              : true)) &&
           (!atividade || t.activity_id === atividade) &&
           (!tag || (selectedTag ? (t.tags ?? []).includes(selectedTag.id) : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
@@ -106,6 +125,26 @@ function Viagens() {
         </label>
       </div>
 
+      {tags.some((t) => !hiddenTagNames.has(normalizeTagName(t.name))) && (
+        <div className="mb-10 flex flex-wrap gap-2">
+          {tags
+            .filter((t) => !hiddenTagNames.has(normalizeTagName(t.name)))
+            .map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => patch({ tag: tag === t.id ? undefined : t.id })}
+                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                  tag === t.id
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border bg-card text-muted-foreground hover:border-accent hover:text-foreground"
+                }`}
+              >
+                {t.name}
+              </button>
+            ))}
+        </div>
+      )}
       {!isLoading && filtered.length === 0 ? (
         <p className="card-surface p-12 text-center text-muted-foreground">
           Nenhuma viagem encontrada para esta busca.
