@@ -12,7 +12,7 @@ const nav = [
   { to: "/", label: "Início" },
   { to: "/viagens", label: "Viagens" },
   { to: "/calendario", label: "Calendário" },
-  { to: "/blog", label: "Blog" },
+  { to: "/viagens", label: "Cursos" },
   { to: "/comentarios", label: "Comentários" },
   { to: "/quem-somos", label: "Quem somos" },
   { to: "/favoritos", label: "Salvas" },
@@ -45,6 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
+                search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`relative whitespace-nowrap rounded-full px-3 py-2 text-sm transition-colors ${
                   isActive(item.to) ? "font-bold text-foreground" : "font-medium text-muted-foreground hover:text-foreground"
                 }`}
@@ -86,6 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={item.to}
                 to={item.to}
+                search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`rounded-xl px-4 py-3 text-sm transition-colors ${
                   isActive(item.to) ? "bg-secondary font-bold text-foreground" : "font-medium text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
                 }`}
