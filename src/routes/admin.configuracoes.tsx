@@ -512,7 +512,7 @@ function CadasturManager({
   const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
 
   return (
-    <section className="card-surface space-y-4 p-5">
+    <section id="certificado-cadastur-config" className="card-surface scroll-mt-24 space-y-4 p-5">
       <div>
         <h2 className="text-lg font-bold uppercase">Certificado Cadastur</h2>
         <p className="mt-1 text-sm text-muted-foreground">
