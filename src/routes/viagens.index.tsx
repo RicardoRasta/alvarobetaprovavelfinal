@@ -50,7 +50,16 @@ function Viagens() {
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
     normalizeTagName(selectedTag?.name ?? "") === "cursos";
-  const hiddenTagNames = new Set(["cursos", "curso aca"]);
+  const isCourseLikeTag = (value: string) => {
+    const normalized = normalizeTagName(value);
+    return normalized === "cursos" || normalized.startsWith("curso ");
+  };
+  const isCourseTrip = (trip: (typeof trips)[number]) =>
+    (trip.tags ?? []).some(
+      (value) =>
+        (cursosTag && value === cursosTag.id) ||
+        isCourseLikeTag(value),
+    );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -58,17 +67,7 @@ function Viagens() {
       trips.filter(
         (t) =>
           t.published &&
-          (isCoursesPage
-            ? (cursosTag
-              ? (t.tags ?? []).some((value) =>
-                  value === cursosTag.id || normalizeTagName(value) === "cursos",
-                )
-              : false)
-            : (cursosTag
-              ? !(t.tags ?? []).some((value) =>
-                  value === cursosTag.id || normalizeTagName(value) === "cursos",
-                )
-              : true)) &&
+          (isCoursesPage ? isCourseTrip(t) : !isCourseTrip(t)) &&
           (!atividade || t.activity_id === atividade) &&
           (!tag ||
             (selectedTag
@@ -138,7 +137,7 @@ function Viagens() {
       {tags.some((t) => !hiddenTagNames.has(normalizeTagName(t.name))) && (
         <div className="mb-10 flex flex-wrap gap-2">
           {tags
-            .filter((t) => !hiddenTagNames.has(normalizeTagName(t.name)) || (isCoursesPage && normalizeTagName(t.name) === "curso aca"))
+            .filter((t) => isCoursesPage ? isCourseLikeTag(t.name) : !isCourseLikeTag(t.name))
             .map((t) => (
               <button
                 key={t.id}
