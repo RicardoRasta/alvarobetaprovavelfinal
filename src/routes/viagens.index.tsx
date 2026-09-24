@@ -73,11 +73,13 @@ function Viagens() {
           (!atividade || t.activity_id === atividade) &&
           (!tag ||
             (selectedTag
-              ? (t.tags ?? []).some(
-                  (value) =>
-                    value === selectedTag.id ||
-                    normalizeTagValue(value) === normalizeTagName(selectedTag.name),
-                )
+              ? normalizeTagName(selectedTag.name) === "cursos"
+                ? isCourseTrip(t)
+                : (t.tags ?? []).some(
+                    (value) =>
+                      value === selectedTag.id ||
+                      normalizeTagValue(value) === normalizeTagName(selectedTag.name),
+                  )
               : false)) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
