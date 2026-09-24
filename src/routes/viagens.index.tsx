@@ -71,8 +71,9 @@ function Viagens() {
           t.published &&
           (isCoursesPage ? isCourseTrip(t) : !isCourseTrip(t)) &&
           (!atividade || t.activity_id === atividade) &&
-          (!tag ||
-            normalizeTagName(tag) === "cursos"
+          (!tag
+            ? true
+            : normalizeTagName(tag) === "cursos" || isCoursesPage
               ? isCourseTrip(t)
               : selectedTag
                 ? (t.tags ?? []).some(
@@ -80,7 +81,7 @@ function Viagens() {
                       value === selectedTag.id ||
                       normalizeTagValue(value) === normalizeTagName(selectedTag.name),
                   )
-                : false) &&
+                : true) &&
           (!data || (t.departures ?? []).some((d) => d.date >= data)) &&
           (!q ||
             `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q)),
