@@ -380,6 +380,7 @@ export type Database = {
       site_settings: {
         Row: {
           about_image_url: string | null
+          cadastur_image_url: string | null
           about_text: string
           about_title: string
           address: string
@@ -405,6 +406,7 @@ export type Database = {
         }
         Insert: {
           about_image_url?: string | null
+          cadastur_image_url?: string | null
           about_text?: string
           about_title?: string
           address?: string
@@ -430,6 +432,7 @@ export type Database = {
         }
         Update: {
           about_image_url?: string | null
+          cadastur_image_url?: string | null
           about_text?: string
           about_title?: string
           address?: string
