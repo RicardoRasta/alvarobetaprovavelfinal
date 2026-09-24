@@ -47,13 +47,13 @@ function Viagens() {
     (t) => t.id === tag || normalizeTagName(t.name) === normalizeTagName(tag ?? ""),
   );
   const cursosTag = tags.find((t) => normalizeTagName(t.name) === "cursos");
-  const isCoursesPage =
-    normalizeTagName(tag ?? "") === "cursos" ||
-    normalizeTagName(selectedTag?.name ?? "") === "cursos";
   const isCourseLikeTag = (value: string) => {
     const normalized = normalizeTagName(value);
     return normalized === "cursos" || normalized.startsWith("curso ");
   };
+  const isCoursesPage =
+    normalizeTagName(tag ?? "") === "cursos" ||
+    isCourseLikeTag(selectedTag?.name ?? "");
   const isCourseTrip = (trip: (typeof trips)[number]) =>
     (trip.tags ?? []).some(
       (value) =>
@@ -134,10 +134,10 @@ function Viagens() {
         </label>
       </div>
 
-      {tags.some((t) => !hiddenTagNames.has(normalizeTagName(t.name))) && (
+      {tags.length > 0 && (
         <div className="mb-10 flex flex-wrap gap-2">
           {tags
-            .filter((t) => isCoursesPage ? isCourseLikeTag(t.name) : !isCourseLikeTag(t.name))
+            .filter((t) => (isCoursesPage ? isCourseLikeTag(t.name) : !isCourseLikeTag(t.name)))
             .map((t) => (
               <button
                 key={t.id}
