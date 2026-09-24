@@ -30,6 +30,7 @@ import {
   formatForeign,
   formatPrice,
   formatRange,
+  normalizeImage,
   phoneHref,
   tripImages,
   videoEmbed,
@@ -515,10 +516,13 @@ function TripDetails({ trip }: { trip: Trip }) {
           <div className="mt-3 flex flex-col gap-4 sm:flex-row">
             {trip.guide_image_url && (
               <img
-                src={trip.guide_image_url}
-                alt="Condutor da viagem"
+                src={normalizeImage(trip.guide_image_url)}
+                alt={trip.guide_text?.trim() ? `Foto do condutor — ${trip.name}` : "Foto do condutor da viagem"}
                 loading="lazy"
                 className="h-32 w-32 shrink-0 rounded-xl object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
               />
             )}
             <p className="content-copy whitespace-pre-line leading-relaxed text-muted-foreground">
