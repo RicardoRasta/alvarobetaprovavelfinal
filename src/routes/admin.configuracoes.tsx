@@ -25,6 +25,7 @@ function AdminSettings() {
   const [uploading, setUploading] = useState(false);
   const [heroUploading, setHeroUploading] = useState(false);
   const [aboutUploading, setAboutUploading] = useState(false);
+  const [cadasturUploading, setCadasturUploading] = useState(false);
   const bannerInputRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
@@ -46,6 +47,7 @@ function AdminSettings() {
     about_title: "",
     about_text: "",
     about_image_url: "",
+    cadastur_image_url: "",
   });
   const [stats, setStats] = useState<Stat[]>([]);
   const [heroImages, setHeroImages] = useState<string[]>([]);
@@ -71,6 +73,7 @@ function AdminSettings() {
       about_title: settings.about_title ?? "",
       about_text: settings.about_text ?? "",
       about_image_url: settings.about_image_url ?? "",
+      cadastur_image_url: settings.cadastur_image_url ?? "",
     });
     setStats(settings.stats ?? []);
     setHeroImages(settings.hero_images ?? []);
@@ -124,6 +127,21 @@ function AdminSettings() {
       setAboutUploading(false);
     }
   };
+  /** Envia e define a imagem oficial do certificado Cadastur. */
+  const uploadCadastur = async (file?: File) => {
+    if (!file) return;
+    setCadasturUploading(true);
+    try {
+      const url = await uploadFile(file, "cadastur");
+      setForm((f) => ({ ...f, cadastur_image_url: url }));
+      toast.success("Certificado Cadastur enviado! Clique em salvar para publicar.");
+    } catch {
+      toast.error("Não foi possível enviar o certificado.");
+    } finally {
+      setCadasturUploading(false);
+    }
+  };
+
 
   const save = async () => {
     setSaving(true);
@@ -134,6 +152,7 @@ function AdminSettings() {
         ...rest,
         banner_image_url: form.banner_image_url.trim() || null,
         about_image_url: form.about_image_url.trim() || null,
+        cadastur_image_url: form.cadastur_image_url.trim() || null,
         phone: form.phone.trim() || DEFAULT_PHONE,
         hero_images: heroImages,
         fx_usd: Number(fx_usd) > 0 ? Number(fx_usd) : DEFAULT_FX.usd,
@@ -459,6 +478,8 @@ function AdminSettings() {
           </button>
         </section>
 
+        <CadasturManager form={form} setForm={setForm} cadasturUploading={cadasturUploading} uploadCadastur={uploadCadastur} />
+
         <CertificatesManager />
 
         <button
@@ -471,6 +492,79 @@ function AdminSettings() {
         </button>
       </div>
     </div>
+  );
+}
+
+/** Certificado Cadastur oficial controlado diretamente pelas configurações. */
+function CadasturManager({
+  form,
+  setForm,
+  cadasturUploading,
+  uploadCadastur,
+}: {
+  form: { cadastur_image_url: string };
+  setForm: React.Dispatch<React.SetStateAction<any>>;
+  cadasturUploading: boolean;
+  uploadCadastur: (file?: File) => Promise<void>;
+}) {
+  const field =
+    "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
+  const labelCls = "mb-1 block text-xs font-medium uppercase text-muted-foreground";
+
+  return (
+    <section className="card-surface space-y-4 p-5">
+      <div>
+        <h2 className="text-lg font-bold uppercase">Certificado Cadastur</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Envie aqui a imagem oficial do certificado. Esta imagem será a usada automaticamente
+          na área de certificações da página Quem somos e no rodapé.
+        </p>
+      </div>
+
+      {form.cadastur_image_url ? (
+        <img
+          src={normalizeImage(form.cadastur_image_url)}
+          alt="Pré-visualização do certificado Cadastur"
+          className="max-h-72 w-full rounded-2xl border border-border bg-white object-contain"
+        />
+      ) : (
+        <div className="flex min-h-48 items-center justify-center rounded-2xl border border-dashed border-border bg-secondary/40 text-center text-sm text-muted-foreground">
+          Nenhum certificado Cadastur configurado.
+        </div>
+      )}
+
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent">
+          <Upload className="h-4 w-4" />
+          {cadasturUploading
+            ? "Enviando..."
+            : form.cadastur_image_url
+              ? "Trocar certificado"
+              : "Carregar certificado"}
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => uploadCadastur(e.target.files?.[0])}
+          />
+        </label>
+
+        {form.cadastur_image_url && (
+          <button
+            type="button"
+            onClick={() => setForm((f: any) => ({ ...f, cadastur_image_url: "" }))}
+            className="rounded-xl border border-border px-4 py-2 text-sm text-muted-foreground hover:border-destructive hover:text-destructive"
+          >
+            Remover
+          </button>
+        )}
+      </div>
+
+      <p className="text-xs text-muted-foreground">
+        Use a foto original do certificado (JPG, PNG ou WebP). Depois de enviar, clique em
+        <strong> Salvar configurações</strong>.
+      </p>
+    </section>
   );
 }
 
