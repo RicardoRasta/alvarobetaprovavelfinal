@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { CalendarDays, Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { activitiesQuery, sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
+import { sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
 
 type CatalogSearch = { atividade?: string; q?: string; data?: string; tag?: string };
 
@@ -39,7 +39,6 @@ function Viagens() {
   const navigate = Route.useNavigate();
   const [query, setQuery] = useState("");
   const { data: trips = [], isLoading } = useQuery(tripsQuery);
-  const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: tags = [] } = useQuery(tagsQuery);
 
   const selectedTag = tags.find(
@@ -107,31 +106,6 @@ function Viagens() {
         </label>
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <FilterChip active={!atividade} onClick={() => patch({ atividade: undefined })} label="Todas" />
-        {activities.map((a) => (
-          <FilterChip
-            key={a.id}
-            active={atividade === a.id}
-            onClick={() => patch({ atividade: a.id })}
-            label={a.name}
-          />
-        ))}
-      </div>
-
-      {tags.length > 0 && (
-        <div className="mb-12 flex flex-wrap gap-2">
-          {tags.map((t) => (
-            <FilterChip
-              key={t.id}
-              active={tag === t.id}
-              onClick={() => patch({ tag: tag === t.id ? undefined : t.id })}
-              label={t.name}
-            />
-          ))}
-        </div>
-      )}
-
       {!isLoading && filtered.length === 0 ? (
         <p className="card-surface p-12 text-center text-muted-foreground">
           Nenhuma viagem encontrada para esta busca.
@@ -144,30 +118,6 @@ function Viagens() {
         </div>
       )}
     </div>
-  );
-}
-
-function FilterChip({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-        active
-          ? "border-accent bg-accent text-accent-foreground"
-          : "border-border bg-card text-muted-foreground hover:border-accent hover:text-accent"
-      }`}
-    >
-      {label}
-    </button>
   );
 }
 
