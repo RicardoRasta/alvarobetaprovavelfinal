@@ -154,7 +154,7 @@ export function SiteFooter() {
               className="mt-5 flex items-center gap-3 rounded-2xl border border-sidebar-border p-3 transition-colors hover:border-accent"
             >
               <img
-                src="/assets/certificado-cadastur-original.jpg"
+                src="/assets/certificado-cadastur-original.jpg?v=20260924"
                 alt="Certificado Cadastur — CNPJ 13.849.141/0001-25"
                 className="h-16 w-24 rounded-lg bg-white object-contain"
               />
