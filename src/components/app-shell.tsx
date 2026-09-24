@@ -11,8 +11,8 @@ import { settingsQuery } from "@/lib/api";
 const nav = [
   { to: "/", label: "Início" },
   { to: "/viagens", label: "Viagens" },
-  { to: "/calendario", label: "Calendário" },
   { to: "/viagens", label: "Cursos" },
+  { to: "/calendario", label: "Calendário" },
   { to: "/comentarios", label: "Comentários" },
   { to: "/quem-somos", label: "Quem somos" },
   { to: "/favoritos", label: "Salvas" },
@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav className="mx-auto hidden items-center gap-1 xl:flex">
             {nav.map((item) => (
               <Link
-                key={item.to}
+                key={`${item.to}-${item.label}`}
                 to={item.to}
                 search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`relative whitespace-nowrap rounded-full px-3 py-2 text-sm transition-colors ${
