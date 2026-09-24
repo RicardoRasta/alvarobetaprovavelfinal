@@ -144,6 +144,8 @@ export type SiteSettings = {
   about_title?: string | null;
   about_text?: string | null;
   about_image_url?: string | null;
+  /** Imagem do certificado Cadastur definida pelo admin. */
+  cadastur_image_url?: string | null;
 };
 
 
