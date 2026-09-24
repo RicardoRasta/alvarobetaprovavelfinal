@@ -521,6 +521,35 @@ function AdminTrips() {
     setSaving(true);
 
     const slug = form.slug.trim() || slugify(form.name);
+    const normalizeTagName = (value: string) =>
+      value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const selectedTagNames = form.tags
+      .map((id) => tags.find((t) => t.id === id)?.name ?? "")
+      .map(normalizeTagName)
+      .filter(Boolean);
+    const isCourse = selectedTagNames.some(
+      (name) => name === "cursos" || name.startsWith("curso "),
+    );
+    const cursosTagId = tags.find((t) => normalizeTagName(t.name) === "cursos")?.id;
+    const viagensTagId = tags.find((t) => normalizeTagName(t.name) === "viagens")?.id;
+    const normalizedTags = [...form.tags];
+    const ensureTag = (id?: string) => {
+      if (id && !normalizedTags.includes(id)) normalizedTags.push(id);
+    };
+    const removeTag = (id?: string) => {
+      if (!id) return;
+      for (let i = normalizedTags.length - 1; i >= 0; i -= 1) {
+        if (normalizedTags[i] === id) normalizedTags.splice(i, 1);
+      }
+    };
+    if (isCourse) {
+      removeTag(viagensTagId);
+      ensureTag(cursosTagId);
+    } else {
+      removeTag(cursosTagId);
+      ensureTag(viagensTagId);
+    }
+
     const tripPayload = {
       slug,
       name: form.name.trim(),
@@ -537,7 +566,7 @@ function AdminTrips() {
       image_url: form.images[0] ?? null,
       images: form.images,
       video_url: form.video_url.trim(),
-      tags: form.tags,
+      tags: normalizedTags,
       description: form.description.trim(),
       highlights: form.highlights.split("\n").map((s) => s.trim()).filter(Boolean),
       includes: form.includes.split("\n").map((s) => s.trim()).filter(Boolean),
