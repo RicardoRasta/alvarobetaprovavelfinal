@@ -69,12 +69,23 @@ function QuemSomos() {
       <section id="certificado-cadastur" className="mt-10 scroll-mt-24 sm:mt-12">
         <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
           <div className="card-surface overflow-hidden p-3 sm:p-4">
-            <img
-              src="/assets/certificado-cadastur-original.jpg?v=20260924"
-              alt="Certificado Cadastur da A Casa de Aventura"
-              className="block max-h-[760px] w-full rounded-xl object-contain object-center"
-              loading="lazy"
-            />
+            {settings?.cadastur_image_url ||
+            certificates.find((c) => c.title.trim().toLowerCase().includes("cadastur"))?.image_url ? (
+              <img
+                src={normalizeImage(
+                  settings?.cadastur_image_url ||
+                    certificates.find((c) => c.title.trim().toLowerCase().includes("cadastur"))?.image_url ||
+                    "",
+                )}
+                alt="Certificado Cadastur da A Casa de Aventura"
+                className="block max-h-[760px] w-full rounded-xl object-contain object-center"
+                loading="lazy"
+              />
+            ) : (
+              <div className="flex min-h-64 items-center justify-center rounded-xl bg-secondary px-6 text-center text-sm text-muted-foreground">
+                Certificado Cadastur ainda não configurado.
+              </div>
+            )}
           </div>
           <div className="card-surface p-5 sm:p-6 md:p-8">
             <div className="flex items-center gap-3">
