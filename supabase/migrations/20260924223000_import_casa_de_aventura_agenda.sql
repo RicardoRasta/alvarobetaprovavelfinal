@@ -22,7 +22,7 @@ DECLARE
   v_slug text;
   v_description text;
   v_status_tags text[];
-  v_tag_ids public.tags.id[];
+  v_tag_ids uuid[];
   r record;
 BEGIN
   -- Categorias utilizadas pela separação Viagens / Cursos.
@@ -390,7 +390,7 @@ BEGIN
     -- acrescenta a classificação/status indicada pela agenda pública.
     SELECT tags INTO v_existing_tags FROM public.trips WHERE id = v_trip_id;
 
-    SELECT COALESCE(array_agg(tid), '{}'::public.tags.id[])
+    SELECT COALESCE(array_agg(tid), '{}'::uuid[])
     INTO v_tag_ids
     FROM (
       SELECT DISTINCT x AS tid
