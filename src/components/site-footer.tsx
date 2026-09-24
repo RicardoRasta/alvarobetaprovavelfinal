@@ -195,7 +195,7 @@ export function SiteFooter() {
         </div>
 
         <p className="border-t border-sidebar-border pt-6 text-xs text-sidebar-foreground/60">
-          © {new Date().getFullYear()} A Casa de Aventura — Todos os direitos reservados.
+          © {new Date().getFullYear()} Casa de Aventura — Todos os direitos reservados.
         </p>
       </div>
     </footer>
