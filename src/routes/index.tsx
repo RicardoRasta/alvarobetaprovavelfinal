@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Compass, Search, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, Compass, Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
@@ -194,23 +194,6 @@ function Index() {
           </section>
         )}
 
-        <section className="grid gap-4 md:grid-cols-3">
-          {[
-            { icon: Compass, title: "Guias credenciados", text: "Condutores locais em todos os roteiros." },
-            { icon: ShieldCheck, title: "Seguro aventura incluso", text: "Cobertura durante toda a viagem." },
-            { icon: Users, title: "Grupos pequenos", text: "No máximo 16 pessoas por saída." },
-          ].map((b) => (
-            <div key={b.title} className="card-surface flex items-start gap-4 p-6">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/12 text-accent">
-                <b.icon className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="font-display text-xl leading-none">{b.title}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{b.text}</p>
-              </div>
-            </div>
-          ))}
-        </section>
       </div>
     </div>
   );
