@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { ImagePlus, Plus, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -503,7 +503,7 @@ function CadasturManager({
   uploadCadastur,
 }: {
   form: { cadastur_image_url: string };
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  setForm: Dispatch<SetStateAction<any>>;
   cadasturUploading: boolean;
   uploadCadastur: (file?: File) => Promise<void>;
 }) {
