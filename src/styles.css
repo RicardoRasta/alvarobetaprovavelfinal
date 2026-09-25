@@ -420,3 +420,17 @@
     line-height: 1.15 !important;
   }
 }
+
+
+/* Oculta a identificação/badge do Lovable quando ela for injetada na página publicada. */
+#lovable-badge,
+.lovable-badge,
+[data-lovable-badge],
+[data-testid="lovable-badge"],
+a[href*="lovable.dev"],
+a[href*="lovable.app"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
