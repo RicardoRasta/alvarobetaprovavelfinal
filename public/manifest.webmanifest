@@ -1,0 +1,27 @@
+{
+  "name": "Casa de Aventura",
+  "short_name": "Casa de Aventura",
+  "description": "Viagens, cursos e experiências de aventura da Casa de Aventura.",
+  "lang": "pt-BR",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#E9E3D7",
+  "theme_color": "#2C5642",
+  "icons": [
+    {
+      "src": "/assets/casa-de-aventura-logo-redonda-transparente.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ]
+}
