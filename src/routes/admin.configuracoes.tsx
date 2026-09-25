@@ -14,7 +14,12 @@ export const Route = createFileRoute("/admin/configuracoes")({
 
 type Stat = { label: string; value: string };
 
-const storageUrl = (path: string) => {\n  const base = import.meta.env["VITE_SUPABASE_URL"] || "";\n  return base\n    ? `${base.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`\n    : path;\n};
+const storageUrl = (path: string) => {
+  const base = import.meta.env["VITE_SUPABASE_URL"] || "";
+  return base
+    ? `${base.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`
+    : path;
+};
 
 const MAX_HERO = 8;
 
