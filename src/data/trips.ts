@@ -166,7 +166,7 @@ export const normalizeImage = (url?: string | null) => {
 
   const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || "";
   const publicStorageBase = supabaseUrl
-    ? `${supabaseUrl.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/`
+    ? `${supabaseUrl.replace(/\/$/, "")}/storage/v1/object/public/trip-images/`
     : "";
 
   const internal = v.match(/^\/api\/public\/img\/(.+)$/);
