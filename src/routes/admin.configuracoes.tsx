@@ -17,7 +17,7 @@ type Stat = { label: string; value: string };
 const storageUrl = (path: string) => {
   const base = import.meta.env["VITE_SUPABASE_URL"] || "";
   return base
-    ? `${base.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`
+    ? `${base.replace(/\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`
     : path;
 };
 
