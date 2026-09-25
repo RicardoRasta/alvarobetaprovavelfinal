@@ -31,11 +31,17 @@ export function useAuth() {
     }
     setCheckingRole(true);
 
-    // Em um banco novo, o primeiro usuário autenticado é promovido
-    // automaticamente a administrador. Os próximos usuários não são.
+    // Administradores autorizados pelo projeto.
+    // Mantém também a tabela user_roles para não quebrar as permissões existentes.
+    const email = session?.user?.email?.toLowerCase() ?? "";
+    const designatedAdmins = new Set([
+      "alvaro.w12@gmail.com",
+      "rrsdesigner2609@gmail.com",
+    ]);
+
     supabase.rpc("bootstrap_admin").then(({ data: bootstrapped }) => {
       if (!active) return;
-      if (bootstrapped) {
+      if (bootstrapped || designatedAdmins.has(email) || session?.user?.app_metadata?.role === "admin") {
         setIsAdmin(true);
         setCheckingRole(false);
         return;
@@ -49,7 +55,7 @@ export function useAuth() {
         .maybeSingle()
         .then(({ data }) => {
           if (!active) return;
-          setIsAdmin(Boolean(data));
+          setIsAdmin(Boolean(data) || session?.user?.app_metadata?.role === "admin");
           setCheckingRole(false);
         });
     });
