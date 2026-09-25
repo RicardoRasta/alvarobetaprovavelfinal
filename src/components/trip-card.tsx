@@ -46,10 +46,6 @@ export function TripCard({ trip }: { trip: Trip }) {
         </div>
 
         <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
-          <h3 className="mb-2 font-display text-[1.35rem] font-semibold leading-[1.08] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.6)] sm:text-2xl md:text-3xl">
-            {trip.name}
-          </h3>
-
           <div className="grid gap-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.7)] sm:grid-cols-2 sm:gap-3">
             <div className="min-w-0">
               <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-xs">
