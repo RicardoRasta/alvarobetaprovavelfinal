@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { BarChart3, CheckCircle2, Save } from "lucide-react";
+import { BarChart3, CheckCircle2, Plus, Save, Trash2 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +23,15 @@ type Finalized = {
   total_expenses: number;
   notes: string | null;
   finalized_at: string;
+  expenses?: Expense[];
+};
+
+type Expense = {
+  id: string;
+  finalized_trip_id: string;
+  category: string;
+  description: string | null;
+  amount: number;
 };
 
 function FinalizedTrips() {
@@ -39,6 +48,8 @@ function FinalizedTrips() {
 
   const [editing, setEditing] = useState<Finalized | null>(null);
   const [saving, setSaving] = useState(false);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [newExpense, setNewExpense] = useState({ category: "", description: "", amount: "" });
 
   const endedDepartures = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
@@ -67,6 +78,26 @@ function FinalizedTrips() {
       qc.invalidateQueries({ queryKey: ["finalized_trips"] });
     })();
   }, [endedDepartures, qc]);
+
+  const loadExpenses = async (tripId: string) => {
+    const { data, error } = await supabase.from("finalized_trip_expenses").select("*").eq("finalized_trip_id", tripId).order("created_at");
+    if (error) return toast.error(error.message);
+    setExpenses((data ?? []) as Expense[]);
+  };
+
+  const addExpense = async () => {
+    if (!editing || !newExpense.category.trim() || Number(newExpense.amount) <= 0) return toast.error("Informe categoria e valor do gasto.");
+    const { data, error } = await supabase.from("finalized_trip_expenses").insert({ finalized_trip_id: editing.id, category: newExpense.category.trim(), description: newExpense.description.trim() || null, amount: Number(newExpense.amount) }).select().single();
+    if (error) return toast.error(error.message);
+    setExpenses((prev) => [...prev, data as Expense]);
+    setNewExpense({ category: "", description: "", amount: "" });
+  };
+
+  const removeExpense = async (id: string) => {
+    const { error } = await supabase.from("finalized_trip_expenses").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    setExpenses((prev) => prev.filter((e) => e.id !== id));
+  };
 
   const totals = useMemo(() => {
     const revenue = records.reduce((s, r) => s + Number(r.gross_revenue || 0), 0);
