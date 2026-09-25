@@ -168,7 +168,15 @@ const slugify = (v: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-const storageUrl = (path: string) => `/api/public/img/${path}`;
+const storageUrl = (path: string) => {
+  const base = import.meta.env["VITE_SUPABASE_URL"] || "";
+  return base
+    ? `${base.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/${path
+        .split("/")
+        .map(encodeURIComponent)
+        .join("/")}`
+    : `/api/public/img/${path}`;
+};
 
 
 const MAX_IMAGES = 8;
