@@ -163,8 +163,23 @@ const fallbackImages: Record<string, string> = {
 export const normalizeImage = (url?: string | null) => {
   const v = (url ?? "").trim();
   if (!v) return "";
-  const m = v.match(/\/storage\/v1\/object\/(?:public\/)?trip-images\/(.+)$/);
-  return m ? `/api/public/img/${m[1]}` : v;
+
+  const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"] || "";
+  const publicStorageBase = supabaseUrl
+    ? `${supabaseUrl.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/`
+    : "";
+
+  const internal = v.match(/^\/api\/public\/img\/(.+)$/);
+  if (internal && publicStorageBase) {
+    return `${publicStorageBase}${internal[1].split("/").map(encodeURIComponent).join("/")}`;
+  }
+
+  const stored = v.match(/\/storage\/v1\/object\/(?:public\/)?trip-images\/(.+)$/);
+  if (stored && publicStorageBase) {
+    return `${publicStorageBase}${stored[1].split("/").map(encodeURIComponent).join("/")}`;
+  }
+
+  return v;
 };
 
 export const tripImage = (trip: Pick<Trip, "slug" | "image_url">) =>
