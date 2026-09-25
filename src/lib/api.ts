@@ -61,9 +61,31 @@ async function fetchTrips(): Promise<Trip[]> {
   }));
 }
 
+export const allTripsQuery = queryOptions({
+  queryKey: ["trips", "all"],
+  queryFn: fetchTrips,
+});
+
+/** Viagens encerradas (data de volta anterior a hoje) ficam fora do site público. */
+export const isTripFinished = (trip: Trip) => {
+  const departures = trip.departures ?? [];
+  return departures.length > 0 && departures.every((d) => {
+    const end = d.return_date || d.date;
+    return end < new Date().toISOString().slice(0, 10);
+  });
+};
+
+export const isTripOngoing = (trip: Trip) => {
+  const today = new Date().toISOString().slice(0, 10);
+  return (trip.departures ?? []).some((d) => {
+    const end = d.return_date || d.date;
+    return d.date <= today && today <= end;
+  });
+};
+
 export const tripsQuery = queryOptions({
   queryKey: ["trips"],
-  queryFn: fetchTrips,
+  queryFn: async () => (await fetchTrips()).filter((t) => !isTripFinished(t)),
 });
 
 export type BookingRequest = {
