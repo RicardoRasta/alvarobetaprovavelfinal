@@ -139,7 +139,16 @@ function AdminSettings() {
     try {
       const url = await uploadFile(file, "cadastur");
       setForm((f) => ({ ...f, cadastur_image_url: url }));
-      toast.success("Certificado Cadastur enviado! Clique em salvar para publicar.");
+      const { error } = await supabase
+        .from("site_settings")
+        .update({ cadastur_image_url: url })
+        .eq("id", 1);
+      if (error) {
+        toast.error(`Certificado enviado, mas não foi salvo: ${error.message}`);
+        return;
+      }
+      await qc.refetchQueries({ queryKey: ["site_settings"] });
+      toast.success("Certificado Cadastur salvo e publicado!");
     } catch {
       toast.error("Não foi possível enviar o certificado.");
     } finally {
@@ -567,7 +576,7 @@ function CadasturManager({
 
       <p className="text-xs text-muted-foreground">
         Use a foto original do certificado (JPG, PNG ou WebP). Depois de enviar, clique em
-        <strong> Salvar configurações</strong>.
+        <strong> Salvar configurações</strong> para as demais alterações; o Cadastur é salvo automaticamente após o envio.
       </p>
     </section>
   );
