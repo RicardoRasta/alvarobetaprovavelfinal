@@ -89,7 +89,7 @@ function AdminLayout() {
         </button>
       </header>
 
-      <nav className="mt-5 flex max-w-full gap-2 overflow-x-auto border-b border-border pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <nav className="mt-5 flex max-w-full flex-wrap gap-2 border-b border-border pb-3">
         {tabs.map((t) => (
           <Link
             key={t.to}
@@ -99,9 +99,9 @@ function AdminLayout() {
             inactiveProps={{
               className: "border-border bg-card text-muted-foreground hover:border-accent hover:text-accent",
             }}
-            className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm"
           >
-            <t.icon className="h-4 w-4" /> {t.label}
+            <t.icon className="h-4 w-4 shrink-0" /> {t.label}
           </Link>
         ))}
       </nav>
