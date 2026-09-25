@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Download, ExternalLink, Share2, Smartphone, MoreVertical, PlusSquare, ArrowDownToLine } from "lucide-react";
+import { ExternalLink, Share2, Smartphone, PlusSquare, ArrowDownToLine } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type BeforeInstallPromptEvent = Event & {
@@ -33,29 +33,53 @@ export const Route = createFileRoute("/web")({
 });
 
 function WebInstall() {
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [installed, setInstalled] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [device, setDevice] = useState("other");
 
   useEffect(() => {
-    setInstalled(isStandalone());
     setDevice(getDevice());
+  }, []);
 
-    const onBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setInstallPrompt(event as BeforeInstallPromptEvent);
-    };
-    const onAppInstalled = () => {
-      setInstalled(true);
-      setInstallPrompt(null);
-    };
-    window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-    window.addEventListener("appinstalled", onAppInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstallPrompt);
-      window.removeEventListener("appinstalled", onAppInstalled);
-    };
+mport { createFileRoute, Link } from "@tanstack/react-router";
+import { ExternalLink, Share2, Smartphone, PlusSquare, ArrowDownToLine } from "lucide-react";
+import { useEffect, useState } from "react";
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+};
+
+function isStandalone() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
+}
+
+function getDevice() {
+  if (typeof navigator === "undefined") return "other";
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
+  if (/Android/i.test(ua)) return "android";
+  return "other";
+}
+
+export const Route = createFileRoute("/web")({
+  head: () => ({
+    meta: [
+      { title: "Casa de Aventura — Aplicativo" },
+      { name: "description", content: "Instale o aplicativo da Casa de Aventura no seu celular." },
+      { name: "theme-color", content: "#2C5642" },
+    ],
+  }),
+  component: WebInstall,
+});
+
+function WebInstall() {
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [device, setDevice] = useState("other");
+
+  useEffect(() => {
+    setDevice(getDevice());
   }, []);
 
   const handleInstall = async () => {
