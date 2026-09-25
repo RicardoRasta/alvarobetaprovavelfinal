@@ -1,4 +1,4 @@
-const CACHE_NAME = "casa-de-aventura-pwa-v1";
+const CACHE_NAME = "casa-de-aventura-pwa-v2";
 const APP_SHELL = [
   "/",
   "/web",
