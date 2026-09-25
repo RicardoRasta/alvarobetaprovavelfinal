@@ -114,6 +114,11 @@ export function SiteFooter() {
                   Contrato de Aluguel de equipamentos
                 </Link>
               </li>
+              <li>
+                <Link to="/web" className="inline-flex text-sidebar-foreground/85 transition-colors hover:text-accent">
+                  Baixar aplicativo
+                </Link>
+              </li>
             </ul>
           </div>
 
