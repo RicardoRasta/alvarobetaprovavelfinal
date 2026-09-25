@@ -13,7 +13,7 @@ import {
   type TechSheetItem,
   type Trip,
 } from "@/data/trips";
-import { activitiesQuery, tagsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, allTripsQuery, tagsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/viagens")({
   component: AdminTrips,
@@ -384,7 +384,7 @@ function ItineraryEditor({
 }
 
 function AdminTrips() {
-  const { data: trips = [] } = useQuery(tripsQuery);
+  const { data: trips = [] } = useQuery(allTripsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: tags = [] } = useQuery(tagsQuery);
   const qc = useQueryClient();
