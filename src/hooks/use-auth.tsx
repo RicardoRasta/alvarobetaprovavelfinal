@@ -30,17 +30,30 @@ export function useAuth() {
       return;
     }
     setCheckingRole(true);
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!active) return;
-        setIsAdmin(Boolean(data));
+
+    // Em um banco novo, o primeiro usuário autenticado é promovido
+    // automaticamente a administrador. Os próximos usuários não são.
+    supabase.rpc("bootstrap_admin").then(({ data: bootstrapped }) => {
+      if (!active) return;
+      if (bootstrapped) {
+        setIsAdmin(true);
         setCheckingRole(false);
-      });
+        return;
+      }
+
+      supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle()
+        .then(({ data }) => {
+          if (!active) return;
+          setIsAdmin(Boolean(data));
+          setCheckingRole(false);
+        });
+    });
+
     return () => {
       active = false;
     };
@@ -53,13 +66,18 @@ export function useAuth() {
     isAdmin,
     refreshRole: async () => {
       if (!userId) return;
-      const { data } = await supabase
+      const { data } = await supabase.rpc("bootstrap_admin");
+      if (data) {
+        setIsAdmin(true);
+        return;
+      }
+      const { data: role } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
         .eq("role", "admin")
         .maybeSingle();
-      setIsAdmin(Boolean(data));
+      setIsAdmin(Boolean(role));
     },
     signOut: () => supabase.auth.signOut(),
   };
