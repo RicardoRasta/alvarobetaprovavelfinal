@@ -73,10 +73,10 @@ function AdminLayout() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl animate-fade-up px-4 py-8 md:px-6 md:py-10">
-      <header className="flex flex-wrap items-end justify-between gap-3">
+    <div className="mx-auto w-full max-w-7xl min-w-0 animate-fade-up overflow-x-hidden px-3 py-5 sm:px-4 sm:py-8 md:px-6 md:py-10">
+      <header className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-4xl leading-[0.95] md:text-5xl">Administração</h1>
+          <h1 className="text-3xl leading-[0.95] sm:text-4xl md:text-5xl">Administração</h1>
           <p className="mt-1 text-sm text-muted-foreground">{session.user.email}</p>
         </div>
         <button
@@ -88,7 +88,7 @@ function AdminLayout() {
         </button>
       </header>
 
-      <nav className="mt-6 flex flex-wrap gap-2 border-b border-border pb-3">
+      <nav className="mt-5 flex max-w-full gap-2 overflow-x-auto border-b border-border pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {tabs.map((t) => (
           <Link
             key={t.to}
@@ -98,14 +98,14 @@ function AdminLayout() {
             inactiveProps={{
               className: "border-border bg-card text-muted-foreground hover:border-accent hover:text-accent",
             }}
-            className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
+            className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:py-1.5 sm:text-sm"
           >
             <t.icon className="h-4 w-4" /> {t.label}
           </Link>
         ))}
       </nav>
 
-      <div className="mt-6">
+      <div className="mt-5 min-w-0 overflow-x-hidden sm:mt-6">
         <Outlet />
       </div>
     </div>
