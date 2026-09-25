@@ -30,9 +30,7 @@ export function TripCard({ trip }: { trip: Trip }) {
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
         <div className="gradient-hero absolute inset-0 opacity-95" />
-
-
-          <div className="grid gap-2 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.7)] sm:grid-cols-2 sm:gap-3">
+        <div className="absolute inset-x-0 bottom-0 z-10 grid gap-2 p-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,.7)] sm:grid-cols-2 sm:gap-3">
             <div className="min-w-0">
               <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white sm:text-xs">
                 <CalendarDays className="h-4 w-4 shrink-0 text-white" />
