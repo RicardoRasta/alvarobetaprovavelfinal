@@ -942,22 +942,20 @@ function AdminTrips() {
                 onChange={(e) => set("description", e.target.value)}
               />
             </label>
-            <label>
-              <span className={labelCls}>Destaques (um por linha)</span>
-              <textarea
-                className="min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-                value={form.highlights}
-                onChange={(e) => set("highlights", e.target.value)}
+            <Block title="Destaques do roteiro" hint="Um destaque por item. Você pode adicionar, remover e reordenar.">
+              <ListEditor
+                items={form.highlights.split("\n").filter(Boolean)}
+                onChange={(v) => set("highlights", v.join("\n"))}
+                placeholder="Ex.: técnica de navegação e resgate"
               />
-            </label>
-            <label>
-              <span className={labelCls}>Incluso (um por linha)</span>
-              <textarea
-                className="min-h-24 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-                value={form.includes}
-                onChange={(e) => set("includes", e.target.value)}
+            </Block>
+            <Block title="O que está incluso" hint="Um item por linha. Você pode adicionar, remover e reordenar.">
+              <ListEditor
+                items={form.includes.split("\n").filter(Boolean)}
+                onChange={(v) => set("includes", v.join("\n"))}
+                placeholder="Ex.: seguro de aventura"
               />
-            </label>
+            </Block>
           </div>
 
           <div className="space-y-3">
