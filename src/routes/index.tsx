@@ -1,14 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Compass, Search } from "lucide-react";
+import { ArrowRight, CalendarDays, Compass, Search, Radio } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
 import { upcomingMonths } from "@/components/departure-chips";
 import { formatRange, heroSlides } from "@/data/trips";
-import { activitiesQuery, settingsQuery, sortByNextDeparture, testimonialsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -80,6 +80,20 @@ function Index() {
 
       <div className="mx-auto max-w-[1400px] space-y-24 px-4 py-20 md:px-8">
         <AgendaSearch />
+
+        {visible.filter(isTripOngoing).length > 0 && (
+          <section className="rounded-3xl border border-accent/30 bg-accent/10 p-5 md:p-8">
+            <div className="flex items-center gap-2 text-accent">
+              <Radio className="h-5 w-5 animate-pulse" />
+              <span className="text-xs font-bold uppercase tracking-[0.18em]">Acontecendo no momento</span>
+            </div>
+            <h2 className="mt-2 text-3xl leading-none md:text-5xl">Aventura em andamento</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Estas experiências estão acontecendo hoje. Acompanhe os roteiros em andamento da Casa de Aventura.</p>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {visible.filter(isTripOngoing).map((t) => <TripCard key={t.id} trip={t} />)}
+            </div>
+          </section>
+        )}
 
         {(settings?.stats?.length ?? 0) > 0 && (
           <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
