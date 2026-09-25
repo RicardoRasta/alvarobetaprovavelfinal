@@ -104,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap",
       },
-      { rel: "icon", href: "/assets/casa-de-aventura-logo-redonda-transparente.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/assets/casa-de-aventura-logo-redonda-transparente.svg", type: "image/svg+xml" },\n      { rel: "manifest", href: "/manifest.webmanifest" },\n      { rel: "apple-touch-icon", href: "/assets/casa-de-aventura-logo-redonda-transparente.svg" },\n      { name: "theme-color", content: "#2C5642" },
     ],
   }),
   shellComponent: RootShell,
@@ -129,13 +129,28 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // O site continua funcionando normalmente mesmo sem suporte a PWA.
+      });
+    }
+  }, []);
+
+  const isWebInstallPage = pathname === "/web";
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppShell>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      {isWebInstallPage ? (
         <Outlet />
-      </AppShell>
+      ) : (
+        <AppShell>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </AppShell>
+      )}
       <Toaster position="top-right" richColors />
     </QueryClientProvider>
   );
