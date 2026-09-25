@@ -52,7 +52,6 @@ export function TripCard({ trip }: { trip: Trip }) {
               </p>
             </div>
           </div>
-        </div>
       </Link>
 
       <div className="flex flex-1 min-w-0 flex-col gap-2 px-1 pt-4">
