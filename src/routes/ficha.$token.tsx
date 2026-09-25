@@ -40,6 +40,8 @@ function EnrollmentForm() {
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [cepLoading, setCepLoading] = useState(false);
+  const [facePhoto, setFacePhoto] = useState<File | null>(null);
+  const [facePreview, setFacePreview] = useState<string | null>(null);
 
   const { data: link, isLoading } = useQuery({
     queryKey: ["enrollment_link", token],
@@ -95,11 +97,19 @@ function EnrollmentForm() {
     if (!String(values.full_name ?? "").trim()) return toast.error("Informe seu nome completo.");
     if (!accepted) return toast.error("É necessário aceitar o termo de ciência de riscos.");
     setSending(true);
+    if (!facePhoto) return toast.error("Envie uma foto do rosto para continuar.");
+    if (!facePhoto.type.startsWith("image/")) return toast.error("A foto precisa ser uma imagem.");
+    if (facePhoto.size > 5 * 1024 * 1024) return toast.error("A foto deve ter no máximo 5 MB.");
+    const facePath = `enrollment-faces/${link.id}/${crypto.randomUUID()}-${facePhoto.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    const { error: faceError } = await supabase.storage.from("trip-images").upload(facePath, facePhoto, { contentType: facePhoto.type, upsert: false });
+    if (faceError) { setSending(false); return toast.error(`Não foi possível enviar a foto: ${faceError.message}`); }
+    const { data: publicFace } = supabase.storage.from("trip-images").getPublicUrl(facePath);
     const payload: Record<string, unknown> = {
       link_id: link.id,
       trip_id: link.trip_id,
       trip_name: link.trip_name,
       risk_terms_accepted: true,
+      face_photo_url: publicFace.publicUrl,
     };
     for (const g of enrollmentGroups) {
       for (const f of g.fields) {
