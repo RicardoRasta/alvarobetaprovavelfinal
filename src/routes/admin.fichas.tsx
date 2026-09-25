@@ -214,6 +214,14 @@ function EnrollmentPrint({ data, onClose }: { data: Record<string, unknown> & { 
             Evento: <strong className="text-foreground">{data.trip_name}</strong> · Enviada em{" "}
             {new Date(data.created_at).toLocaleDateString("pt-BR")}
           </p>
+          {typeof data.face_photo_url === "string" && data.face_photo_url && (
+            <div className="mt-4 flex items-start gap-4">
+              <div>
+                <p className="mb-1 text-xs font-bold uppercase text-accent">Foto do participante</p>
+                <img src={data.face_photo_url} alt="Foto do rosto do participante" className="h-32 w-32 rounded-lg border border-border object-cover print:h-36 print:w-36" />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mt-6 space-y-5 print:mt-2 print:space-y-1">
