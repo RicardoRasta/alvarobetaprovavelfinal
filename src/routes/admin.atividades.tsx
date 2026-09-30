@@ -58,16 +58,6 @@ function AdminActivities() {
       toast.error("Nome é obrigatório.");
       return;
     }
-    const id = form.id
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9-]+/g, "-")
-      .replace(/^-|-$/g, "");
-    if (!id) {
-      toast.error("Identificador inválido.");
-      return;
-    }
     setSaving(true);
     const payload = {
       name: form.name.trim(),
