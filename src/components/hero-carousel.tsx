@@ -44,8 +44,8 @@ export function HeroCarousel({
   const fromImages: Slide[] = images.slice(0, 8).map((src, i) => ({
     key: `img-${i}`,
     image: src,
-    title: i === 0 ? fallbackTitle : undefined,
-    description: i === 0 ? fallbackDescription : undefined,
+    title: fallbackTitle,
+    description: fallbackDescription,
     to: "/viagens",
     months: [],
     places: [],
@@ -73,14 +73,27 @@ export function HeroCarousel({
               i === index ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            <img
-              src={s.image}
-              alt={s.title || "Aventura guiada pela Casa de Aventura"}
-              width={1920}
-              height={1080}
-              loading={i === 0 ? "eager" : "lazy"}
-              className="h-full w-full object-cover"
-            />
+            {/\\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(s.image) ? (
+              <video
+                src={s.image}
+                aria-label={s.title || "Vídeo da Casa de Aventura"}
+                className="h-full w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload={i === 0 ? "auto" : "metadata"}
+              />
+            ) : (
+              <img
+                src={s.image}
+                alt={s.title || "Aventura guiada pela Casa de Aventura"}
+                width={1920}
+                height={1080}
+                loading={i === 0 ? "eager" : "lazy"}
+                className="h-full w-full object-cover"
+              />
+            )}
             <div className="gradient-hero absolute inset-0" />
             <div className="absolute inset-x-0 bottom-0 flex flex-col gap-5 p-4 pb-20 text-primary-foreground sm:p-6 sm:pb-20 md:p-10 md:pb-10">
               {s.title && (
