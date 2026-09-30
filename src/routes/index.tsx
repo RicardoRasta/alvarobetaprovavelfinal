@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Compass, Search, Radio } from "lucide-react";
+import { ArrowRight, CalendarDays, Compass, Search, Radio, MessageCircle } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
@@ -76,6 +76,18 @@ function Index() {
             "Canoagem, escalada, trekking e expedições guiadas por todo o Brasil."
           }
         />
+      </section>
+
+      <section className="mx-auto mt-5 max-w-[1400px] px-4 md:px-8">
+        <a
+          href="https://wa.me/554733511661?text=Ol%C3%A1!%20Quero%20saber%20mais%20sobre%20as%20viagens%20e%20cursos%20da%20Casa%20de%20Aventura."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#25D366] px-5 py-4 text-center text-sm font-extrabold text-white shadow-lg transition hover:brightness-95 sm:text-base"
+        >
+          <MessageCircle className="h-5 w-5 shrink-0" />
+          Fale com a Casa de Aventura pelo WhatsApp
+        </a>
       </section>
 
       <div className="mx-auto max-w-[1400px] space-y-24 px-4 py-20 md:px-8">
