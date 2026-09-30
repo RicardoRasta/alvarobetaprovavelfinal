@@ -7,7 +7,7 @@ import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
 import { upcomingMonths } from "@/components/departure-chips";
-import { formatRange, heroSlides } from "@/data/trips";
+import { formatRange, heroSlides, tripImage } from "@/data/trips";
 import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
@@ -109,28 +109,25 @@ function Index() {
         {featured.length > 0 && (
           <section>
             <SectionHeading title="Roteiros em destaque" linkTo="/viagens" linkLabel="Ver todos os roteiros" />
-            <ul className="grid gap-x-10 gap-y-1 md:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {featured.map((t) => (
-                <li key={t.id} className="border-b border-border">
-                  <Link
-                    to="/viagens/$tripId"
-                    params={{ tripId: t.slug }}
-                    className="group flex flex-col gap-1 py-5 transition-colors hover:text-accent"
-                  >
-                    <span className="font-display text-2xl leading-[0.95] md:text-3xl">{t.name}</span>
-                    <span className="flex flex-wrap gap-1.5 text-xs capitalize text-muted-foreground">
-                      {upcomingMonths(t, 5).length > 0
-                        ? upcomingMonths(t, 5).map((m) => (
-                            <span key={m} className="chip">
-                              {m}
-                            </span>
-                          ))
-                        : "Datas sob consulta"}
-                    </span>
+                <article key={t.id} className="group min-w-0 overflow-hidden rounded-2xl border border-border bg-card transition-shadow hover:shadow-lg">
+                  <Link to="/viagens/$tripId" params={{ tripId: t.slug }} className="block">
+                    <div className="media-frame aspect-[4/3] overflow-hidden">
+                      <img src={tripImage(t)} alt={t.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    </div>
+                    <div className="space-y-3 p-4">
+                      <h3 className="font-display text-xl leading-tight transition-colors group-hover:text-accent md:text-2xl">{t.name}</h3>
+                      <div className="flex flex-wrap gap-1.5 text-xs capitalize text-muted-foreground">
+                        {upcomingMonths(t, 3).length > 0
+                          ? upcomingMonths(t, 3).map((m) => <span key={m} className="chip">{m}</span>)
+                          : <span className="chip">Datas sob consulta</span>}
+                      </div>
+                    </div>
                   </Link>
-                </li>
+                </article>
               ))}
-            </ul>
+            </div>
           </section>
         )}
 
