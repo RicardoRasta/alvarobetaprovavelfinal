@@ -487,8 +487,23 @@ function DetailText({
 
 /** Todo o conteúdo detalhado da viagem, no estilo "ficha técnica". */
 function TripDetails({ trip }: { trip: Trip }) {
-  const techSheet = (trip.tech_sheet ?? []).filter((i) => i?.label || i?.value);
-  const itinerary = (trip.itinerary ?? []).filter((d) => d?.title || d?.description);
+  // Registros antigos podem armazenar a ficha técnica como objeto
+  // ("Local": "...") enquanto o editor atual usa uma lista de { label, value }.
+  // Normalizamos os dois formatos para evitar que .filter() quebre a página.
+  const rawTechSheet = trip.tech_sheet as unknown;
+  const techSheet = Array.isArray(rawTechSheet)
+    ? rawTechSheet.filter((item) => item && (item.label || item.value))
+    : rawTechSheet && typeof rawTechSheet === "object"
+      ? Object.entries(rawTechSheet as Record<string, unknown>)
+          .map(([label, value]) => ({
+            label,
+            value: Array.isArray(value) ? value.join(", ") : String(value ?? ""),
+          }))
+          .filter((item) => item.label || item.value)
+      : [];
+  const itinerary = Array.isArray(trip.itinerary)
+    ? trip.itinerary.filter((day) => day && (day.title || day.description))
+    : [];
 
   return (
     <div className="mt-10 space-y-6">
