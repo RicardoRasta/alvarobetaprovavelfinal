@@ -10,14 +10,6 @@ export const Route = createFileRoute("/admin/tags")({
   component: AdminTags,
 });
 
-const slugify = (v: string) =>
-  v
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-
 const field =
   "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring";
 
