@@ -54,8 +54,8 @@ function AdminActivities() {
 
   const save = async () => {
     if (!form) return;
-    if (!form.id.trim() || !form.name.trim()) {
-      toast.error("Identificador e nome são obrigatórios.");
+    if (!form.name.trim()) {
+      toast.error("Nome é obrigatório.");
       return;
     }
     const id = form.id
@@ -70,7 +70,6 @@ function AdminActivities() {
     }
     setSaving(true);
     const payload = {
-      id,
       name: form.name.trim(),
       description: form.description.trim(),
       sort_order: Number(form.sort_order) || 0,
