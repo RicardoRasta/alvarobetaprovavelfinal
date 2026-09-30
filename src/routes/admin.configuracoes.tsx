@@ -106,13 +106,25 @@ function AdminSettings() {
   /** Adiciona uma imagem ao carrossel da home (máximo de 8). */
   const addHeroImage = async (file?: File) => {
     if (!file) return;
+    if (heroImages.length >= MAX_HERO) return toast.error("O carrossel aceita até 8 mídias.");
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      return toast.error("Selecione uma imagem ou vídeo.");
+    }
+    if (file.size > 50 * 1024 * 1024) return toast.error("O arquivo deve ter no máximo 50 MB.");
     setHeroUploading(true);
     try {
-      const url = await uploadFile(file, "carrossel");
-      setHeroImages((p) => [...p, url].slice(0, MAX_HERO));
-      toast.success("Imagem adicionada! Não esqueça de salvar.");
-    } catch {
-      toast.error("Não foi possível enviar a imagem.");
+      const ext = file.name.split(".").pop()?.toLowerCase() || (file.type.startsWith("video/") ? "mp4" : "jpg");
+      const path = `carrossel/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from("trip-images").upload(path, file, {
+        contentType: file.type,
+        cacheControl: "3600",
+        upsert: false,
+      });
+      if (error) throw error;
+      setHeroImages((p) => [...p, storageUrl(path)].slice(0, MAX_HERO));
+      toast.success("Mídia adicionada! Não esqueça de salvar.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível enviar a mídia.");
     } finally {
       setHeroUploading(false);
     }
@@ -245,15 +257,19 @@ function AdminSettings() {
         />
 
         <div className="border-t border-border pt-4">
-          <span className={labelCls}>Carrossel da home (até {MAX_HERO} imagens · troca a cada 10s)</span>
+          <span className={labelCls}>Carrossel da home (até {MAX_HERO} mídias · troca a cada 10s)</span>
           <div className="mt-2 flex flex-wrap gap-3">
             {heroImages.map((img, i) => (
               <div key={i} className="relative">
-                <img
-                  src={normalizeImage(img)}
-                  alt={`Imagem ${i + 1} do carrossel`}
-                  className="h-20 w-28 rounded-xl border border-border object-cover"
-                />
+                {/\\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(img) ? (
+                  <video src={normalizeImage(img)} muted playsInline className="h-20 w-28 rounded-xl border border-border object-cover" />
+                ) : (
+                  <img
+                    src={normalizeImage(img)}
+                    alt={`Mídia ${i + 1} do carrossel`}
+                    className="h-20 w-28 rounded-xl border border-border object-cover"
+                  />
+                )}
                 <button
                   type="button"
                   onClick={() => setHeroImages((arr) => arr.filter((_, j) => j !== i))}
@@ -277,7 +293,7 @@ function AdminSettings() {
             )}
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Sem imagens no carrossel, mostramos a imagem do banner acima.
+            Sem mídias no carrossel, mostramos a imagem do banner acima. Você pode enviar fotos ou vídeos MP4/WebM (até 50 MB).
           </p>
         </div>
       </section>
