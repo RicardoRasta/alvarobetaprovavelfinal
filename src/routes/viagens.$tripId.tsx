@@ -233,7 +233,7 @@ function TripDetail() {
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                 {trip.highlights.map((h) => (
                   <li key={h} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> {h}
+                    <span aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 rounded-[3px] border-2 border-accent" /> {h}
                   </li>
                 ))}
               </ul>
@@ -248,7 +248,7 @@ function TripDetail() {
               <ul className="mt-3 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
                 {trip.includes.map((i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> {i}
+                    <span aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 rounded-[3px] border-2 border-accent" /> {i}
                   </li>
                 ))}
               </ul>
