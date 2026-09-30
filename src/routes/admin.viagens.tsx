@@ -944,14 +944,14 @@ function AdminTrips() {
             </label>
             <Block title="Destaques do roteiro" hint="Um destaque por item. Você pode adicionar, remover e reordenar.">
               <ListEditor
-                items={form.highlights.split("\n").filter(Boolean)}
+                items={form.highlights.split("\n")}
                 onChange={(v) => set("highlights", v.join("\n"))}
                 placeholder="Ex.: técnica de navegação e resgate"
               />
             </Block>
             <Block title="O que está incluso" hint="Um item por linha. Você pode adicionar, remover e reordenar.">
               <ListEditor
-                items={form.includes.split("\n").filter(Boolean)}
+                items={form.includes.split("\n")}
                 onChange={(v) => set("includes", v.join("\n"))}
                 placeholder="Ex.: seguro de aventura"
               />
