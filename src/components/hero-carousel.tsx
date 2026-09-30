@@ -73,7 +73,7 @@ export function HeroCarousel({
               i === index ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            {/\\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(s.image) ? (
+            {/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(s.image) ? (
               <video
                 src={s.image}
                 aria-label={s.title || "Vídeo da Casa de Aventura"}
