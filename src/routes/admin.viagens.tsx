@@ -447,6 +447,21 @@ function AdminTrips() {
     setForm(toForm(t));
   };
 
+  const duplicateTrip = (t: Trip) => {
+    const copied = toForm(t);
+    const suffix = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    setEditing("new");
+    setForm({
+      ...copied,
+      name: `${t.name} (cópia)`,
+      slug: `${t.slug}-copia-${suffix}`,
+      departures: copied.departures.map(({ id: _id, ...departure }) => ({ ...departure })),
+      published: false,
+      featured: false,
+    });
+    toast.info("Cópia criada como rascunho. Altere as datas e salve para publicar.");
+  };
+
   useEffect(() => {
     if (editing && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1238,6 +1253,13 @@ function AdminTrips() {
               </div>
             </div>
             <div className="flex gap-2 sm:flex-col">
+              <button
+                type="button"
+                onClick={() => duplicateTrip(t)}
+                className="rounded-xl border border-border px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
+              >
+                Duplicar
+              </button>
               <button
                 type="button"
                 onClick={() => openEdit(t)}
