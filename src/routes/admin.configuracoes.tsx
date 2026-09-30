@@ -217,7 +217,7 @@ function AdminSettings() {
           <input
             ref={bannerInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,video/ogg"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
@@ -261,7 +261,7 @@ function AdminSettings() {
           <div className="mt-2 flex flex-wrap gap-3">
             {heroImages.map((img, i) => (
               <div key={i} className="relative">
-                {/\\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(img) ? (
+                {/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(img) ? (
                   <video src={normalizeImage(img)} muted playsInline className="h-20 w-28 rounded-xl border border-border object-cover" />
                 ) : (
                   <img
