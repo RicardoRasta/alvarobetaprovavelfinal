@@ -32,12 +32,10 @@ function AdminTags() {
   const add = async () => {
     const clean = name.trim();
     if (!clean) return;
-    const id = slugify(clean);
-    if (!id) return toast.error("Nome inválido.");
     setSaving(true);
     const { error } = await supabase
       .from("tags")
-      .insert({ id, name: clean, sort_order: tags.length });
+      .insert({ name: clean, sort_order: tags.length });
     setSaving(false);
     if (error) return toast.error(error.message);
     setName("");
