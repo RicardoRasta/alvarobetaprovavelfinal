@@ -90,7 +90,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav className="mx-auto grid max-w-[1400px] gap-1 px-3 py-3 sm:grid-cols-2 sm:px-4 md:px-8">
             {nav.map((item) => (
               <Link
-                key={item.to}
+                key={`${item.to}-${item.label}`}
                 to={item.to}
                 search={item.label === "Cursos" ? { tag: "cursos" } : undefined}
                 className={`rounded-xl px-4 py-3 text-sm transition-colors ${
