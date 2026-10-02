@@ -55,7 +55,7 @@ function AdminSettings() {
     cadastur_image_url: "",
   });
   const [stats, setStats] = useState<Stat[]>([]);
-  const [heroImages, setHeroImages] = useState<string[]>([]);
+  const [heroSlides, setHeroSlides] = useState<{ image: string; title: string; description: string }[]>([]);
 
   useEffect(() => {
     if (!settings) return;
@@ -81,7 +81,7 @@ function AdminSettings() {
       cadastur_image_url: settings.cadastur_image_url ?? "",
     });
     setStats(settings.stats ?? []);
-    setHeroImages(settings.hero_images ?? []);
+    setHeroSlides((settings.hero_slides ?? settings.hero_images?.map((image) => ({ image, title: settings.banner_title ?? "", description: settings.banner_subtitle ?? "" })) ?? []).slice(0, MAX_HERO));
   }, [settings]);
 
   const field =
@@ -106,7 +106,7 @@ function AdminSettings() {
   /** Adiciona uma imagem ao carrossel da home (máximo de 8). */
   const addHeroImage = async (file?: File) => {
     if (!file) return;
-    if (heroImages.length >= MAX_HERO) return toast.error("O carrossel aceita até 8 mídias.");
+    if (heroSlides.length >= MAX_HERO) return toast.error("O carrossel aceita até 8 mídias.");
     if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
       return toast.error("Selecione uma imagem ou vídeo.");
     }
@@ -121,7 +121,7 @@ function AdminSettings() {
         upsert: false,
       });
       if (error) throw error;
-      setHeroImages((p) => [...p, storageUrl(path)].slice(0, MAX_HERO));
+      setHeroSlides((p) => [...p, { image: storageUrl(path), title: "", description: "" }].slice(0, MAX_HERO));
       toast.success("Mídia adicionada! Não esqueça de salvar.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não foi possível enviar a mídia.");
@@ -180,7 +180,8 @@ function AdminSettings() {
         about_image_url: form.about_image_url.trim() || null,
         cadastur_image_url: form.cadastur_image_url.trim() || null,
         phone: form.phone.trim() || DEFAULT_PHONE,
-        hero_images: heroImages,
+        hero_images: heroSlides.map((slide) => slide.image),
+        hero_slides: heroSlides,
         fx_usd: Number(fx_usd) > 0 ? Number(fx_usd) : DEFAULT_FX.usd,
         fx_eur: Number(fx_eur) > 0 ? Number(fx_eur) : DEFAULT_FX.eur,
         stats: stats.filter((s) => s.label.trim()),
@@ -257,30 +258,40 @@ function AdminSettings() {
         />
 
         <div className="border-t border-border pt-4">
-          <span className={labelCls}>Carrossel da home (até {MAX_HERO} mídias · troca a cada 10s)</span>
+          <span className={labelCls}>Carrossel da home (até {MAX_HERO} imagens · troca a cada 10s)</span>
           <div className="mt-2 flex flex-wrap gap-3">
-            {heroImages.map((img, i) => (
-              <div key={i} className="relative">
-                {/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(img) ? (
-                  <video src={normalizeImage(img)} muted playsInline className="h-20 w-28 rounded-xl border border-border object-cover" />
+            {heroSlides.map((slide, i) => (
+              <div key={`${slide.image}-${i}`} className="w-full rounded-xl border border-border p-3">
+              <div className="relative">
+                {/\.(mp4|webm|ogg)(?:[?#].*)?$/i.test(slide.image) ? (
+                  <video src={normalizeImage(slide.image)} muted playsInline className="h-20 w-28 rounded-xl border border-border object-cover" />
                 ) : (
                   <img
-                    src={normalizeImage(img)}
+                    src={normalizeImage(slide.image)}
                     alt={`Mídia ${i + 1} do carrossel`}
                     className="h-20 w-28 rounded-xl border border-border object-cover"
                   />
                 )}
+                <label className="mt-3 block">
+                  <span className={labelCls}>Texto principal desta imagem</span>
+                  <input className={field} value={slide.title} placeholder="Ex.: Viva sua próxima aventura" onChange={(e) => setHeroSlides((arr) => arr.map((item, j) => j === i ? { ...item, title: e.target.value } : item))} />
+                </label>
+                <label className="mt-2 block">
+                  <span className={labelCls}>Texto complementar desta imagem</span>
+                  <textarea className="min-h-16 w-full rounded-xl border border-input bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring" value={slide.description} placeholder="Descrição exibida sobre esta imagem" onChange={(e) => setHeroSlides((arr) => arr.map((item, j) => j === i ? { ...item, description: e.target.value } : item))} />
+                </label>
                 <button
                   type="button"
-                  onClick={() => setHeroImages((arr) => arr.filter((_, j) => j !== i))}
+                  onClick={() => setHeroSlides((arr) => arr.filter((_, j) => j !== i))}
                   aria-label="Remover imagem"
                   className="absolute -right-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
+              </div>
             ))}
-            {heroImages.length < MAX_HERO && (
+            {heroSlides.length < MAX_HERO && (
               <label className="flex h-20 w-28 cursor-pointer items-center justify-center rounded-xl border border-dashed border-border text-muted-foreground hover:border-accent hover:text-accent">
                 {heroUploading ? <span className="text-xs">Enviando...</span> : <ImagePlus className="h-6 w-6" />}
                 <input
