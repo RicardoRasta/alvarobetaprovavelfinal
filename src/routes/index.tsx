@@ -157,7 +157,10 @@ function Index() {
 
         {featuredCourses.length > 0 && (
           <section>
-            <SectionHeading title="Cursos" linkTo="/viagens" linkLabel="Ver todos os cursos" />
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <h2 className="font-display text-3xl leading-none md:text-4xl">Cursos</h2>
+              <Link to="/viagens" search={{ tag: "cursos" }} className="text-sm font-semibold text-accent hover:underline">Ver todos os cursos <ArrowRight className="inline h-4 w-4" /></Link>
+            </div>
             <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {featuredCourses.map((t) => <TripCard key={t.id} trip={t} />)}
             </div>
