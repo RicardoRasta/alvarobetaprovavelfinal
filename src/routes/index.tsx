@@ -56,7 +56,7 @@ function Index() {
   }, [testimonials]);
 
   const normalizeCategory = (value: string) =>
-    value.trim().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+    value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const tagNames = new Map(tags.map((tag) => [tag.id, normalizeCategory(tag.name)]));
   const isCourse = (trip: (typeof trips)[number]) =>
     (trip.tags ?? []).some((value) => {
