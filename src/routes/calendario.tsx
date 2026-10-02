@@ -8,16 +8,16 @@ import { settingsQuery, tripsQuery } from "@/lib/api";
 export const Route = createFileRoute("/calendario")({
   head: () => ({
     meta: [
-      { title: "Calendário de saídas — A Casa de Aventura" },
+      { title: "Agenda de saídas — A Casa de Aventura" },
       {
         name: "description",
         content:
           "Calendário mensal com todas as saídas dos roteiros de aventura da Casa de Aventura. Clique no dia para ver os detalhes.",
       },
-      { property: "og:title", content: "Calendário de saídas — A Casa de Aventura" },
+      { property: "og:title", content: "Agenda de saídas — A Casa de Aventura" },
       {
         property: "og:description",
-        content: "Veja todas as datas de saídas dos roteiros de aventura em um calendário mensal.",
+        content: "Veja todas as datas de saídas dos roteiros de aventura em um agenda mensal.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -87,8 +87,8 @@ function Calendario() {
       <header className="mb-6 flex items-center gap-3">
         <CalendarDays className="h-8 w-8 text-accent" />
         <div>
-          <h1 className="text-4xl leading-[0.95] md:text-5xl">Calendário</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Todas as saídas dos roteiros em um só lugar.</p>
+          <h1 className="text-4xl leading-[0.95] md:text-5xl">Agenda</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Todas as saídas e cursos em um só lugar.</p>
         </div>
       </header>
 
