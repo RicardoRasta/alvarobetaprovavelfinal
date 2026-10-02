@@ -91,14 +91,21 @@ function Viagens() {
 
       <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
         {[
-          { value: "todos", label: "Todos" },
+          { value: "todos", label: isCoursesPage ? "Todos os cursos" : "Todas as viagens" },
           { value: "montanhismo", label: "Montanhismo" },
           { value: "canoagem", label: "Canoagem" },
         ].map((item) => (
           <button
             key={item.value}
             type="button"
-            onClick={() => patch({ categoria: item.value })}
+            onClick={() => {
+              if (item.value === "todos") {
+                setQuery("");
+                patch({ categoria: "todos", atividade: undefined, data: undefined });
+              } else {
+                patch({ categoria: item.value });
+              }
+            }}
             aria-pressed={(categoria ?? "todos") === item.value}
             className={`rounded-full border px-4 py-2 text-sm transition-colors ${
               (categoria ?? "todos") === item.value
