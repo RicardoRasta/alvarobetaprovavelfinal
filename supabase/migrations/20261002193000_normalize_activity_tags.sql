@@ -22,3 +22,27 @@ where not exists (select 1 from public.tags t where lower(t.name)=lower(w.name))
 delete from public.tags
 where id = '80a446e2-513e-4c8d-93e7-af6b8db76874'
   and not exists (select 1 from public.trips where public.tags.id = any(trips.tags));
+
+-- Repair category/activity assignments on existing records without changing trip IDs.
+do $$
+declare cursos_id uuid; viagens_id uuid; canoagem_id uuid; montanhismo_id uuid; trekking_id uuid; hiking_id uuid;
+begin
+  select id into cursos_id from public.tags where lower(name)='cursos' limit 1;
+  select id into viagens_id from public.tags where lower(name)='viagens' limit 1;
+  select id into canoagem_id from public.tags where lower(name)='canoagem' limit 1;
+  select id into montanhismo_id from public.tags where lower(name)='montanhismo' limit 1;
+  select id into trekking_id from public.tags where lower(name)='trekking' limit 1;
+  select id into hiking_id from public.tags where lower(name)='hiking' limit 1;
+  update public.trips tr set tags = array_append(array_remove(tr.tags, viagens_id), cursos_id)
+    where tr.name ilike 'curso %' and cursos_id is not null and not (cursos_id = any(tr.tags));
+  update public.trips tr set tags = array_remove(tr.tags, viagens_id)
+    where tr.name ilike 'curso %' and viagens_id is not null;
+  update public.trips set tags = array_append(tags, canoagem_id)
+    where name ilike '%canoagem%' and canoagem_id is not null and not (canoagem_id = any(tags));
+  update public.trips set tags = array_append(tags, montanhismo_id)
+    where name ilike '%montanhismo%' and montanhismo_id is not null and not (montanhismo_id = any(tags));
+  update public.trips set tags = array_append(tags, trekking_id)
+    where name ilike '%trekking%' and trekking_id is not null and not (trekking_id = any(tags));
+  update public.trips set tags = array_append(tags, hiking_id)
+    where name ilike '%hiking%' and hiking_id is not null and not (hiking_id = any(tags));
+end $$;
