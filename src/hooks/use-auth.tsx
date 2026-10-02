@@ -9,18 +9,28 @@ export function useAuth() {
   const [checkingRole, setCheckingRole] = useState(true);
 
   useEffect(() => {
+    let active = true;
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+      if (!active) return;
       setSession(next);
       setLoading(false);
     });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
+    supabase.auth.getSession()
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) console.error("[auth] Erro ao recuperar sessão:", error);
+        setSession(data?.session ?? null);
+      })
+      .catch((error) => {
+        if (active) console.error("[auth] Falha ao recuperar sessão:", error);
+      })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; sub.subscription.unsubscribe(); };
   }, []);
 
   const userId = session?.user?.id;
+  const email = session?.user?.email?.toLowerCase() ?? "";
+  const appRole = session?.user?.app_metadata?.role;
 
   useEffect(() => {
     let active = true;
@@ -30,40 +40,30 @@ export function useAuth() {
       return;
     }
     setCheckingRole(true);
+    const designatedAdmins = new Set(["alvaro.w12@gmail.com", "rrsdesigner2609@gmail.com"]);
 
-    // Administradores autorizados pelo projeto.
-    // Mantém também a tabela user_roles para não quebrar as permissões existentes.
-    const email = session?.user?.email?.toLowerCase() ?? "";
-    const designatedAdmins = new Set([
-      "alvaro.w12@gmail.com",
-      "rrsdesigner2609@gmail.com",
-    ]);
-
-    supabase.rpc("bootstrap_admin").then(({ data: bootstrapped }) => {
-      if (!active) return;
-      if (bootstrapped || designatedAdmins.has(email) || session?.user?.app_metadata?.role === "admin") {
-        setIsAdmin(true);
-        setCheckingRole(false);
-        return;
+    (async () => {
+      try {
+        const { data: bootstrapped, error: bootstrapError } = await supabase.rpc("bootstrap_admin");
+        if (bootstrapError) console.warn("[auth] bootstrap_admin indisponível; consultando user_roles.", bootstrapError);
+        if (!active) return;
+        if (bootstrapped || designatedAdmins.has(email) || appRole === "admin") {
+          setIsAdmin(true);
+          return;
+        }
+        const { data, error } = await supabase.from("user_roles")
+          .select("role").eq("user_id", userId).eq("role", "admin").maybeSingle();
+        if (error) console.error("[auth] Falha ao consultar user_roles:", error);
+        if (active) setIsAdmin(Boolean(data) || appRole === "admin");
+      } catch (error) {
+        console.error("[auth] Falha ao verificar permissão administrativa:", error);
+        if (active) setIsAdmin(designatedAdmins.has(email) || appRole === "admin");
+      } finally {
+        if (active) setCheckingRole(false);
       }
-
-      supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "admin")
-        .maybeSingle()
-        .then(({ data }) => {
-          if (!active) return;
-          setIsAdmin(Boolean(data) || session?.user?.app_metadata?.role === "admin");
-          setCheckingRole(false);
-        });
-    });
-
-    return () => {
-      active = false;
-    };
-  }, [userId]);
+    })();
+    return () => { active = false; };
+  }, [userId, email, appRole]);
 
   return {
     session,
@@ -72,18 +72,17 @@ export function useAuth() {
     isAdmin,
     refreshRole: async () => {
       if (!userId) return;
-      const { data } = await supabase.rpc("bootstrap_admin");
-      if (data) {
-        setIsAdmin(true);
-        return;
+      try {
+        const { data, error } = await supabase.rpc("bootstrap_admin");
+        if (error) throw error;
+        if (data) { setIsAdmin(true); return; }
+        const { data: role, error: roleError } = await supabase.from("user_roles")
+          .select("role").eq("user_id", userId).eq("role", "admin").maybeSingle();
+        if (roleError) throw roleError;
+        setIsAdmin(Boolean(role) || email === "alvaro.w12@gmail.com" || email === "rrsdesigner2609@gmail.com" || appRole === "admin");
+      } catch (error) {
+        console.error("[auth] Não foi possível atualizar a permissão:", error);
       }
-      const { data: role } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", userId)
-        .eq("role", "admin")
-        .maybeSingle();
-      setIsAdmin(Boolean(role));
     },
     signOut: () => supabase.auth.signOut(),
   };
