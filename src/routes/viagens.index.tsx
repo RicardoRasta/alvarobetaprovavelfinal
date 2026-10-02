@@ -49,7 +49,7 @@ function Viagens() {
   const { data: tags = [] } = useQuery(tagsQuery);
 
   const normalizeTagName = (value: string) =>
-    value.trim().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+    value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const selectedTag = tags.find(
     (t) => t.id === tag || normalizeTagName(t.name) === normalizeTagName(tag ?? ""),
   );
@@ -58,10 +58,11 @@ function Viagens() {
     normalizeTagName(tagNameById.get(value) ?? value);
   const isCourseLikeTag = (value: string) => {
     const normalized = normalizeTagValue(value);
-    return normalized === "cursos" || normalized.startsWith("curso ");
+    return normalized === "cursos" || normalized.startsWith("curso");
   };
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
+    normalizeTagName(categoria ?? "") === "cursos" ||
     isCourseLikeTag(selectedTag?.name ?? "");
   const isCourseTrip = (trip: (typeof trips)[number]) =>
     (trip.tags ?? []).some((value) => isCourseLikeTag(value)) ||
