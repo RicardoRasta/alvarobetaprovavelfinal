@@ -85,6 +85,10 @@ function Viagens() {
     );
   }, [atividade, data, categoria, query, trips, isCoursesPage]);
 
+  const patch = (next: Partial<CatalogSearch>) =>
+    navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
+
+
       <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
         {[
           { value: "todos", label: "Todos" },
