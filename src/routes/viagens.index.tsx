@@ -12,7 +12,8 @@ export const Route = createFileRoute("/viagens/")({
     atividade: typeof search.atividade === "string" ? search.atividade : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
     data: typeof search.data === "string" ? search.data : undefined,
-    tag: typeof search.tag === "string" ? search.tag : undefined,\n    categoria: typeof search.categoria === "string" ? search.categoria : undefined,
+    tag: typeof search.tag === "string" ? search.tag : undefined,
+    categoria: typeof search.categoria === "string" ? search.categoria : undefined,
   }),
   head: () => ({
     meta: [
@@ -68,7 +69,9 @@ function Viagens() {
     if (name.includes("canoagem") || name.includes("canoagem") || name.includes("canoeagem")) return "canoagem";
     if (name.includes("montanhismo") || name.includes("montanha") || name.includes("trekking") || name.includes("hiking") || name.includes("escalada")) return "montanhismo";
     return "outros";
-  };  const filtered = useMemo(() => {
+  };
+
+  const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return sortByNextDeparture(
       trips.filter((t) => {
@@ -80,7 +83,9 @@ function Viagens() {
         return isCorrectCatalog && categoryMatches && activityMatches && dateMatches && queryMatches;
       }),
     );
-  }, [atividade, data, categoria, query, trips, isCoursesPage]);      <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
+  }, [atividade, data, categoria, query, trips, isCoursesPage]);
+
+      <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
         {[
           { value: "todos", label: "Todos" },
           { value: "montanhismo", label: "Montanhismo" },
