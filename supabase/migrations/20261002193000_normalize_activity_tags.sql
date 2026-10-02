@@ -17,3 +17,8 @@ insert into public.tags(id,name,sort_order)
 select gen_random_uuid(), w.name, w.sort_order
 from wanted w
 where not exists (select 1 from public.tags t where lower(t.name)=lower(w.name));
+
+-- Remove an unused imported keyword blob; no trip references this tag.
+delete from public.tags
+where id = '80a446e2-513e-4c8d-93e7-af6b8db76874'
+  and not exists (select 1 from public.trips where public.tags.id = any(trips.tags));
