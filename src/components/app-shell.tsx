@@ -12,7 +12,7 @@ const nav = [
   { to: "/", label: "Início" },
   { to: "/viagens", label: "Viagens" },
   { to: "/viagens", label: "Cursos" },
-  { to: "/calendario", label: "Calendário" },
+  { to: "/calendario", label: "Agenda" },
   { to: "/comentarios", label: "Comentários" },
   { to: "/quem-somos", label: "Quem somos" },
   { to: "/favoritos", label: "Salvas" },
