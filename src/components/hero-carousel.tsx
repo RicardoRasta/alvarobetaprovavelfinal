@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DepartureChips, upcomingMonths } from "@/components/departure-chips";
-import { tripImage, type Trip } from "@/data/trips";
+import { tripImage, type HeroSlide, type Trip } from "@/data/trips";
 
 type Slide = {
   key: string;
@@ -25,7 +25,7 @@ export function HeroCarousel({
   fallbackTitle,
   fallbackDescription,
 }: {
-  images: string[];
+  images: HeroSlide[];
   trips?: Trip[];
   fallbackTitle?: string;
   fallbackDescription?: string;
@@ -41,11 +41,11 @@ export function HeroCarousel({
     places: [t.destination, t.state].filter(Boolean) as string[],
   }));
 
-  const fromImages: Slide[] = images.slice(0, 8).map((src, i) => ({
+  const fromImages: Slide[] = images.slice(0, 8).map((slide, i) => ({
     key: `img-${i}`,
-    image: src,
-    title: fallbackTitle,
-    description: fallbackDescription,
+    image: slide.image,
+    title: slide.title || fallbackTitle,
+    description: slide.description || fallbackDescription,
     to: "/viagens",
     months: [],
     places: [],
