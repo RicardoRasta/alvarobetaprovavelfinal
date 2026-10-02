@@ -8,7 +8,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
 import { upcomingMonths } from "@/components/departure-chips";
 import { formatRange, heroSlides, tripImage } from "@/data/trips";
-import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, testimonialsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, tagsQuery, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { data: trips = [] } = useQuery(tripsQuery);
+  const { data: tags = [] } = useQuery(tagsQuery);
   const { data: activities = [] } = useQuery(activitiesQuery);
   const { data: settings } = useQuery(settingsQuery);
   const { data: testimonials = [] } = useQuery(testimonialsQuery);
@@ -54,9 +55,20 @@ function Index() {
     setHomeTestimonials(shuffled.slice(0, count));
   }, [testimonials]);
 
+  const normalizeCategory = (value: string) =>
+    value.trim().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
+  const tagNames = new Map(tags.map((tag) => [tag.id, normalizeCategory(tag.name)]));
+  const isCourse = (trip: (typeof trips)[number]) =>
+    (trip.tags ?? []).some((value) => {
+      const name = tagNames.get(value) ?? normalizeCategory(value);
+      return name === "cursos" || name.startsWith("curso ");
+    }) || normalizeCategory(trip.name).includes("curso ");
   const visible = trips.filter((t) => t.published);
-  const featured = sortByNextDeparture(visible.filter((t) => t.featured)).slice(0, 6);
-  const heroTrips = featured.length > 0 ? featured.slice(0, 4) : sortByNextDeparture(visible).slice(0, 4);
+  const visibleTrips = visible.filter((t) => !isCourse(t));
+  const visibleCourses = visible.filter(isCourse);
+  const featured = sortByNextDeparture(visibleTrips.filter((t) => t.featured)).slice(0, 6);
+  const featuredCourses = sortByNextDeparture(visibleCourses).slice(0, 3);
+  const heroTrips = featured.length > 0 ? featured.slice(0, 4) : sortByNextDeparture(visibleTrips).slice(0, 4);
   const today = new Date().toISOString().slice(0, 10);
   const nextDepartures = visible
     .flatMap((t) => (t.departures ?? []).map((d) => ({ trip: t, ...d })))
@@ -93,7 +105,7 @@ function Index() {
       <div className="mx-auto max-w-[1400px] space-y-24 px-4 py-20 md:px-8">
         <AgendaSearch />
 
-        {visible.filter(isTripOngoing).length > 0 && (
+        {visibleTrips.filter(isTripOngoing).length > 0 && (
           <section className="rounded-3xl border border-accent/30 bg-accent/10 p-5 md:p-8">
             <div className="flex items-center gap-2 text-accent">
               <Radio className="h-5 w-5 animate-pulse" />
@@ -102,7 +114,7 @@ function Index() {
             <h2 className="mt-2 text-3xl leading-none md:text-5xl">Aventura em andamento</h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">Estas experiências estão acontecendo hoje. Acompanhe os roteiros em andamento da Casa de Aventura.</p>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {visible.filter(isTripOngoing).map((t) => <TripCard key={t.id} trip={t} />)}
+              {visibleTrips.filter(isTripOngoing).map((t) => <TripCard key={t.id} trip={t} />)}
             </div>
           </section>
         )}
@@ -143,7 +155,7 @@ function Index() {
           </section>
         )}
 
-        {nextDepartures.length > 0 && (
+        {featuredCourses.length > 0 && (\n          <section>\n            <SectionHeading title="Cursos" linkTo="/viagens" linkLabel="Ver todos os cursos" />\n            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">\n              {featuredCourses.map((t) => <TripCard key={t.id} trip={t} />)}\n            </div>\n          </section>\n        )}\n\n        {nextDepartures.length > 0 && (
           <section>
             <SectionHeading title="Próximas aventuras" linkTo="/calendario" linkLabel="Ver calendário" />
             <ul className="divide-y divide-border">
