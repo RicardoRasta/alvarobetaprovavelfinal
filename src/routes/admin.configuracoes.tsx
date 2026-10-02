@@ -81,7 +81,7 @@ function AdminSettings() {
       cadastur_image_url: settings.cadastur_image_url ?? "",
     });
     setStats(settings.stats ?? []);
-    setHeroSlides((settings.hero_slides ?? settings.hero_images?.map((image) => ({ image, title: settings.banner_title ?? "", description: settings.banner_subtitle ?? "" })) ?? []).slice(0, MAX_HERO));
+    setHeroSlides((settings.hero_slides?.length ? settings.hero_slides : settings.hero_images?.map((image) => ({ image, title: settings.banner_title ?? "", description: settings.banner_subtitle ?? "" })) ?? []).slice(0, MAX_HERO));
   }, [settings]);
 
   const field =
