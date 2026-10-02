@@ -133,8 +133,10 @@ export type SiteSettings = {
   fx_updated_at?: string | null;
   /** Telefone fixo/celular para ligação direta */
   phone?: string | null;
-  /** Imagens do carrossel da home (até 8) */
+  /** Imagens legadas do carrossel da home. */
   hero_images?: string[] | null;
+  /** Slides editáveis da home, com texto individual por imagem. */
+  hero_slides?: { image: string; title: string; description: string }[] | null;
   contact_email?: string | null;
   address?: string | null;
   instagram_url?: string | null;
@@ -195,11 +197,30 @@ export const bannerImage = (settings?: Pick<SiteSettings, "banner_image_url"> | 
   normalizeImage(settings?.banner_image_url) || hero;
 
 /** Imagens do carrossel da home (até 8), com fallback para o banner. */
+export type HeroSlide = { image: string; title: string; description: string };
+
 export const heroSlides = (
-  settings?: Pick<SiteSettings, "banner_image_url" | "hero_images"> | null,
-): string[] => {
-  const list = (settings?.hero_images ?? []).map((u) => normalizeImage(u)).filter(Boolean);
-  return list.length > 0 ? list.slice(0, 8) : [bannerImage(settings)];
+  settings?: Pick<SiteSettings, "banner_image_url" | "hero_images" | "hero_slides" | "banner_title" | "banner_subtitle"> | null,
+): HeroSlide[] => {
+  const configured = (settings?.hero_slides ?? [])
+    .map((slide) => ({
+      image: normalizeImage(slide.image),
+      title: slide.title ?? "",
+      description: slide.description ?? "",
+    }))
+    .filter((slide) => Boolean(slide.image))
+    .slice(0, 8);
+  if (configured.length) return configured;
+  const legacy = (settings?.hero_images ?? []).map((image) => ({
+    image: normalizeImage(image),
+    title: settings?.banner_title ?? "",
+    description: settings?.banner_subtitle ?? "",
+  })).filter((slide) => Boolean(slide.image));
+  return legacy.length ? legacy.slice(0, 8) : [{
+    image: bannerImage(settings),
+    title: settings?.banner_title ?? "",
+    description: settings?.banner_subtitle ?? "",
+  }];
 };
 
 /** Telefone padrão da agência. */
