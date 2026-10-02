@@ -155,7 +155,16 @@ function Index() {
           </section>
         )}
 
-        {featuredCourses.length > 0 && (\n          <section>\n            <SectionHeading title="Cursos" linkTo="/viagens" linkLabel="Ver todos os cursos" />\n            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">\n              {featuredCourses.map((t) => <TripCard key={t.id} trip={t} />)}\n            </div>\n          </section>\n        )}\n\n        {nextDepartures.length > 0 && (
+        {featuredCourses.length > 0 && (
+          <section>
+            <SectionHeading title="Cursos" linkTo="/viagens" linkLabel="Ver todos os cursos" />
+            <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredCourses.map((t) => <TripCard key={t.id} trip={t} />)}
+            </div>
+          </section>
+        )}
+
+        {nextDepartures.length > 0 && (
           <section>
             <SectionHeading title="Próximas aventuras" linkTo="/calendario" linkLabel="Ver calendário" />
             <ul className="divide-y divide-border">
