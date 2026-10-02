@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { CalendarDays, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
 
 type CatalogSearch = {
   atividade?: string;
   q?: string;
-  data?: string;
   tag?: string;
   categoria?: string;
 };
@@ -17,7 +16,6 @@ export const Route = createFileRoute("/viagens/")({
   validateSearch: (search: Record<string, unknown>): CatalogSearch => ({
     atividade: typeof search.atividade === "string" ? search.atividade : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
-    data: typeof search.data === "string" ? search.data : undefined,
     tag: typeof search.tag === "string" ? search.tag : undefined,
     categoria: typeof search.categoria === "string" ? search.categoria : undefined,
   }),
@@ -42,7 +40,7 @@ export const Route = createFileRoute("/viagens/")({
 });
 
 function Viagens() {
-  const { atividade, data, tag, categoria } = Route.useSearch();
+  const { atividade, tag, categoria } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [query, setQuery] = useState("");
   const { data: trips = [], isLoading } = useQuery(tripsQuery);
@@ -89,13 +87,12 @@ function Viagens() {
         const categoryMatches =
           !categoria || categoria === "todos" || getCatalogCategory(t) === categoria;
         const activityMatches = !atividade || t.activity_id === atividade;
-        const dateMatches = !data || (t.departures ?? []).some((d) => d.date >= data);
         const queryMatches =
           !q || `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q);
-        return isCorrectCatalog && categoryMatches && activityMatches && dateMatches && queryMatches;
+        return isCorrectCatalog && categoryMatches && activityMatches && queryMatches;
       }),
     );
-  }, [atividade, data, categoria, query, trips, isCoursesPage]);
+  }, [atividade, categoria, query, trips, isCoursesPage]);
 
   const patch = (next: Partial<CatalogSearch>) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
@@ -107,7 +104,7 @@ function Viagens() {
           {isCoursesPage ? (
             <>Nossos<br /><span className="text-accent">cursos</span></>
           ) : (
-            <>Nossa agenda<br /><span className="text-accent">completa</span></>
+            <>Nossas<br /><span className="text-accent">viagens</span></>
           )}
         </h1>
         <p className="mt-4 text-sm text-muted-foreground">
@@ -129,16 +126,7 @@ function Viagens() {
           />
         </label>
         <span className="hidden h-8 w-px bg-border md:block" />
-        <label className="flex items-center gap-2 px-4 py-2">
-          <CalendarDays className="h-5 w-5 shrink-0 text-accent" />
-          <input
-            type="date"
-            value={data ?? ""}
-            onChange={(e) => patch({ data: e.target.value || undefined })}
-            aria-label="A partir da data"
-            className="bg-transparent text-sm outline-none"
-          />
-        </label>
+
       </div>
 
       <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
@@ -153,7 +141,7 @@ function Viagens() {
             onClick={() => {
               if (item.value === "todos") {
                 setQuery("");
-                patch({ categoria: "todos", atividade: undefined, data: undefined });
+                patch({ categoria: "todos", atividade: undefined });
               } else {
                 patch({ categoria: item.value });
               }
