@@ -56,6 +56,14 @@ function Viagens() {
     const normalized = normalizeTagValue(value);
     return normalized === "cursos" || normalized.startsWith("curso ");
   };
+  // No catálogo, mostrar somente estas duas categorias; outras tags continuam
+  // preservadas no banco e no cadastro administrativo, mas não viram filtros aqui.
+  const isCatalogCategoryTag = (name: string) => {
+    const normalized = normalizeTagName(name);
+    return normalized === "montanhismo" ||
+      normalized === "canoagem" ||
+      normalized === "canoagens";
+  };
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
     isCourseLikeTag(selectedTag?.name ?? "");
@@ -139,10 +147,10 @@ function Viagens() {
         </label>
       </div>
 
-      {tags.length > 0 && (
+      {tags.some((t) => isCatalogCategoryTag(t.name)) && (
         <div className="mb-10 flex flex-wrap gap-2">
           {tags
-            .filter((t) => (isCoursesPage ? isCourseLikeTag(t.name) : !isCourseLikeTag(t.name)))
+            .filter((t) => isCatalogCategoryTag(t.name))
             .map((t) => (
               <button
                 key={t.id}
@@ -154,7 +162,9 @@ function Viagens() {
                     : "border-border bg-card text-muted-foreground hover:border-accent hover:text-foreground"
                 }`}
               >
-                {t.name}
+                {normalizeTagName(t.name) === "montanhismo"
+                  ? "Montanhismo"
+                  : "Canoagem"}
               </button>
             ))}
         </div>
