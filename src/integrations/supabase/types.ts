@@ -395,6 +395,7 @@ export type Database = {
           fx_updated_at: string | null
           fx_usd: number
           hero_images: string[]
+          hero_slides: Json
           id: number
           instagram_url: string
           phone: string
@@ -421,6 +422,7 @@ export type Database = {
           fx_updated_at?: string | null
           fx_usd?: number
           hero_images?: string[]
+          hero_slides?: Json
           id?: number
           instagram_url?: string
           phone?: string
@@ -447,6 +449,7 @@ export type Database = {
           fx_updated_at?: string | null
           fx_usd?: number
           hero_images?: string[]
+          hero_slides?: Json
           id?: number
           instagram_url?: string
           phone?: string
