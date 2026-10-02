@@ -5,7 +5,13 @@ import { CalendarDays, Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
 
-type CatalogSearch = { atividade?: string; q?: string; data?: string; tag?: string; categoria?: string };
+type CatalogSearch = {
+  atividade?: string;
+  q?: string;
+  data?: string;
+  tag?: string;
+  categoria?: string;
+};
 
 export const Route = createFileRoute("/viagens/")({
   validateSearch: (search: Record<string, unknown>): CatalogSearch => ({
@@ -43,31 +49,33 @@ function Viagens() {
   const { data: tags = [] } = useQuery(tagsQuery);
 
   const normalizeTagName = (value: string) =>
-    value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    value.trim().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "");
   const selectedTag = tags.find(
     (t) => t.id === tag || normalizeTagName(t.name) === normalizeTagName(tag ?? ""),
   );
-  const tagNameById = useMemo(
-    () => new Map(tags.map((t) => [t.id, t.name])),
-    [tags],
-  );
+  const tagNameById = useMemo(() => new Map(tags.map((t) => [t.id, t.name])), [tags]);
   const normalizeTagValue = (value: string) =>
     normalizeTagName(tagNameById.get(value) ?? value);
   const isCourseLikeTag = (value: string) => {
     const normalized = normalizeTagValue(value);
     return normalized === "cursos" || normalized.startsWith("curso ");
   };
-  // A separação entre cursos e viagens é independente das tags cadastradas.
-  // A categoria é identificada pelo nome do roteiro, evitando cruzamento entre catálogos.
   const isCoursesPage =
     normalizeTagName(tag ?? "") === "cursos" ||
     isCourseLikeTag(selectedTag?.name ?? "");
   const isCourseTrip = (trip: (typeof trips)[number]) =>
+    (trip.tags ?? []).some((value) => isCourseLikeTag(value)) ||
     normalizeTagName(trip.name).includes("curso ");
   const getCatalogCategory = (trip: (typeof trips)[number]) => {
     const name = normalizeTagName(trip.name);
-    if (name.includes("canoagem") || name.includes("canoagem") || name.includes("canoeagem")) return "canoagem";
-    if (name.includes("montanhismo") || name.includes("montanha") || name.includes("trekking") || name.includes("hiking") || name.includes("escalada")) return "montanhismo";
+    if (name.includes("canoagem") || name.includes("canoeagem")) return "canoagem";
+    if (
+      name.includes("montanhismo") ||
+      name.includes("montanha") ||
+      name.includes("trekking") ||
+      name.includes("hiking") ||
+      name.includes("escalada")
+    ) return "montanhismo";
     return "outros";
   };
 
@@ -75,11 +83,14 @@ function Viagens() {
     const q = query.trim().toLowerCase();
     return sortByNextDeparture(
       trips.filter((t) => {
-        const isCorrectCatalog = t.published && (isCoursesPage ? isCourseTrip(t) : !isCourseTrip(t));
-        const categoryMatches = !categoria || categoria === "todos" || getCatalogCategory(t) === categoria;
+        const isCorrectCatalog =
+          t.published && (isCoursesPage ? isCourseTrip(t) : !isCourseTrip(t));
+        const categoryMatches =
+          !categoria || categoria === "todos" || getCatalogCategory(t) === categoria;
         const activityMatches = !atividade || t.activity_id === atividade;
         const dateMatches = !data || (t.departures ?? []).some((d) => d.date >= data);
-        const queryMatches = !q || `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q);
+        const queryMatches =
+          !q || `${t.name} ${t.destination} ${t.state} ${t.description}`.toLowerCase().includes(q);
         return isCorrectCatalog && categoryMatches && activityMatches && dateMatches && queryMatches;
       }),
     );
@@ -88,6 +99,46 @@ function Viagens() {
   const patch = (next: Partial<CatalogSearch>) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...next }) });
 
+  return (
+    <div className="mx-auto max-w-[1400px] animate-fade-up px-4 py-12 md:px-8 md:py-16">
+      <header className="mb-10">
+        <h1 className="text-5xl leading-[0.95] md:text-7xl">
+          {isCoursesPage ? (
+            <>Nossos<br /><span className="text-accent">cursos</span></>
+          ) : (
+            <>Nossa agenda<br /><span className="text-accent">completa</span></>
+          )}
+        </h1>
+        <p className="mt-4 text-sm text-muted-foreground">
+          {isLoading
+            ? "Carregando..."
+            : `${filtered.length} ${isCoursesPage ? "curso(s)" : "roteiro(s)"} disponíveis`}
+        </p>
+      </header>
+
+      <div className="card-surface mb-6 flex flex-col gap-3 rounded-3xl p-3 md:flex-row md:items-center md:rounded-full md:p-2.5">
+        <label className="flex flex-1 items-center gap-2 px-4 py-2">
+          <Search className="h-5 w-5 shrink-0 text-accent" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            type="search"
+            placeholder="Buscar por destino, estado ou atividade..."
+            className="w-full bg-transparent text-sm outline-none"
+          />
+        </label>
+        <span className="hidden h-8 w-px bg-border md:block" />
+        <label className="flex items-center gap-2 px-4 py-2">
+          <CalendarDays className="h-5 w-5 shrink-0 text-accent" />
+          <input
+            type="date"
+            value={data ?? ""}
+            onChange={(e) => patch({ data: e.target.value || undefined })}
+            aria-label="A partir da data"
+            className="bg-transparent text-sm outline-none"
+          />
+        </label>
+      </div>
 
       <div className="mb-10 flex flex-wrap gap-2" aria-label={isCoursesPage ? "Filtrar cursos" : "Filtrar viagens"}>
         {[
@@ -117,3 +168,16 @@ function Viagens() {
           </button>
         ))}
       </div>
+
+      {!isLoading && filtered.length === 0 ? (
+        <p className="card-surface p-12 text-center text-muted-foreground">
+          Nenhum {isCoursesPage ? "curso" : "roteiro"} encontrado para esta busca.
+        </p>
+      ) : (
+        <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((trip) => <TripCard key={trip.id} trip={trip} />)}
+        </div>
+      )}
+    </div>
+  );
+}
