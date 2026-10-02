@@ -89,7 +89,7 @@ function AdminLayout() {
         </button>
       </header>
 
-      <nav className="mt-5 flex max-w-full flex-wrap gap-2 border-b border-border pb-3">
+      <nav aria-label="Navegação administrativa" className="mt-5 flex max-w-full flex-nowrap gap-2 overflow-x-auto border-b border-border pb-3 [scrollbar-width:thin]">
         {tabs.map((t) => (
           <Link
             key={t.to}
