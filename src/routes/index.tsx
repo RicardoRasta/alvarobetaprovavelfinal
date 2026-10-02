@@ -1,13 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, CalendarDays, Compass, Search, Radio, MessageCircle } from "lucide-react";
+import { ArrowRight, Compass, Search, Radio, MessageCircle } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
-import { upcomingMonths } from "@/components/departure-chips";
-import { formatRange, heroSlides, tripImage } from "@/data/trips";
+import { heroSlides, tripImage } from "@/data/trips";
 import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, tagsQuery, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
@@ -69,12 +68,6 @@ function Index() {
   const featured = sortByNextDeparture(visibleTrips.filter((t) => t.featured)).slice(0, 6);
   const featuredCourses = sortByNextDeparture(visibleCourses).slice(0, 3);
   const heroTrips = featured.length > 0 ? featured.slice(0, 4) : sortByNextDeparture(visibleTrips).slice(0, 4);
-  const today = new Date().toISOString().slice(0, 10);
-  const nextDepartures = visibleTrips
-    .flatMap((t) => (t.departures ?? []).map((d) => ({ trip: t, ...d })))
-    .filter((d) => d.date >= today)
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .slice(0, 6);
 
   return (
     <div className="animate-fade-up">
@@ -103,7 +96,6 @@ function Index() {
       </section>
 
       <div className="mx-auto max-w-[1400px] space-y-24 px-4 py-20 md:px-8">
-        <AgendaSearch />
 
         {visibleTrips.filter(isTripOngoing).length > 0 && (
           <section className="rounded-3xl border border-accent/30 bg-accent/10 p-5 md:p-8">
@@ -167,35 +159,6 @@ function Index() {
           </section>
         )}
 
-        {nextDepartures.length > 0 && (
-          <section>
-            <SectionHeading title="Próximas aventuras" linkTo="/calendario" linkLabel="Ver calendário" />
-            <ul className="divide-y divide-border">
-              {nextDepartures.map((d) => (
-                <li key={d.id}>
-                  <Link
-                    to="/viagens/$tripId"
-                    params={{ tripId: d.trip.slug }}
-                    className="group flex flex-wrap items-center gap-4 py-5"
-                  >
-                    <span className="chip">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {formatRange(d.date, d.return_date)}
-                    </span>
-                    <span className="font-display min-w-0 flex-1 truncate text-xl transition-colors group-hover:text-accent md:text-2xl">
-                      {d.trip.name}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      {d.trip.destination} · {d.trip.state}
-                    </span>
-                    <span className="chip">{d.spots} vagas</span>
-                    <ArrowRight className="h-4 w-4 text-accent transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
 
         {activities.length > 0 && (
           <section>
@@ -243,78 +206,5 @@ function Index() {
 
       </div>
     </div>
-  );
-}
-
-/** Bloco "Explore a nossa agenda completa" com busca em pílula. */
-function AgendaSearch() {
-  const navigate = useNavigate();
-  const { data: activities = [] } = useQuery(activitiesQuery);
-  const [date, setDate] = useState("");
-  const [atividade, setAtividade] = useState("");
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate({
-      to: "/viagens",
-      search: { atividade: atividade || undefined, data: date || undefined },
-    });
-  };
-
-  return (
-    <section className="grid items-center gap-10 lg:grid-cols-2">
-      <div>
-        <h2 className="text-4xl leading-[0.95] md:text-6xl">
-          Explore a nossa
-          <br />
-          agenda completa
-        </h2>
-        <Link to="/viagens" className="btn-pill mt-8">
-          Acessar agenda <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-
-      <form
-        onSubmit={submit}
-        className="card-surface flex flex-col gap-3 rounded-3xl p-3 sm:flex-row sm:items-center sm:rounded-full sm:p-2.5"
-      >
-        <label className="flex flex-1 items-center gap-2 px-4 py-2">
-          <CalendarDays className="h-5 w-5 shrink-0 text-accent" />
-          <span className="sr-only">A partir de</span>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-transparent text-sm outline-none"
-            aria-label="Datas"
-          />
-        </label>
-        <span className="hidden h-8 w-px bg-border sm:block" />
-        <label className="flex flex-1 items-center gap-2 px-4 py-2">
-          <Compass className="h-5 w-5 shrink-0 text-accent" />
-          <span className="sr-only">Categoria</span>
-          <select
-            value={atividade}
-            onChange={(e) => setAtividade(e.target.value)}
-            className="w-full bg-transparent text-sm outline-none"
-            aria-label="Categorias"
-          >
-            <option value="">Todas as categorias</option>
-            {activities.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          type="submit"
-          aria-label="Buscar aventuras"
-          className="inline-flex h-12 w-12 shrink-0 items-center justify-center self-end rounded-full bg-accent text-accent-foreground transition-transform hover:scale-105 sm:self-auto"
-        >
-          <Search className="h-5 w-5" />
-        </button>
-      </form>
-    </section>
   );
 }
