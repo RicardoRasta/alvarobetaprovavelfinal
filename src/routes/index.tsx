@@ -70,7 +70,7 @@ function Index() {
   const featuredCourses = sortByNextDeparture(visibleCourses).slice(0, 3);
   const heroTrips = featured.length > 0 ? featured.slice(0, 4) : sortByNextDeparture(visibleTrips).slice(0, 4);
   const today = new Date().toISOString().slice(0, 10);
-  const nextDepartures = visible
+  const nextDepartures = visibleTrips
     .flatMap((t) => (t.departures ?? []).map((d) => ({ trip: t, ...d })))
     .filter((d) => d.date >= today)
     .sort((a, b) => a.date.localeCompare(b.date))
