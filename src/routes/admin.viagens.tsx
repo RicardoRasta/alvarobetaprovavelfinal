@@ -449,17 +449,18 @@ function AdminTrips() {
 
   const duplicateTrip = (t: Trip) => {
     const copied = toForm(t);
-    const suffix = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    setEditing("new");
+    const duplicatedDepartures = copied.departures.map(({ id: _id, ...departure }) => ({
+      ...departure,
+    }));
+    if (duplicatedDepartures.length === 0) {
+      duplicatedDepartures.push({ ...emptyDeparture });
+    }
+    setEditing(t.id);
     setForm({
       ...copied,
-      name: `${t.name} (cópia)`,
-      slug: `${t.slug}-copia-${suffix}`,
-      departures: copied.departures.map(({ id: _id, ...departure }) => ({ ...departure })),
-      published: false,
-      featured: false,
+      departures: [...copied.departures, ...duplicatedDepartures],
     });
-    toast.info("Cópia criada como rascunho. Altere as datas e salve para publicar.");
+    toast.info("Saídas duplicadas no mesmo roteiro. Altere as datas e salve; o catálogo continuará mostrando apenas um roteiro.");
   };
 
   useEffect(() => {
