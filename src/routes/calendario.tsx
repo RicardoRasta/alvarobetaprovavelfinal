@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight, MapPin, MessageCircle } from "lucide-react";
-import { formatRange, whatsappLink } from "@/data/trips";
+import { formatRange, tripImage, whatsappLink } from "@/data/trips";
 import { settingsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/calendario")({
@@ -32,7 +32,7 @@ const MONTHS = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
 ];
 
-type Dep = { id: string; tripId: string; tripSlug: string; tripName: string; destination: string; state: string; date: string; return_date: string | null; spots: number; meeting_point: string | null };
+type Dep = { id: string; tripId: string; tripSlug: string; tripName: string; destination: string; state: string; date: string; return_date: string | null; spots: number; meeting_point: string | null; image: string };
 
 function Calendario() {
   const { data: trips = [] } = useQuery(tripsQuery);
@@ -59,6 +59,7 @@ function Calendario() {
           return_date: d.return_date ?? null,
           spots: d.spots,
           meeting_point: d.meeting_point ?? null,
+          image: tripImage(t),
         });
         map.set(d.date, list);
       }
@@ -135,18 +136,19 @@ function Calendario() {
                   type="button"
                   key={iso}
                   onClick={() => setSelected(isSel ? null : iso)}
-                  className={`relative aspect-square rounded-xl border text-sm transition-colors ${
-                    isSel
-                      ? "border-accent bg-accent text-accent-foreground"
-                      : has
-                        ? "border-accent/40 bg-accent/10 text-foreground hover:border-accent"
-                        : "border-border bg-card text-muted-foreground hover:border-accent/40"
+                  className={`group relative aspect-square overflow-hidden rounded-xl border text-sm transition-all ${
+                    isSel ? "border-accent ring-2 ring-accent ring-offset-2 ring-offset-background" :
+                    has ? "border-accent/50 hover:-translate-y-0.5 hover:shadow-md" :
+                    "border-border bg-card text-muted-foreground hover:border-accent/40"
                   }`}
+                  aria-label={`${day}${has ? `, ${deps.length} saída(s)` : ""}`}
                 >
-                  <span className={isToday && !isSel ? "font-bold text-accent" : ""}>{day}</span>
-                  {has && (
-                    <span className="absolute bottom-1.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-accent" />
-                  )}
+                  {has && <><img src={deps[0].image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" /><span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10" /></>}
+                  <span className={`relative z-10 flex h-full flex-col items-center justify-between p-1.5 ${has ? "font-bold text-white" : isToday ? "font-bold text-accent" : ""}`}>
+                    <span className="self-start">{day}</span>
+                    {has && <span className="rounded-full bg-black/45 px-1.5 py-0.5 text-[9px] font-semibold text-white backdrop-blur">{deps.length} saída{deps.length > 1 ? "s" : ""}</span>}
+                  </span>
+                  {isSel && <span className="absolute inset-x-2 bottom-1 h-0.5 rounded-full bg-white" />}
                 </button>
               );
             })}
@@ -166,21 +168,17 @@ function Calendario() {
           ) : (
             <ul className="mt-3 space-y-3">
               {selectedDeps.map((d) => (
-                <li key={d.id} className="rounded-xl border border-border bg-card p-3">
-                  <Link
-                    to="/viagens/$tripId"
-                    params={{ tripId: d.tripSlug }}
-                    className="font-semibold transition-colors hover:text-accent"
-                  >
-                    {d.tripName}
+                <li key={d.id} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md">
+                  <Link to="/viagens/$tripId" params={{ tripId: d.tripSlug }} className="group flex gap-3 p-3">
+                    <img src={d.image} alt="" loading="lazy" className="h-24 w-28 shrink-0 rounded-xl object-cover" />
+                    <div className="min-w-0 flex-1">
+                      <span className="font-semibold transition-colors group-hover:text-accent">{d.tripName}</span>
+                      <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> {d.destination} · {d.state}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{formatRange(d.date, d.return_date)} · {d.spots} vagas</p>
+                    </div>
                   </Link>
-                  <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-                    <MapPin className="h-3.5 w-3.5" /> {d.destination} · {d.state}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {formatRange(d.date, d.return_date)} · {d.spots} vagas
-                    {d.meeting_point ? ` · Saída: ${d.meeting_point}` : ""}
-                  </p>
+                  <div className="px-3 pb-3">
+                    {d.meeting_point && <p className="mb-2 text-xs text-muted-foreground">Ponto de saída: {d.meeting_point}</p>}
                   <a
                     href={whatsappLink(settings, {
                       tripName: d.tripName,
@@ -196,6 +194,7 @@ function Calendario() {
                   >
                     <MessageCircle className="h-3.5 w-3.5" /> Agendar
                   </a>
+                  </div>
                 </li>
               ))}
             </ul>
