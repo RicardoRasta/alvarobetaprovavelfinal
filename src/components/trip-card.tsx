@@ -1,19 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowUpRight, CalendarDays, MapPin, MessageCircle, Star } from "lucide-react";
+import { MessageCircle, Star } from "lucide-react";
 import { formatForeign, formatPrice, formatRange, tripImage, whatsappLink, type Trip } from "@/data/trips";
 import { PriceTag } from "@/components/price-tag";
-import { upcomingMonths } from "@/components/departure-chips";
 import { logWhatsAppClick, nextDeparture, settingsQuery } from "@/lib/api";
 
 export function TripCard({ trip }: { trip: Trip }) {
   const next = nextDeparture(trip);
   const { data: settings } = useQuery(settingsQuery);
-  const discount =
-    trip.old_price != null && trip.old_price > 0
-      ? Math.round((1 - trip.price / trip.old_price) * 100)
-      : null;
-
   return (
     <article className="group flex min-w-0 flex-col">
       <Link
