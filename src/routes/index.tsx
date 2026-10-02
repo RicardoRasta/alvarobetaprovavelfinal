@@ -6,6 +6,7 @@ import { TripCard } from "@/components/trip-card";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
+import { upcomingMonths } from "@/components/departure-chips";
 import { heroSlides, tripImage } from "@/data/trips";
 import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, tagsQuery, testimonialsQuery, tripsQuery } from "@/lib/api";
 
