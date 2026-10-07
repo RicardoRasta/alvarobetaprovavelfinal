@@ -170,6 +170,21 @@ export const sortByNextDeparture = <T extends Trip>(trips: T[]): T[] =>
   });
 
 
+/** Remove duplicatas do catálogo público pelo nome, mantendo a edição com a próxima saída mais próxima. O calendário continua mostrando todas as saídas. */
+export const dedupeTripsByName = <T extends Trip>(trips: T[]): T[] => {
+  const keyOf = (name: string) => name.trim().toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/\\s+/g, " ");
+  const best = new Map<string, T>();
+  for (const trip of trips) {
+    const key = keyOf(trip.name);
+    const current = best.get(key);
+    if (!current) { best.set(key, trip); continue; }
+    const next = nextDeparture(trip)?.date;
+    const currentNext = nextDeparture(current)?.date;
+    if (next && (!currentNext || next < currentNext)) best.set(key, trip);
+  }
+  return Array.from(best.values());
+};
+
 /* ---------- Tags ---------- */
 export const tagsQuery = queryOptions({
   queryKey: ["tags"],
