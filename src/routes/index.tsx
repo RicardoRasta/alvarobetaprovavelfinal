@@ -8,7 +8,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { SectionHeading } from "@/components/section-heading";
 import { upcomingMonths } from "@/components/departure-chips";
 import { heroSlides, tripImage } from "@/data/trips";
-import { activitiesQuery, isTripOngoing, settingsQuery, sortByNextDeparture, tagsQuery, testimonialsQuery, tripsQuery } from "@/lib/api";
+import { activitiesQuery, dedupeTripsByName, isTripOngoing, settingsQuery, sortByNextDeparture, tagsQuery, testimonialsQuery, tripsQuery } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,7 +63,7 @@ function Index() {
       const name = tagNames.get(value) ?? normalizeCategory(value);
       return name === "cursos" || name.startsWith("curso ");
     }) || normalizeCategory(trip.name).includes("curso ");
-  const visible = trips.filter((t) => t.published);
+  const visible = dedupeTripsByName(trips.filter((t) => t.published));
   const visibleTrips = visible.filter((t) => !isCourse(t));
   const visibleCourses = visible.filter(isCourse);
   const featured = sortByNextDeparture(visibleTrips.filter((t) => t.featured)).slice(0, 6);
