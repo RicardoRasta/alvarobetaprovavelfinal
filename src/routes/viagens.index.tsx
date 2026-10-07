@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { TripCard } from "@/components/trip-card";
-import { sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
+import { dedupeTripsByName, sortByNextDeparture, tagsQuery, tripsQuery } from "@/lib/api";
 
 type CatalogSearch = {
   atividade?: string;
