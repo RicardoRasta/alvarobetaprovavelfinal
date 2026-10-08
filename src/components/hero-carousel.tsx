@@ -101,11 +101,6 @@ export function HeroCarousel({
                   <h2 className="text-3xl leading-[0.95] text-primary-foreground md:text-5xl">
                     {s.title}
                   </h2>
-                  {s.description && (
-                    <p className="mt-3 line-clamp-2 max-w-xl text-sm text-primary-foreground/85 md:text-base">
-                      {s.description}
-                    </p>
-                  )}
                 </div>
               )}
               <div className="flex flex-wrap items-end gap-x-10 gap-y-4">
