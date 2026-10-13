@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ImagePlus, Pencil, Plus, Save, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -42,7 +42,7 @@ function AdminEquipmentPage() {
   }, [editingId, items]);
 
   const startNew = () => { setEditingId("new"); setForm(emptyForm); };
-  const save = async (e: React.FormEvent) => {
+  const save = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) return toast.error("Informe o nome do equipamento.");
     const price = Number(form.daily_price);
