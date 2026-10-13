@@ -15,7 +15,7 @@ const nav = [
   { to: "/calendario", label: "Agenda" },
   { to: "/comentarios", label: "Comentários" },
   { to: "/quem-somos", label: "Quem somos" },
-  { to: "/favoritos", label: "Salvas" },
+  { to: "/equipamentos", label: "Aluguel de equipamentos" },
   { to: "/conta", label: "Minha conta" },
 ] as const;
 
