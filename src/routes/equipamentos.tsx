@@ -75,7 +75,7 @@ function EquipmentRentalPage() {
                 <div className="flex flex-1 flex-col p-4 sm:p-5">
                   <h2 className="text-lg font-bold">{item.name}</h2>
                   {item.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{item.description}</p>}
-                  <p className="mt-4 font-bold text-accent">{Number(item.daily_price) > 0 ? `R$ ${Number(item.daily_price).toLocaleString("pt-BR", { minimumFractionDigits: 2 })} <span className="text-xs font-medium text-muted-foreground">/ dia por unidade</span>` : "Consulte o valor"}</p>
+                  <p className="mt-4 font-bold text-accent">{Number(item.daily_price) > 0 ? <>R$ {Number(item.daily_price).toLocaleString("pt-BR", { minimumFractionDigits: 2 })} <span className="text-xs font-medium text-muted-foreground">/ dia por unidade</span></> : "Consulte o valor"}</p>
                   <div className="mt-auto flex items-center justify-between gap-3 pt-5">
                     <span className="text-sm text-muted-foreground">Quantidade</span>
                     <div className="flex items-center gap-3">
