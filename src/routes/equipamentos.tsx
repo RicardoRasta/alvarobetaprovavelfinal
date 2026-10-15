@@ -5,12 +5,14 @@ import { MessageCircle, PackageCheck, ShoppingBag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { settingsQuery } from "@/lib/api";
 
+type MediaItem = { url: string; type: "image" | "video" };
 type RentalEquipment = {
   id: string;
   name: string;
   description: string;
   daily_price: number;
   image_url: string | null;
+  media?: MediaItem[] | null;
   available: boolean;
   sort_order: number;
 };
@@ -71,7 +73,19 @@ function EquipmentRentalPage() {
             {equipment.map((item) => {
               const quantity = selected[item.id] ?? 0;
               return <article key={item.id} className="card-surface flex min-w-0 flex-col overflow-hidden">
-                {item.image_url ? <img src={item.image_url} alt={item.name} loading="lazy" className="aspect-[4/3] w-full object-cover" /> : <div className="flex aspect-[4/3] items-center justify-center bg-secondary text-muted-foreground"><PackageCheck className="h-12 w-12" /></div>}
+                {(item.media?.length ? item.media : item.image_url ? [{ url: item.image_url, type: "image" as const }] : []).length > 0 ? (
+                  <div className="grid grid-cols-2 gap-1 bg-secondary p-1">
+                    {(item.media?.length ? item.media : item.image_url ? [{ url: item.image_url, type: "image" as const }] : []).slice(0, 8).map((media, mediaIndex) => (
+                      <div key={media.url} className={mediaIndex === 0 ? "col-span-2" : ""}>
+                        {media.type === "video" ? (
+                          <video src={media.url} controls playsInline preload="metadata" className={`${mediaIndex === 0 ? "aspect-[4/3]" : "aspect-square"} w-full rounded-lg bg-black object-contain`} aria-label={`Vídeo ${mediaIndex + 1} de ${item.name}`} />
+                        ) : (
+                          <img src={media.url} alt={`${item.name} — foto ${mediaIndex + 1}`} loading="lazy" className={`${mediaIndex === 0 ? "aspect-[4/3]" : "aspect-square"} w-full rounded-lg object-cover`} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : <div className="flex aspect-[4/3] items-center justify-center bg-secondary text-muted-foreground"><PackageCheck className="h-12 w-12" /></div>}
                 <div className="flex flex-1 flex-col p-4 sm:p-5">
                   <h2 className="text-lg font-bold">{item.name}</h2>
                   {item.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{item.description}</p>}
