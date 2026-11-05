@@ -82,7 +82,7 @@ function AdminEquipmentPage() {
         if (error) throw error;
         const base = import.meta.env["VITE_SUPABASE_URL"] || "";
         if (!base) throw new Error("URL do armazenamento não configurada.");
-        uploaded.push({ url: `${base.replace(/\\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`, type: file.type.startsWith("video/") ? "video" : "image" });
+        uploaded.push({ url: `${base.replace(/\/$/, "")}/storage/v1/object/public/trip-images/${path.split("/").map(encodeURIComponent).join("/")}`, type: file.type.startsWith("video/") ? "video" : "image" });
       }
       setForm((current) => ({ ...current, media: [...current.media, ...uploaded].slice(0, 8), image_url: current.image_url || uploaded.find((m) => m.type === "image")?.url || uploaded[0]?.url || "" }));
       toast.success("Foto(s)/vídeo(s) enviados. Salve o equipamento para publicar.");
