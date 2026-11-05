@@ -11,6 +11,8 @@ type RentalEquipment = {
   name: string;
   description: string;
   daily_price: number;
+  weekly_price: number;
+  monthly_price: number;
   image_url: string | null;
   media?: MediaItem[] | null;
   available: boolean;
@@ -30,6 +32,8 @@ export const Route = createFileRoute("/equipamentos")({
 function EquipmentRentalPage() {
   const { data: settings } = useQuery(settingsQuery);
   const [selected, setSelected] = useState<Record<string, number>>({});
+  const [rentalType, setRentalType] = useState<"daily" | "weekly" | "monthly">("daily");
+  const [periodCount, setPeriodCount] = useState(1);
   const { data: equipment = [], isLoading, error } = useQuery({
     queryKey: ["equipment_rentals_public"],
     queryFn: async (): Promise<RentalEquipment[]> => {
@@ -40,11 +44,16 @@ function EquipmentRentalPage() {
   });
 
   const selectedItems = useMemo(() => equipment.filter((item) => (selected[item.id] ?? 0) > 0), [equipment, selected]);
-  const totalPerDay = selectedItems.reduce((sum, item) => sum + Number(item.daily_price || 0) * (selected[item.id] ?? 0), 0);
+  const priceField = rentalType === "daily" ? "daily_price" : rentalType === "weekly" ? "weekly_price" : "monthly_price";
+  const periodLabel = rentalType === "daily" ? "diária(s)" : rentalType === "weekly" ? "semana(s) de 7 dias" : "mês(es) de 30 dias";
+  const totalEstimate = selectedItems.reduce((sum, item) => sum + Number(item[priceField] || 0) * (selected[item.id] ?? 0) * periodCount, 0);
   const phone = (settings?.whatsapp_number || settings?.phone || "4733517661").replace(/\D/g, "");
   const message = [
     "Olá, Casa de Aventura! Gostaria de consultar a disponibilidade para aluguel dos seguintes equipamentos:",
-    ...selectedItems.map((item) => `• ${item.name} — quantidade: ${selected[item.id]}${Number(item.daily_price) > 0 ? ` — R$ ${Number(item.daily_price).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}/dia por unidade` : ""}`),
+    ...selectedItems.map((item) => `• ${item.name} — quantidade: ${selected[item.id]} — R$ ${Number(item[priceField] || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })} por unidade/${rentalType === "daily" ? "diária" : rentalType === "weekly" ? "semana" : "mês"}`),
+    `Modalidade: ${rentalType === "daily" ? "Diária" : rentalType === "weekly" ? "Semanal (7 dias)" : "Mensal (30 dias)"}`,
+    `Períodos: ${periodCount} ${periodLabel}`,
+    `Estimativa total: R$ ${totalEstimate.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
     "",
     "Por favor, me informem disponibilidade, período e condições do aluguel."
   ].join("\n");
@@ -69,7 +78,11 @@ function EquipmentRentalPage() {
         </div>
       ) : (
         <>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <section className="mt-8 grid gap-4 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[1fr_180px] sm:items-end sm:p-5">
+        <label className="block"><span className="mb-2 block text-sm font-bold">Modalidade de locação</span><select value={rentalType} onChange={(e) => setRentalType(e.target.value as "daily" | "weekly" | "monthly")} className="w-full rounded-xl border border-input bg-background px-3 py-3 text-sm"><option value="daily">Diária — 1 dia</option><option value="weekly">Semanal — 7 dias</option><option value="monthly">Mensal — 30 dias</option></select></label>
+        <label className="block"><span className="mb-2 block text-sm font-bold">Quantidade de períodos</span><input type="number" min="1" max="12" step="1" value={periodCount} onChange={(e) => setPeriodCount(Math.min(12, Math.max(1, Number(e.target.value) || 1)))} className="w-full rounded-xl border border-input bg-background px-3 py-3 text-sm" /></label>
+      </section>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {equipment.map((item) => {
               const quantity = selected[item.id] ?? 0;
               return <article key={item.id} className="card-surface flex min-w-0 flex-col overflow-hidden">
@@ -89,7 +102,7 @@ function EquipmentRentalPage() {
                 <div className="flex flex-1 flex-col p-4 sm:p-5">
                   <h2 className="text-lg font-bold">{item.name}</h2>
                   {item.description && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-muted-foreground">{item.description}</p>}
-                  <p className="mt-4 font-bold text-accent">{Number(item.daily_price) > 0 ? <>R$ {Number(item.daily_price).toLocaleString("pt-BR", { minimumFractionDigits: 2 })} <span className="text-xs font-medium text-muted-foreground">/ dia por unidade</span></> : "Consulte o valor"}</p>
+                  <div className="mt-4 space-y-1 text-sm"><p className="font-bold text-accent">Diária: R$ {Number(item.daily_price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p><p className="text-muted-foreground">Semanal: R$ {Number(item.weekly_price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p><p className="text-muted-foreground">Mensal: R$ {Number(item.monthly_price || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p></div>
                   <div className="mt-auto flex items-center justify-between gap-3 pt-5">
                     <span className="text-sm text-muted-foreground">Quantidade</span>
                     <div className="flex items-center gap-3">
@@ -106,7 +119,7 @@ function EquipmentRentalPage() {
           <aside className="sticky bottom-3 z-30 mt-8 rounded-2xl border border-border bg-background/95 p-4 shadow-xl backdrop-blur sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-5">
             <div className="min-w-0">
               <p className="font-bold">{selectedItems.length} {selectedItems.length === 1 ? "tipo de equipamento selecionado" : "tipos de equipamento selecionados"}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{selectedItems.reduce((sum, item) => sum + selected[item.id], 0)} unidade(s). {totalPerDay > 0 ? `Estimativa: R$ ${totalPerDay.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}/dia, sujeita à confirmação.` : "Valores e disponibilidade serão confirmados pelo WhatsApp."}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{selectedItems.reduce((sum, item) => sum + selected[item.id], 0)} unidade(s) por {periodCount} {periodLabel}. {totalEstimate > 0 ? `Estimativa: R$ ${totalEstimate.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}, sujeita à confirmação.` : "Valores e disponibilidade serão confirmados pelo WhatsApp."}</p>
             </div>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-disabled={selectedItems.length === 0} onClick={(e) => { if (!selectedItems.length) e.preventDefault(); }} className={`mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold sm:mt-0 sm:w-auto ${selectedItems.length ? "bg-accent text-accent-foreground" : "pointer-events-auto bg-muted text-muted-foreground"}`}><MessageCircle className="h-4 w-4" /> Enviar lista pelo WhatsApp</a>
           </aside>
