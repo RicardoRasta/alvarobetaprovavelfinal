@@ -37,7 +37,9 @@ function AdminEquipmentPage() {
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Form>(emptyForm);
-  const [saving, setSaving] = useState(false);\n  const [mediaUploading, setMediaUploading] = useState(false);\n  const mediaInputRef = useRef<HTMLInputElement>(null);
+  const [saving, setSaving] = useState(false);
+  const [mediaUploading, setMediaUploading] = useState(false);
+  const mediaInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!editingId) return;
