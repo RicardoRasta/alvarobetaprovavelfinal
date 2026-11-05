@@ -83,6 +83,51 @@ export type Database = {
         }
         Relationships: []
       }
+      equipment_rentals: {
+        Row: {
+          available: boolean
+          created_at: string
+          daily_price: number
+          description: string
+          id: string
+          image_url: string | null
+          media: Json
+          monthly_price: number
+          name: string
+          sort_order: number
+          updated_at: string
+          weekly_price: number
+        }
+        Insert: {
+          available?: boolean
+          created_at?: string
+          daily_price?: number
+          description?: string
+          id?: string
+          image_url?: string | null
+          media?: Json
+          monthly_price?: number
+          name: string
+          sort_order?: number
+          updated_at?: string
+          weekly_price?: number
+        }
+        Update: {
+          available?: boolean
+          created_at?: string
+          daily_price?: number
+          description?: string
+          id?: string
+          image_url?: string | null
+          media?: Json
+          monthly_price?: number
+          name?: string
+          sort_order?: number
+          updated_at?: string
+          weekly_price?: number
+        }
+        Relationships: []
+      }
       booking_requests: {
         Row: {
           contact: string
